@@ -35,10 +35,10 @@ const verifyToken: (st: string) => boolean = (serviceToken) => {
   return decoded.exp > Date.now() / 1000;
 };
 
-const setSession = (serviceToken?: string | null) => {
-  if (serviceToken) {
-    localStorage.setItem('serviceToken', serviceToken);
-    axios.defaults.headers.common.Authorization = `Bearer ${serviceToken}`;
+const setSession = (token?: string | null) => {
+  if (token) {
+    localStorage.setItem('serviceToken', token);
+    axios.defaults.headers.common.Authorization = `Bearer ${token}`;
   } else {
     localStorage.removeItem('serviceToken');
     delete axios.defaults.headers.common.Authorization;
@@ -58,7 +58,7 @@ export const JWTProvider = ({ children }: { children: ReactElement }) => {
         const serviceToken = localStorage.getItem('serviceToken');
         if (serviceToken && verifyToken(serviceToken)) {
           setSession(serviceToken);
-          const response = await axios.get('/api/account/me');
+          const response = await axios.get('/me');
           const { user } = response.data;
 
           dispatch({
@@ -85,9 +85,9 @@ export const JWTProvider = ({ children }: { children: ReactElement }) => {
   }, []);
 
   const login = async (email: string, password: string) => {
-    const response = await axios.post('/api/account/login', { email, password });
-    const { serviceToken, user } = response.data;
-    setSession(serviceToken);
+    const response = await axios.post('/api/login', { email, password });
+    const { token, user } = response.data;
+    setSession(token);
     dispatch({
       type: LOGIN,
       payload: {
@@ -97,13 +97,13 @@ export const JWTProvider = ({ children }: { children: ReactElement }) => {
     });
   };
 
-  const register = async (email: string, password: string, firstName: string, lastName: string) => {
+  const register = async (email: string, plainPassword: string, firstName: string, lastName: string) => {
     // todo: this flow need to be recode as it not verified
     const id = chance.bb_pin();
-    const response = await axios.post('/api/account/register', {
+    const response = await axios.post('/register', {
       id,
       email,
-      password,
+      plainPassword,
       firstName,
       lastName
     });
@@ -116,7 +116,7 @@ export const JWTProvider = ({ children }: { children: ReactElement }) => {
         {
           id,
           email,
-          password,
+          plainPassword,
           name: `${firstName} ${lastName}`
         }
       ];
