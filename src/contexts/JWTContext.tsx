@@ -56,11 +56,13 @@ export const JWTProvider = ({ children }: { children: ReactElement }) => {
     const init = async () => {
       try {
         const serviceToken = localStorage.getItem('serviceToken');
+  
+        // Vérification du token (date d'expiration)
         if (serviceToken && verifyToken(serviceToken)) {
-          setSession(serviceToken);
-          const response = await axios.get('/me');
+          setSession(serviceToken); // Définit le header Authorization
+          const response = await axios.get('/me'); // Appel protégé
           const { user } = response.data;
-
+  
           dispatch({
             type: LOGIN,
             payload: {
@@ -69,20 +71,23 @@ export const JWTProvider = ({ children }: { children: ReactElement }) => {
             }
           });
         } else {
-          dispatch({
-            type: LOGOUT
-          });
+          throw new Error('Token expiré ou invalide');
         }
-      } catch (err) {
-        console.error(err);
+      } catch (err: any) {
+        console.warn('JWTContext init error:', err?.response?.data || err.message || err);
+  
+        // Nettoyage complet du token
+        setSession(null);
+  
         dispatch({
           type: LOGOUT
         });
       }
     };
-
+  
     init();
   }, []);
+  
 
   const login = async (email: string, password: string) => {
     const response = await axios.post('/api/login', { email, password });
