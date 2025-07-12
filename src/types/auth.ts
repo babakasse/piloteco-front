@@ -14,6 +14,11 @@ export type UserProfile = {
   name?: string;
   role?: string;
   tier?: string;
+  firstName?: string;
+  lastName?: string;
+  company?: string;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
 export interface AuthProps {

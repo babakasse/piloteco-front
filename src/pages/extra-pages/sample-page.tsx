@@ -8,7 +8,7 @@ import CompanyCard from 'components/cards/company/CompanyCard';
 import useCompany from 'hooks/useCompany';
 
 export default function SamplePage() {
-  const { company, loading } = useCompany();
+  const { company, user, loading } = useCompany();
 
   return (
     <MainCard title="Home">
@@ -20,11 +20,22 @@ export default function SamplePage() {
         <Box display="flex" justifyContent="center" mt={2}>
           <CircularProgress />
         </Box>
-      ) : company ? (
-        <CompanyCard company={company} />
+      ) : user ? (
+        <Box>
+          <Typography variant="h6" gutterBottom>
+            Welcome, {user.firstName} {user.lastName}!
+          </Typography>
+          {company ? (
+            <CompanyCard company={company} />
+          ) : (
+            <Typography color="warning" mt={2}>
+              No company information available.
+            </Typography>
+          )}
+        </Box>
       ) : (
         <Typography color="error" mt={2}>
-          No company information found.
+          No user information found.
         </Typography>
       )}
     </MainCard>
