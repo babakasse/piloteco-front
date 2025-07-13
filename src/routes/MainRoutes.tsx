@@ -1,4 +1,5 @@
 import { lazy } from 'react';
+import { Navigate } from 'react-router-dom';
 
 // project-imports
 import Loadable from 'components/Loadable';
@@ -25,6 +26,10 @@ const MainRoutes = {
       path: '/',
       element: <DashboardLayout />,
       children: [
+        {
+          path: '',
+          element: <Navigate to="/sample-page" replace />
+        },
         {
           path: 'sample-page',
           element: <SamplePage />
