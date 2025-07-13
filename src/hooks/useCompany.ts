@@ -36,7 +36,7 @@ export default function useCompany() {
       }
 
       try {
-        const response = await axios.get('/api/me');
+        const response = await axios.get('/me');
         const userData = response.data;
         setUser(userData);
 

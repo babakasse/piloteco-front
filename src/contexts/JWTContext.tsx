@@ -60,7 +60,7 @@ export const JWTProvider = ({ children }: { children: ReactElement }) => {
         // Vérification du token (date d'expiration)
         if (serviceToken && verifyToken(serviceToken)) {
           setSession(serviceToken); // Définit le header Authorization
-          const response = await axios.get('/api/me'); // Appel protégé
+          const response = await axios.get('/me'); // Appel protégé
           const { user } = response.data;
   
           dispatch({
@@ -90,7 +90,7 @@ export const JWTProvider = ({ children }: { children: ReactElement }) => {
   
 
   const login = async (email: string, password: string) => {
-    const response = await axios.post('/api/login', { email, password });
+    const response = await axios.post('/login', { email, password });
     const { token, user } = response.data;
     setSession(token);
     dispatch({
