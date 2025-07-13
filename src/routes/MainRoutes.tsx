@@ -1,4 +1,5 @@
 import { lazy } from 'react';
+import { Navigate } from 'react-router-dom';
 
 // project-imports
 import Loadable from 'components/Loadable';
@@ -13,8 +14,8 @@ const MaintenanceUnderConstruction = Loadable(lazy(() => import('pages/maintenan
 const MaintenanceComingSoon = Loadable(lazy(() => import('pages/maintenance/coming-soon/coming-soon')));
 
 const AppContactUS = Loadable(lazy(() => import('pages/contact-us')));
-// render - sample page
-const SamplePage = Loadable(lazy(() => import('pages/extra-pages/sample-page')));
+// render - dashboard page
+const Dashboard = Loadable(lazy(() => import('pages/dashboard')));
 
 // ==============================|| MAIN ROUTES ||============================== //
 
@@ -26,8 +27,12 @@ const MainRoutes = {
       element: <DashboardLayout />,
       children: [
         {
-          path: 'sample-page',
-          element: <SamplePage />
+          path: '',
+          element: <Navigate to="/dashboard" replace />
+        },
+        {
+          path: 'dashboard',
+          element: <Dashboard />
         }
       ]
     },
