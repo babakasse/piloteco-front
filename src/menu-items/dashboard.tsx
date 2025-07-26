@@ -20,8 +20,34 @@ const dashboard: NavItemType = {
   id: 'dashboard',
   title: <FormattedMessage id="dashboard" />,
   type: 'group',
-  url: '/dashboard',
-  icon: icons.dashboard
+  icon: icons.dashboard,
+  children: [
+    {
+      id: 'dashboard-main',
+      title: <FormattedMessage id="dashboard" />,
+      type: 'item',
+      url: '/dashboard',
+      icon: icons.dashboard
+    },
+    {
+      id: 'assessment-create',
+      title: 'Nouveau bilan carbone',
+      type: 'item',
+      url: '/assessment-create',
+    },
+    {
+      id: 'assessment-list',
+      title: 'Bilans carbone',
+      type: 'item',
+      url: '/assessment-list',
+    },
+    {
+      id: 'companies',
+      title: 'Entreprises',
+      type: 'item',
+      url: '/companies',
+    }
+  ]
 };
 
-export default dashboard; 
+export default dashboard;
