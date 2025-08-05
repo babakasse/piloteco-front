@@ -13,7 +13,6 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import { getCompanyAssessments } from '../api/carbonAssessment';
 import { useNavigate } from 'react-router-dom';
-import AssessmentForm from './AssessmentForm';
 
 const AssessmentListPage: React.FC = () => {
   const [assessments, setAssessments] = useState<any[]>([]);
@@ -64,7 +63,7 @@ const AssessmentListPage: React.FC = () => {
                     <TableCell>{a.name}</TableCell>
                     <TableCell>{a.year}</TableCell>
                     <TableCell>{a.description}</TableCell>
-                    <TableCell>{a.totalEmissions} tCO₂e</TableCell>
+                    <TableCell>{a.totalEmissions} kgCO₂e</TableCell>
                     <TableCell>
                       <Box
                         sx={{

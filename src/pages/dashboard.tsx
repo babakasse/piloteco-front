@@ -43,7 +43,11 @@ export default function Dashboard() {
           const summary = await getAssessmentWithEmissions(assessmentToShow.id);
           setCarbonSummary(summary);
           // Récupère toutes les émissions de tous les bilans
-          const emissions = assessments.flatMap((a: any) => (a.emissions && Array.isArray(a.emissions)) ? a.emissions.map((em: any) => ({...em, assessmentYear: a.year, assessmentName: a.name})) : []);
+          const emissions = assessments.flatMap((a: any) =>
+            a.emissions && Array.isArray(a.emissions)
+              ? a.emissions.map((em: any) => ({ ...em, assessmentYear: a.year, assessmentName: a.name }))
+              : []
+          );
           setAllEmissions(emissions);
         } else {
           setAllEmissions([]);
@@ -88,18 +92,28 @@ export default function Dashboard() {
             ) : carbonSummary ? (
               <Card>
                 <CardContent>
-                  <Typography variant="h6" gutterBottom>Bilan Carbone de l'entreprise</Typography>
+                  <Typography variant="h6" gutterBottom>
+                    Bilan Carbone de l'entreprise
+                  </Typography>
                   <Typography>Année : {carbonSummary.year}</Typography>
-                  <Typography>Date d'évaluation : {carbonSummary.assessmentDate ? new Date(carbonSummary.assessmentDate).toLocaleDateString() : '-'}</Typography>
-                  <Typography>Total émissions : <b>{carbonSummary.totalEmissions} tCO2e</b></Typography>
+                  <Typography>
+                    Date d'évaluation : {carbonSummary.assessmentDate ? new Date(carbonSummary.assessmentDate).toLocaleDateString() : '-'}
+                  </Typography>
+                  <Typography>
+                    Total émissions : <b>{carbonSummary.totalEmissions} kgCO₂e</b>
+                  </Typography>
                   <Box mt={1} mb={2}>
-                    <Chip label={`Scope 1 : ${carbonSummary.scope1Emissions} tCO2e`} color="success" sx={{mr:1}} />
-                    <Chip label={`Scope 2 : ${carbonSummary.scope2Emissions} tCO2e`} color="info" sx={{mr:1}} />
-                    <Chip label={`Scope 3 : ${carbonSummary.scope3Emissions} tCO2e`} color="warning" />
+                    <Chip label={`Scope 1 : ${carbonSummary.scope1Emissions} kgCO₂e`} color="success" sx={{ mr: 1 }} />
+                    <Chip label={`Scope 2 : ${carbonSummary.scope2Emissions} kgCO₂e`} color="info" sx={{ mr: 1 }} />
+                    <Chip label={`Scope 3 : ${carbonSummary.scope3Emissions} kgCO₂e`} color="warning" />
                   </Box>
-                  <Typography>Statut : <b>{carbonSummary.status}</b></Typography>
+                  <Typography>
+                    Statut : <b>{carbonSummary.status}</b>
+                  </Typography>
                   <Box mt={2}>
-                    <Typography variant="subtitle1" gutterBottom>Émissions détaillées</Typography>
+                    <Typography variant="subtitle1" gutterBottom>
+                      Émissions détaillées
+                    </Typography>
                     <TableContainer component={Paper}>
                       <Table size="small">
                         <TableHead>
@@ -121,10 +135,7 @@ export default function Dashboard() {
                                 <TableCell>
                                   <Chip
                                     label={`Scope ${em.scope}`}
-                                    color={
-                                      em.scope === 1 ? 'success' :
-                                      em.scope === 2 ? 'info' : 'warning'
-                                    }
+                                    color={em.scope === 1 ? 'success' : em.scope === 2 ? 'info' : 'warning'}
                                     size="small"
                                   />
                                 </TableCell>
@@ -135,7 +146,9 @@ export default function Dashboard() {
                             ))
                           ) : (
                             <TableRow>
-                              <TableCell colSpan={6} align="center">Aucune émission enregistrée</TableCell>
+                              <TableCell colSpan={6} align="center">
+                                Aucune émission enregistrée
+                              </TableCell>
                             </TableRow>
                           )}
                         </TableBody>
@@ -154,7 +167,9 @@ export default function Dashboard() {
       ) : null}
       {/* Tableau de toutes les émissions de l'entreprise */}
       <Box mt={4}>
-        <Typography variant="h6" gutterBottom>Toutes les émissions de l'entreprise</Typography>
+        <Typography variant="h6" gutterBottom>
+          Toutes les émissions de l'entreprise
+        </Typography>
         <TableContainer component={Paper}>
           <Table size="small">
             <TableHead>
@@ -180,10 +195,7 @@ export default function Dashboard() {
                     <TableCell>
                       <Chip
                         label={`Scope ${em.scope}`}
-                        color={
-                          em.scope === 1 ? 'success' :
-                          em.scope === 2 ? 'info' : 'warning'
-                        }
+                        color={em.scope === 1 ? 'success' : em.scope === 2 ? 'info' : 'warning'}
                         size="small"
                       />
                     </TableCell>
@@ -194,7 +206,9 @@ export default function Dashboard() {
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={8} align="center">Aucune émission enregistrée pour l'entreprise.</TableCell>
+                  <TableCell colSpan={8} align="center">
+                    Aucune émission enregistrée pour l'entreprise.
+                  </TableCell>
                 </TableRow>
               )}
             </TableBody>
@@ -211,7 +225,9 @@ export default function Dashboard() {
             >
               Précédent
             </Button>
-            <Typography variant="body2">Page {emissionsPage} / {totalPages}</Typography>
+            <Typography variant="body2">
+              Page {emissionsPage} / {totalPages}
+            </Typography>
             <Button
               variant="outlined"
               size="small"

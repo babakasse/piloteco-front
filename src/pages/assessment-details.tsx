@@ -25,12 +25,16 @@ export default function AssessmentDetailsPage() {
     if (!id) return;
     setLoading(true);
     getAssessmentWithEmissions(id)
-      .then(data => setAssessment(data))
+      .then((data) => setAssessment(data))
       .finally(() => setLoading(false));
   }, [id]);
 
   if (loading) {
-    return <Box display="flex" justifyContent="center" mt={4}><CircularProgress /></Box>;
+    return (
+      <Box display="flex" justifyContent="center" mt={4}>
+        <CircularProgress />
+      </Box>
+    );
   }
 
   if (!assessment) {
@@ -39,13 +43,25 @@ export default function AssessmentDetailsPage() {
 
   return (
     <MainCard title={`Détails du bilan carbone : ${assessment.name}`}>
-      <Typography variant="subtitle1" gutterBottom>Année : {assessment.year}</Typography>
-      <Typography variant="subtitle1" gutterBottom>Description : {assessment.description || '-'}</Typography>
-      <Typography variant="subtitle1" gutterBottom>Date d'évaluation : {assessment.assessmentDate ? new Date(assessment.assessmentDate).toLocaleDateString() : '-'}</Typography>
-      <Typography variant="subtitle1" gutterBottom>Statut : {assessment.status}</Typography>
-      <Typography variant="subtitle1" gutterBottom>Total émissions : {assessment.totalEmissions} tCO2e</Typography>
+      <Typography variant="subtitle1" gutterBottom>
+        Année : {assessment.year}
+      </Typography>
+      <Typography variant="subtitle1" gutterBottom>
+        Description : {assessment.description || '-'}
+      </Typography>
+      <Typography variant="subtitle1" gutterBottom>
+        Date d'évaluation : {assessment.assessmentDate ? new Date(assessment.assessmentDate).toLocaleDateString() : '-'}
+      </Typography>
+      <Typography variant="subtitle1" gutterBottom>
+        Statut : {assessment.status}
+      </Typography>
+      <Typography variant="subtitle1" gutterBottom>
+        Total émissions : {assessment.totalEmissions} kgCO₂e
+      </Typography>
       <Box mt={3}>
-        <Typography variant="h6" gutterBottom>Émissions associées</Typography>
+        <Typography variant="h6" gutterBottom>
+          Émissions associées
+        </Typography>
         {assessment.emissions && assessment.emissions.length > 0 ? (
           <TableContainer component={Paper}>
             <Table size="small">
@@ -83,13 +99,11 @@ export default function AssessmentDetailsPage() {
           color={showForm ? 'secondary' : 'primary'}
           size="large"
           sx={{ borderRadius: 2, fontWeight: 600, px: 3, py: 1 }}
-          onClick={() => setShowForm(v => !v)}
+          onClick={() => setShowForm((v) => !v)}
         >
           {showForm ? 'Fermer le formulaire' : 'Ajouter une émission'}
         </Button>
-        {showForm && (
-          <EmissionForm assessmentId={assessment.id?.toString()} onSuccess={() => window.location.reload()} />
-        )}
+        {showForm && <EmissionForm assessmentId={assessment.id?.toString()} onSuccess={() => window.location.reload()} />}
       </Box>
     </MainCard>
   );

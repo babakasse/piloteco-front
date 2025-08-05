@@ -268,13 +268,14 @@ export default function NavGroup({
               {item.title ? (
                 drawerOpen && (
                   <Box sx={{ pl: 3, mb: 1.5 }}>
-                    <Typography
+                    {/* Masquer le titre du groupe de navigation */}
+                    {/* <Typography
                       variant="h5"
                       color={theme.palette.mode === ThemeMode.DARK ? 'text.secondary' : 'secondary.dark'}
                       sx={{ textTransform: 'uppercase', fontSize: '0.688rem' }}
                     >
                       {item.title}
-                    </Typography>
+                    </Typography> */}
                     {item.caption && (
                       <Typography variant="caption" color="secondary">
                         {item.caption}
