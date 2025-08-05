@@ -17,6 +17,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Chip from '@mui/material/Chip';
+import Button from '@mui/material/Button';
 
 export default function Dashboard() {
   const { company, user, loading } = useCompany();
@@ -24,6 +25,11 @@ export default function Dashboard() {
   const [carbonLoading, setCarbonLoading] = useState(false);
   const [refresh, setRefresh] = useState(0);
   const [allEmissions, setAllEmissions] = useState<any[]>([]);
+  // Pagination pour la liste des émissions
+  const [emissionsPage, setEmissionsPage] = useState(1);
+  const emissionsPerPage = 10;
+  const totalPages = Math.ceil(allEmissions.length / emissionsPerPage);
+  const paginatedEmissions = allEmissions.slice((emissionsPage - 1) * emissionsPerPage, emissionsPage * emissionsPerPage);
 
   useEffect(() => {
     const fetchCarbon = async () => {
@@ -165,7 +171,7 @@ export default function Dashboard() {
             </TableHead>
             <TableBody>
               {allEmissions.length > 0 ? (
-                allEmissions.map((em: any) => (
+                paginatedEmissions.map((em: any) => (
                   <TableRow key={em.id}>
                     <TableCell>{em.assessmentYear}</TableCell>
                     <TableCell>{em.assessmentName}</TableCell>
@@ -181,7 +187,7 @@ export default function Dashboard() {
                         size="small"
                       />
                     </TableCell>
-                    <TableCell>{em.amount}</TableCell>
+                    <TableCell>{em.quantity ?? em.amount}</TableCell>
                     <TableCell>{em.unit}</TableCell>
                     <TableCell>{em.description}</TableCell>
                   </TableRow>
@@ -194,6 +200,28 @@ export default function Dashboard() {
             </TableBody>
           </Table>
         </TableContainer>
+        {/* Pagination pour les émissions */}
+        {totalPages > 1 && (
+          <Box display="flex" justifyContent="center" alignItems="center" mt={2} gap={2}>
+            <Button
+              variant="outlined"
+              size="small"
+              disabled={emissionsPage === 1}
+              onClick={() => setEmissionsPage((p) => Math.max(1, p - 1))}
+            >
+              Précédent
+            </Button>
+            <Typography variant="body2">Page {emissionsPage} / {totalPages}</Typography>
+            <Button
+              variant="outlined"
+              size="small"
+              disabled={emissionsPage === totalPages}
+              onClick={() => setEmissionsPage((p) => Math.min(totalPages, p + 1))}
+            >
+              Suivant
+            </Button>
+          </Box>
+        )}
       </Box>
     </MainCard>
   );

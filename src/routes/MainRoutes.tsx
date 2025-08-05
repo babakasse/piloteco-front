@@ -17,6 +17,7 @@ const AppContactUS = Loadable(lazy(() => import('pages/contact-us')));
 const AssessmentCreatePage = Loadable(lazy(() => import('pages/assessment-create')));
 const AssessmentListPage = Loadable(lazy(() => import('pages/assessment-list')));
 const AssessmentEmissionsPage = Loadable(lazy(() => import('pages/assessment-emissions')));
+const AssessmentDetailsPage = Loadable(lazy(() => import('pages/assessment-details')));
 // render - dashboard page
 const Dashboard = Loadable(lazy(() => import('pages/dashboard')));
 const CompaniesPage = Loadable(lazy(() => import('pages/companies')));
@@ -49,6 +50,10 @@ const MainRoutes = {
         {
           path: 'assessment/:id/emissions',
           element: <AssessmentEmissionsPage />
+        },
+        {
+          path: 'assessment/:id',
+          element: <AssessmentDetailsPage />
         },
         {
           path: 'companies',

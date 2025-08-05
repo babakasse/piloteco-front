@@ -4,48 +4,46 @@
 import { FormattedMessage } from 'react-intl';
 
 // assets
-import { Home } from 'iconsax-react';
+import { Home, BookSquare, Buildings } from 'iconsax-react';
 
 // type
 import { NavItemType } from 'types/menu';
 
 // icons
 const icons = {
-  dashboard: Home
+  dashboard: Home,
+  assessment: BookSquare,
+  companies: Buildings
 };
 
 // ==============================|| MENU ITEMS - DASHBOARD ||============================== //
 
 const dashboard: NavItemType = {
   id: 'dashboard',
-  title: <FormattedMessage id="dashboard" />,
+  title: 'Tableau de bord',
   type: 'group',
   icon: icons.dashboard,
   children: [
     {
       id: 'dashboard-main',
-      title: <FormattedMessage id="dashboard" />,
+      title: 'Tableau de bord',
       type: 'item',
       url: '/dashboard',
       icon: icons.dashboard
-    },
-    {
-      id: 'assessment-create',
-      title: 'Nouveau bilan carbone',
-      type: 'item',
-      url: '/assessment-create',
     },
     {
       id: 'assessment-list',
       title: 'Bilans carbone',
       type: 'item',
       url: '/assessment-list',
+      icon: icons.assessment
     },
     {
       id: 'companies',
       title: 'Entreprises',
       type: 'item',
       url: '/companies',
+      icon: icons.companies
     }
   ]
 };

@@ -13,6 +13,7 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import { getCompanyAssessments } from '../api/carbonAssessment';
 import { useNavigate } from 'react-router-dom';
+import AssessmentForm from './AssessmentForm';
 
 const AssessmentListPage: React.FC = () => {
   const [assessments, setAssessments] = useState<any[]>([]);
@@ -51,6 +52,8 @@ const AssessmentListPage: React.FC = () => {
                 <TableCell>Nom</TableCell>
                 <TableCell>Année</TableCell>
                 <TableCell>Description</TableCell>
+                <TableCell>Total émissions</TableCell>
+                <TableCell>Statut</TableCell>
                 <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
@@ -61,16 +64,41 @@ const AssessmentListPage: React.FC = () => {
                     <TableCell>{a.name}</TableCell>
                     <TableCell>{a.year}</TableCell>
                     <TableCell>{a.description}</TableCell>
+                    <TableCell>{a.totalEmissions} tCO₂e</TableCell>
                     <TableCell>
-                      <Button variant="outlined" size="small" onClick={() => navigate(`/assessment/${a.id}/emissions`)}>
-                        Ajouter des émissions
+                      <Box
+                        sx={{
+                          display: 'inline-block',
+                          px: 1,
+                          py: 0.5,
+                          borderRadius: 1,
+                          fontSize: '0.75rem',
+                          fontWeight: 600,
+                          backgroundColor: a.status === 'published' ? '#e8f5e8' : '#fff3cd',
+                          color: a.status === 'published' ? '#2e7d32' : '#856404'
+                        }}
+                      >
+                        {a.status === 'published' ? 'Publié' : 'Brouillon'}
+                      </Box>
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        size="small"
+                        sx={{ borderRadius: 2, fontWeight: 600, px: 2, py: 0.5, ml: 1, textTransform: 'none' }}
+                        onClick={() => navigate(`/assessment/${a.id}`)}
+                      >
+                        Détails
                       </Button>
                     </TableCell>
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={4} align="center">Aucun bilan trouvé</TableCell>
+                  <TableCell colSpan={6} align="center">
+                    Aucun bilan trouvé
+                  </TableCell>
                 </TableRow>
               )}
             </TableBody>
@@ -82,4 +110,3 @@ const AssessmentListPage: React.FC = () => {
 };
 
 export default AssessmentListPage;
-

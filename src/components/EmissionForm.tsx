@@ -76,7 +76,8 @@ export default function EmissionForm({ assessmentId, onSuccess }: { assessmentId
         .map(em => ({
           ...em,
           activityData: parseFloat(em.activityData),
-          emissionFactor: parseFloat(em.emissionFactor)
+          emissionFactor: parseFloat(em.emissionFactor),
+          amount: parseFloat(em.activityData) * parseFloat(em.emissionFactor) // Ajout du calcul automatique
         }));
       // Appel API pour chaque émission
       for (const emission of emissionsToSend) {
@@ -149,6 +150,20 @@ export default function EmissionForm({ assessmentId, onSuccess }: { assessmentId
               </Grid>
               <Grid item xs={12} md={2}>
                 <TextField label="Description" fullWidth value={em.description} onChange={e => handleEmissionChange(idx, 'description', e.target.value)} />
+              </Grid>
+              <Grid item xs={12} md={1}>
+                <TextField
+                  label="Montant (calculé)"
+                  type="number"
+                  fullWidth
+                  value={
+                    em.activityData && em.emissionFactor
+                      ? parseFloat(em.activityData) * parseFloat(em.emissionFactor)
+                      : ''
+                  }
+                  InputProps={{ readOnly: true }}
+                  helperText="activityData × facteur"
+                />
               </Grid>
               <Grid item xs={12} md={1}>
                 <Button color="error" onClick={() => removeEmission(idx)} disabled={emissions.length === 1}>Supprimer</Button>

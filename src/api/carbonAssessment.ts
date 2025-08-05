@@ -2,7 +2,7 @@ import axios from '../utils/axios';
 
 export const getCompanyAssessments = async () => {
   const response = await axios.get('/assessment');
-  return response.data;
+  return response.data || [];
 };
 
 export const getAssessmentSummary = async (id: number) => {
