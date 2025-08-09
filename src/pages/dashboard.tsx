@@ -10,6 +10,7 @@ import Grid from '@mui/material/Grid';
 
 import MainCard from 'components/MainCard';
 import useCompany from 'hooks/useCompany';
+import { useLanguage } from 'contexts/LanguageContext';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -25,6 +26,7 @@ import { EmojiObjects, Factory, LocalGasStation, Timeline } from '@mui/icons-mat
 
 export default function Dashboard() {
   const { company, user, loading } = useCompany();
+  const { t } = useLanguage();
   const [carbonSummary, setCarbonSummary] = useState<any>(null);
   const [carbonLoading, setCarbonLoading] = useState(false);
   const [refresh, setRefresh] = useState(0);
@@ -71,7 +73,7 @@ export default function Dashboard() {
   }, [refresh]);
 
   return (
-    <MainCard title="L'essentiel de votre Bilan Carbone" sx={{ mb: 3 }}>
+    <MainCard title={t('carbon-footprint-essentials')} sx={{ mb: 3 }}>
       {loading ? (
         <Box display="flex" justifyContent="center" mt={2}>
           <CircularProgress />
@@ -79,12 +81,12 @@ export default function Dashboard() {
       ) : user ? (
         <Box>
           <Typography variant="h6" gutterBottom>
-            Bienvenue, {user.firstName} {user.lastName} !
+            {t('welcome-user', { firstName: user.firstName, lastName: user.lastName })}
           </Typography>
           {/* CompanyCard supprimé ici */}
           {company ? null : (
             <Typography color="warning" mt={2}>
-              Aucune information d'entreprise disponible.
+              {t('no-company-info')}
             </Typography>
           )}
           {/* On garde le bilan carbone et les émissions détaillées */}
@@ -98,12 +100,12 @@ export default function Dashboard() {
                 {/* Section des métriques clés */}
                 <Box mb={4}>
                   <Typography variant="h5" gutterBottom sx={{ mb: 3 }}>
-                    📊 Métriques Clés
+                    {t('key-metrics')}
                   </Typography>
                   <Grid container spacing={3}>
                     <Grid item xs={12} sm={6} md={3}>
                       <MetricsCard
-                        title="Total Émissions"
+                        title={t('total-emissions')}
                         value={carbonSummary.totalEmissions}
                         unit="kgCO₂e"
                         color="error"
@@ -112,7 +114,7 @@ export default function Dashboard() {
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
                       <MetricsCard
-                        title="Scope 1 (Direct)"
+                        title={t('scope-1-direct')}
                         value={carbonSummary.scope1Emissions || 0}
                         unit="kgCO₂e"
                         color="success"
@@ -121,7 +123,7 @@ export default function Dashboard() {
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
                       <MetricsCard
-                        title="Scope 2 (Électricité)"
+                        title={t('scope-2-electricity')}
                         value={carbonSummary.scope2Emissions || 0}
                         unit="kgCO₂e"
                         color="info"
@@ -130,7 +132,7 @@ export default function Dashboard() {
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
                       <MetricsCard
-                        title="Scope 3 (Indirect)"
+                        title={t('scope-3-indirect')}
                         value={carbonSummary.scope3Emissions || 0}
                         unit="kgCO₂e"
                         color="warning"
@@ -143,7 +145,7 @@ export default function Dashboard() {
                 {/* Section des graphiques */}
                 <Box mb={4}>
                   <Typography variant="h5" gutterBottom sx={{ mb: 3 }}>
-                    � Analyse Graphique des Émissions
+                    {t('graphical-analysis')}
                   </Typography>
                   <Grid container spacing={3}>
                     {/* Répartition par Scope */}
@@ -177,26 +179,28 @@ export default function Dashboard() {
                       <Card sx={{ height: '100%' }}>
                         <CardContent>
                           <Typography variant="h6" gutterBottom>
-                            📋 Résumé du Bilan Carbone
+                            {t('carbon-footprint-summary')}
                           </Typography>
                           <Grid container spacing={2}>
                             <Grid item xs={12}>
-                              <Typography>Année : {carbonSummary.year}</Typography>
+                              <Typography>
+                                {t('year')} : {carbonSummary.year}
+                              </Typography>
                             </Grid>
                             <Grid item xs={12}>
                               <Typography>
-                                Date d'évaluation :{' '}
+                                {t('assessment-date')} :{' '}
                                 {carbonSummary.assessmentDate ? new Date(carbonSummary.assessmentDate).toLocaleDateString() : '-'}
                               </Typography>
                             </Grid>
                             <Grid item xs={12}>
                               <Typography>
-                                Total émissions : <b>{carbonSummary.totalEmissions} kgCO₂e</b>
+                                {t('total-emissions')} : <b>{carbonSummary.totalEmissions} kgCO₂e</b>
                               </Typography>
                             </Grid>
                             <Grid item xs={12}>
                               <Typography>
-                                Statut : <b>{carbonSummary.status}</b>
+                                {t('status')} : <b>{carbonSummary.status}</b>
                               </Typography>
                             </Grid>
                           </Grid>
@@ -223,18 +227,18 @@ export default function Dashboard() {
                 <Card>
                   <CardContent>
                     <Typography variant="h6" gutterBottom>
-                      📝 Détail des Émissions du Bilan Actuel
+                      {t('emission-details')}
                     </Typography>
                     <TableContainer component={Paper}>
                       <Table size="small">
                         <TableHead>
                           <TableRow>
-                            <TableCell>Source</TableCell>
-                            <TableCell>Catégorie</TableCell>
-                            <TableCell>Scope</TableCell>
-                            <TableCell>Quantité</TableCell>
-                            <TableCell>Unité</TableCell>
-                            <TableCell>Description</TableCell>
+                            <TableCell>{t('source')}</TableCell>
+                            <TableCell>{t('category')}</TableCell>
+                            <TableCell>{t('scope')}</TableCell>
+                            <TableCell>{t('quantity')}</TableCell>
+                            <TableCell>{t('unit')}</TableCell>
+                            <TableCell>{t('description')}</TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
@@ -258,7 +262,7 @@ export default function Dashboard() {
                           ) : (
                             <TableRow>
                               <TableCell colSpan={6} align="center">
-                                Aucune émission enregistrée
+                                {t('no-emissions-recorded')}
                               </TableCell>
                             </TableRow>
                           )}
@@ -270,7 +274,7 @@ export default function Dashboard() {
               </>
             ) : (
               <Typography color="warning.main" mt={2}>
-                Aucun bilan carbone trouvé pour cette entreprise.
+                {t('no-carbon-footprint')}
               </Typography>
             )}
           </Box>
@@ -279,7 +283,7 @@ export default function Dashboard() {
       {/* Tableau de toutes les émissions de l'entreprise */}
       <Box mt={4}>
         <Typography variant="h5" gutterBottom>
-          📈 Historique Complet des Émissions
+          {t('complete-emissions-history')}
         </Typography>
         <Card>
           <CardContent>
@@ -287,14 +291,14 @@ export default function Dashboard() {
               <Table size="small">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Année</TableCell>
-                    <TableCell>Bilan</TableCell>
-                    <TableCell>Source</TableCell>
-                    <TableCell>Catégorie</TableCell>
-                    <TableCell>Scope</TableCell>
-                    <TableCell>Quantité</TableCell>
-                    <TableCell>Unité</TableCell>
-                    <TableCell>Description</TableCell>
+                    <TableCell>{t('year')}</TableCell>
+                    <TableCell>{t('assessment')}</TableCell>
+                    <TableCell>{t('source')}</TableCell>
+                    <TableCell>{t('category')}</TableCell>
+                    <TableCell>{t('scope')}</TableCell>
+                    <TableCell>{t('quantity')}</TableCell>
+                    <TableCell>{t('unit')}</TableCell>
+                    <TableCell>{t('description')}</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -320,7 +324,7 @@ export default function Dashboard() {
                   ) : (
                     <TableRow>
                       <TableCell colSpan={8} align="center">
-                        Aucune émission enregistrée pour l'entreprise.
+                        {t('no-emissions-for-company')}
                       </TableCell>
                     </TableRow>
                   )}
@@ -336,10 +340,10 @@ export default function Dashboard() {
                   disabled={emissionsPage === 1}
                   onClick={() => setEmissionsPage((p) => Math.max(1, p - 1))}
                 >
-                  Précédent
+                  {t('previous')}
                 </Button>
                 <Typography variant="body2">
-                  Page {emissionsPage} / {totalPages}
+                  {t('page')} {emissionsPage} / {totalPages}
                 </Typography>
                 <Button
                   variant="outlined"
@@ -347,7 +351,7 @@ export default function Dashboard() {
                   disabled={emissionsPage === totalPages}
                   onClick={() => setEmissionsPage((p) => Math.min(totalPages, p + 1))}
                 >
-                  Suivant
+                  {t('next')}
                 </Button>
               </Box>
             )}

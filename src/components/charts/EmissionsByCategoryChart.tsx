@@ -1,6 +1,7 @@
 // src/components/charts/EmissionsByCategoryChart.tsx
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { Card, CardContent, Typography, Box } from '@mui/material';
+import { useLanguage } from 'contexts/LanguageContext';
 
 interface Emission {
   id: string;
@@ -16,9 +17,10 @@ interface EmissionsByCategoryChartProps {
 }
 
 const EmissionsByCategoryChart = ({ emissions }: EmissionsByCategoryChartProps) => {
+  const { t } = useLanguage();
   // Grouper les émissions par catégorie et scope
   const categoryData = emissions.reduce((acc: any, emission) => {
-    const category = emission.category || 'Non spécifié';
+    const category = emission.category || t('not-specified');
     const amount = emission.amount || emission.quantity || 0;
 
     if (!acc[category]) {
@@ -71,10 +73,10 @@ const EmissionsByCategoryChart = ({ emissions }: EmissionsByCategoryChartProps) 
       <Card>
         <CardContent>
           <Typography variant="h6" gutterBottom>
-            Émissions par Catégorie
+            {t('emissions-by-category')}
           </Typography>
           <Box display="flex" justifyContent="center" alignItems="center" height={400}>
-            <Typography color="text.secondary">Aucune donnée d'émissions disponible</Typography>
+            <Typography color="text.secondary">{t('no-emissions-data')}</Typography>
           </Box>
         </CardContent>
       </Card>
@@ -85,7 +87,7 @@ const EmissionsByCategoryChart = ({ emissions }: EmissionsByCategoryChartProps) 
     <Card>
       <CardContent>
         <Typography variant="h6" gutterBottom>
-          Émissions par Catégorie
+          {t('emissions-by-category')}
         </Typography>
         <Box height={400}>
           <ResponsiveContainer width="100%" height="100%">

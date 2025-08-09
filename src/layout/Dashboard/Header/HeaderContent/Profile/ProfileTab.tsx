@@ -6,6 +6,9 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 
+// project imports
+import { useLanguage } from 'contexts/LanguageContext';
+
 // assets
 import { Card, Edit2, Logout, Profile, Profile2User } from 'iconsax-react';
 
@@ -16,6 +19,7 @@ interface Props {
 // ==============================|| HEADER PROFILE - PROFILE TAB ||============================== //
 
 export default function ProfileTab({ handleLogout }: Props) {
+  const { t } = useLanguage();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const handleListItemClick = (event: MouseEvent<HTMLDivElement>, index: number) => {
     setSelectedIndex(index);
@@ -27,32 +31,32 @@ export default function ProfileTab({ handleLogout }: Props) {
         <ListItemIcon>
           <Edit2 variant="Bulk" size={18} />
         </ListItemIcon>
-        <ListItemText primary="Edit Profile" />
+        <ListItemText primary={t('edit-profile')} />
       </ListItemButton>
       <ListItemButton selected={selectedIndex === 1} onClick={(event: MouseEvent<HTMLDivElement>) => handleListItemClick(event, 1)}>
         <ListItemIcon>
           <Profile variant="Bulk" size={18} />
         </ListItemIcon>
-        <ListItemText primary="View Profile" />
+        <ListItemText primary={t('view-profile')} />
       </ListItemButton>
 
       <ListItemButton selected={selectedIndex === 3} onClick={(event: MouseEvent<HTMLDivElement>) => handleListItemClick(event, 3)}>
         <ListItemIcon>
           <Profile2User variant="Bulk" size={18} />
         </ListItemIcon>
-        <ListItemText primary="Social Profile" />
+        <ListItemText primary={t('social-profile')} />
       </ListItemButton>
       <ListItemButton selected={selectedIndex === 4} onClick={(event: MouseEvent<HTMLDivElement>) => handleListItemClick(event, 4)}>
         <ListItemIcon>
           <Card variant="Bulk" size={18} />
         </ListItemIcon>
-        <ListItemText primary="Billing" />
+        <ListItemText primary={t('billing')} />
       </ListItemButton>
       <ListItemButton selected={selectedIndex === 2} onClick={handleLogout}>
         <ListItemIcon>
           <Logout variant="Bulk" size={18} />
         </ListItemIcon>
-        <ListItemText primary="Logout" />
+        <ListItemText primary={t('logout')} />
       </ListItemButton>
     </List>
   );

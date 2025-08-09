@@ -16,35 +16,35 @@ import Paper from '@mui/material/Paper';
 
 // project-imports
 import MainCard from 'components/MainCard';
+import { useLanguage } from '../contexts/LanguageContext';
 
 // assets
 import { MessageText, Call, Sms, Location, Clock } from 'iconsax-react';
-
-// select company-size
-const sizes = [
-  { value: '1', label: '1 - 10 employés' },
-  { value: '2', label: '10 - 50 employés' },
-  { value: '3', label: '50 - 200 employés' },
-  { value: '4', label: '200 - 1000 employés' },
-  { value: '5', label: '1000+ employés' }
-];
-
-// select interest areas for carbon assessment
-const interests = [
-  { value: 'assessment', label: 'Évaluation carbone complète' },
-  { value: 'reporting', label: 'Rapports et conformité' },
-  { value: 'reduction', label: 'Stratégies de réduction' },
-  { value: 'waste', label: 'Gestion des déchets' },
-  { value: 'energy', label: 'Optimisation énergétique' },
-  { value: 'other', label: 'Autre' }
-];
-
-// ==============================|| CONTACT US PAGE ||============================== //
 
 export default function ContactUS() {
   const theme = useTheme();
   const [size, setSize] = useState('1');
   const [interest, setInterest] = useState('assessment');
+  const { t } = useLanguage();
+
+  // select company-size
+  const sizes = [
+    { value: '1', label: t('1-10-employees') },
+    { value: '2', label: t('10-50-employees') },
+    { value: '3', label: t('50-200-employees') },
+    { value: '4', label: t('200-1000-employees') },
+    { value: '5', label: t('1000-plus-employees') }
+  ];
+
+  // select interest areas for carbon assessment
+  const interests = [
+    { value: 'assessment', label: t('complete-carbon-assessment') },
+    { value: 'reporting', label: t('reports-compliance') },
+    { value: 'reduction', label: t('reduction-strategies') },
+    { value: 'waste', label: t('waste-management') },
+    { value: 'energy', label: t('energy-optimization') },
+    { value: 'other', label: t('other') }
+  ];
 
   const handleCompanySize = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setSize(event.target?.value!);
@@ -55,17 +55,16 @@ export default function ContactUS() {
   };
 
   return (
-    <MainCard title="Contactez nos experts PilotEco">
+    <MainCard title={t('contact-piloteco-experts')}>
       <Grid container spacing={4}>
         {/* Section Header */}
         <Grid item xs={12}>
           <Box textAlign="center" sx={{ mb: 4 }}>
             <Typography variant="h4" gutterBottom>
-              🌱 Parlons de votre empreinte carbone
+              🌱 {t('talk-about-carbon-footprint')}
             </Typography>
             <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 600, mx: 'auto' }}>
-              Obtenez des conseils personnalisés pour optimiser l'empreinte carbone de votre entreprise et atteindre vos objectifs
-              environnementaux.
+              {t('personalized-advice-description')}
             </Typography>
           </Box>
         </Grid>
@@ -78,7 +77,7 @@ export default function ContactUS() {
                 <CardContent>
                   <MessageText variant="Bold" size={32} style={{ color: theme.palette.primary.main, marginBottom: 16 }} />
                   <Typography variant="h6" gutterBottom>
-                    Email
+                    {t('email')}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     contact@piloteco.fr
@@ -91,7 +90,7 @@ export default function ContactUS() {
                 <CardContent>
                   <Call variant="Bold" size={32} style={{ color: theme.palette.success.main, marginBottom: 16 }} />
                   <Typography variant="h6" gutterBottom>
-                    Téléphone
+                    {t('phone')}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     +33 1 23 45 67 89
@@ -104,7 +103,7 @@ export default function ContactUS() {
                 <CardContent>
                   <Location variant="Bold" size={32} style={{ color: theme.palette.warning.main, marginBottom: 16 }} />
                   <Typography variant="h6" gutterBottom>
-                    Adresse
+                    {t('address')}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     123 Rue de l'Environnement
@@ -119,12 +118,12 @@ export default function ContactUS() {
                 <CardContent>
                   <Clock variant="Bold" size={32} style={{ color: theme.palette.info.main, marginBottom: 16 }} />
                   <Typography variant="h6" gutterBottom>
-                    Horaires
+                    {t('phone-hours')}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    Lun-Ven: 9h-18h
+                    {t('monday-friday')}
                     <br />
-                    Sam: 9h-12h
+                    {t('saturday')}
                   </Typography>
                 </CardContent>
               </Card>
@@ -136,38 +135,38 @@ export default function ContactUS() {
         <Grid item xs={12}>
           <Paper sx={{ p: 4, borderRadius: 3 }}>
             <Typography variant="h5" gutterBottom sx={{ mb: 3, textAlign: 'center' }}>
-              📋 Demande de consultation gratuite
+              📋 {t('free-consultation-request')}
             </Typography>
 
             <Grid container spacing={3}>
               <Grid item xs={12} md={6}>
                 <Stack spacing={1}>
                   <Typography variant="subtitle1" color="secondary">
-                    Prénom *
+                    {t('first-name')} *
                   </Typography>
-                  <TextField fullWidth type="text" placeholder="Votre prénom" />
+                  <TextField fullWidth type="text" placeholder={t('your-first-name')} />
                 </Stack>
               </Grid>
               <Grid item xs={12} md={6}>
                 <Stack spacing={1}>
                   <Typography variant="subtitle1" color="secondary">
-                    Nom *
+                    {t('last-name')} *
                   </Typography>
-                  <TextField fullWidth type="text" placeholder="Votre nom" />
+                  <TextField fullWidth type="text" placeholder={t('your-last-name')} />
                 </Stack>
               </Grid>
               <Grid item xs={12}>
                 <Stack spacing={1}>
                   <Typography variant="subtitle1" color="secondary">
-                    Adresse email *
+                    {t('email-address')} *
                   </Typography>
-                  <TextField fullWidth type="email" placeholder="votre.email@entreprise.com" />
+                  <TextField fullWidth type="email" placeholder={t('your-email')} />
                 </Stack>
               </Grid>
               <Grid item xs={12} md={6}>
                 <Stack spacing={1}>
                   <Typography variant="subtitle1" color="secondary">
-                    Téléphone
+                    {t('phone')}
                   </Typography>
                   <TextField fullWidth type="tel" placeholder="+33 1 23 45 67 89" />
                 </Stack>
@@ -175,15 +174,15 @@ export default function ContactUS() {
               <Grid item xs={12} md={6}>
                 <Stack spacing={1}>
                   <Typography variant="subtitle1" color="secondary">
-                    Entreprise *
+                    {t('company')} *
                   </Typography>
-                  <TextField fullWidth type="text" placeholder="Nom de votre entreprise" />
+                  <TextField fullWidth type="text" placeholder={t('your-company-name')} />
                 </Stack>
               </Grid>
               <Grid item xs={12} md={6}>
                 <Stack spacing={1}>
                   <Typography variant="subtitle1" color="secondary">
-                    Taille de l'entreprise *
+                    {t('company-size')} *
                   </Typography>
                   <TextField select fullWidth value={size} onChange={handleCompanySize}>
                     {sizes.map((option, index) => (
@@ -197,7 +196,7 @@ export default function ContactUS() {
               <Grid item xs={12} md={6}>
                 <Stack spacing={1}>
                   <Typography variant="subtitle1" color="secondary">
-                    Domaine d'intérêt *
+                    {t('interest-area')} *
                   </Typography>
                   <TextField select fullWidth value={interest} onChange={handleInterest}>
                     {interests.map((option, index) => (
@@ -211,24 +210,18 @@ export default function ContactUS() {
               <Grid item xs={12}>
                 <Stack spacing={1}>
                   <Typography variant="subtitle1" color="secondary">
-                    Message
+                    {t('message')}
                   </Typography>
-                  <TextField
-                    fullWidth
-                    multiline
-                    rows={4}
-                    placeholder="Décrivez-nous vos besoins en matière d'évaluation carbone et vos objectifs environnementaux..."
-                  />
+                  <TextField fullWidth multiline rows={4} placeholder={t('describe-needs')} />
                 </Stack>
               </Grid>
               <Grid item xs={12}>
                 <Stack direction="row" alignItems="flex-start" sx={{ ml: -1 }}>
                   <Checkbox sx={{ '& .css-1vjb4cj': { borderRadius: '2px' } }} defaultChecked />
                   <Typography variant="body2" sx={{ mt: 1 }}>
-                    J'accepte d'être contacté par PilotEco concernant mes besoins en évaluation carbone et je consens au traitement de mes
-                    données selon les{' '}
+                    {t('contact-consent')}{' '}
                     <Typography sx={{ cursor: 'pointer' }} component="span" color={theme.palette.primary.main}>
-                      Conditions Générales
+                      {t('terms-conditions')}
                     </Typography>
                   </Typography>
                 </Stack>
@@ -247,7 +240,7 @@ export default function ContactUS() {
                     borderRadius: 2
                   }}
                 >
-                  Envoyer ma demande de consultation
+                  {t('send-consultation-request')}
                 </Button>
               </Grid>
             </Grid>
@@ -258,7 +251,7 @@ export default function ContactUS() {
         <Grid item xs={12}>
           <Box textAlign="center" sx={{ mt: 4 }}>
             <Typography variant="body2" color="text.secondary">
-              💡 Réponse garantie sous 24h • Consultation gratuite • Devis personnalisé
+              💡 {t('response-guarantee')}
             </Typography>
           </Box>
         </Grid>

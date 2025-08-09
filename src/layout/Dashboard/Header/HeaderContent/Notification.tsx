@@ -22,6 +22,7 @@ import MainCard from 'components/MainCard';
 import IconButton from 'components/@extended/IconButton';
 import Transitions from 'components/@extended/Transitions';
 import { ThemeMode } from 'config';
+import { useLanguage } from 'contexts/LanguageContext';
 
 // assets
 import { Gift, MessageText1, Notification, Setting2, Flash, DocumentText, Chart, Timer, Global } from 'iconsax-react';
@@ -43,6 +44,7 @@ const actionSX = {
 export default function NotificationPage() {
   const theme = useTheme();
   const matchesXs = useMediaQuery(theme.breakpoints.down('md'));
+  const { t } = useLanguage();
 
   const anchorRef = useRef<any>(null);
   const [read] = useState(5);
@@ -102,9 +104,9 @@ export default function NotificationPage() {
               <ClickAwayListener onClickAway={handleClose}>
                 <MainCard elevation={0} border={false}>
                   <Stack direction="row" alignItems="center" justifyContent="space-between">
-                    <Typography variant="h5">Notifications</Typography>
+                    <Typography variant="h5">{t('notifications')}</Typography>
                     <Link href="#" variant="h6" color="primary">
-                      Tout marquer lu
+                      {t('mark-all-read')}
                     </Link>
                   </Stack>
                   <List
@@ -126,16 +128,8 @@ export default function NotificationPage() {
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText
-                        primary={
-                          <Typography variant="h6">
-                            Nouvel objectif carbone{' '}
-                            <Typography component="span" variant="subtitle1">
-                              atteint
-                            </Typography>{' '}
-                            pour votre entreprise !
-                          </Typography>
-                        }
-                        secondary="Il y a 5 min"
+                        primary={<Typography variant="h6">{t('carbon-objective-reached')}</Typography>}
+                        secondary={t('5-min-ago')}
                       />
                       <ListItemSecondaryAction>
                         <Typography variant="caption" noWrap>
@@ -151,16 +145,8 @@ export default function NotificationPage() {
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText
-                        primary={
-                          <Typography variant="h6">
-                            Rapport d&apos;évaluation carbone{' '}
-                            <Typography component="span" variant="subtitle1">
-                              prêt
-                            </Typography>{' '}
-                            à être téléchargé
-                          </Typography>
-                        }
-                        secondary="Il y a 1 heure"
+                        primary={<Typography variant="h6">{t('carbon-report-ready')}</Typography>}
+                        secondary={t('1-hour-ago')}
                       />
                       <ListItemSecondaryAction>
                         <Typography variant="caption" noWrap>
@@ -175,18 +161,7 @@ export default function NotificationPage() {
                           <Chart size={20} variant="Bold" />
                         </Avatar>
                       </ListItemAvatar>
-                      <ListItemText
-                        primary={
-                          <Typography variant="h6">
-                            Émissions réduites de{' '}
-                            <Typography component="span" variant="subtitle1">
-                              15%
-                            </Typography>{' '}
-                            ce mois-ci
-                          </Typography>
-                        }
-                        secondary="Il y a 3 heures"
-                      />
+                      <ListItemText primary={<Typography variant="h6">{t('emissions-reduced')}</Typography>} secondary={t('3-hours-ago')} />
                       <ListItemSecondaryAction>
                         <Typography variant="caption" noWrap>
                           11:20
@@ -201,15 +176,7 @@ export default function NotificationPage() {
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText
-                        primary={
-                          <Typography variant="h6">
-                            Rappel : Évaluation carbone{' '}
-                            <Typography component="span" variant="subtitle1">
-                              mensuelle
-                            </Typography>{' '}
-                            à compléter
-                          </Typography>
-                        }
+                        primary={<Typography variant="h6">{t('assessment-reminder')}</Typography>}
                         secondary="Échéance dans 2 jours"
                       />
                       <ListItemSecondaryAction>
@@ -225,18 +192,7 @@ export default function NotificationPage() {
                           <Global size={20} variant="Bold" />
                         </Avatar>
                       </ListItemAvatar>
-                      <ListItemText
-                        primary={
-                          <Typography variant="h6">
-                            Nouvelle réglementation{' '}
-                            <Typography component="span" variant="subtitle1">
-                              environnementale
-                            </Typography>{' '}
-                            disponible
-                          </Typography>
-                        }
-                        secondary="Hier"
-                      />
+                      <ListItemText primary={<Typography variant="h6">{t('new-regulation')}</Typography>} secondary={t('yesterday')} />
                       <ListItemSecondaryAction>
                         <Typography variant="caption" noWrap>
                           16:45
@@ -246,10 +202,10 @@ export default function NotificationPage() {
                   </List>
                   <Stack direction="row" justifyContent="space-between" sx={{ pt: 1 }}>
                     <Link href="#" variant="h6" color="primary">
-                      Voir tout
+                      {t('view-all')}
                     </Link>
                     <Link href="#" variant="h6" color="secondary">
-                      Paramètres
+                      {t('settings')}
                     </Link>
                   </Stack>
                 </MainCard>

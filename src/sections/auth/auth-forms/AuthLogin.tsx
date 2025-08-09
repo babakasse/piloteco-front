@@ -25,6 +25,7 @@ import useScriptRef from 'hooks/useScriptRef';
 import IconButton from 'components/@extended/IconButton';
 import AnimateButton from 'components/@extended/AnimateButton';
 import { fetcher } from 'utils/axios';
+import { useLanguage } from 'contexts/LanguageContext';
 
 // assets
 import { Eye, EyeSlash } from 'iconsax-react';
@@ -33,6 +34,7 @@ import { Eye, EyeSlash } from 'iconsax-react';
 
 export default function AuthLogin({ forgot }: { forgot?: string }) {
   const [checked, setChecked] = useState(false);
+  const { t } = useLanguage();
 
   const { isLoggedIn, login } = useAuth();
   const scriptedRef = useScriptRef();
@@ -55,8 +57,8 @@ export default function AuthLogin({ forgot }: { forgot?: string }) {
           submit: null
         }}
         validationSchema={Yup.object().shape({
-          email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-          password: Yup.string().max(255).required('Password is required')
+          email: Yup.string().email(t('valid-email')).max(255).required(t('email-required')),
+          password: Yup.string().max(255).required(t('password-required'))
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           try {
@@ -81,7 +83,7 @@ export default function AuthLogin({ forgot }: { forgot?: string }) {
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="email-login">Email Address</InputLabel>
+                  <InputLabel htmlFor="email-login">{t('email-address')}</InputLabel>
                   <OutlinedInput
                     id="email-login"
                     type="email"
@@ -89,7 +91,7 @@ export default function AuthLogin({ forgot }: { forgot?: string }) {
                     name="email"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    placeholder="Enter email address"
+                    placeholder={t('enter-email-address')}
                     fullWidth
                     error={Boolean(touched.email && errors.email)}
                   />
@@ -102,7 +104,7 @@ export default function AuthLogin({ forgot }: { forgot?: string }) {
               </Grid>
               <Grid item xs={12}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="password-login">Password</InputLabel>
+                  <InputLabel htmlFor="password-login">{t('password')}</InputLabel>
                   <OutlinedInput
                     fullWidth
                     error={Boolean(touched.password && errors.password)}
@@ -125,7 +127,7 @@ export default function AuthLogin({ forgot }: { forgot?: string }) {
                         </IconButton>
                       </InputAdornment>
                     }
-                    placeholder="Enter password"
+                    placeholder={t('enter-password')}
                   />
                 </Stack>
                 {touched.password && errors.password && (
@@ -147,11 +149,11 @@ export default function AuthLogin({ forgot }: { forgot?: string }) {
                         size="small"
                       />
                     }
-                    label={<Typography variant="h6">Keep me sign in</Typography>}
+                    label={<Typography variant="h6">{t('keep-me-sign-in')}</Typography>}
                   />
 
                   <Link variant="h6" component={RouterLink} to={isLoggedIn && forgot ? forgot : '/forgot-password'} color="text.primary">
-                    Forgot Password?
+                    {t('forgot-password')}
                   </Link>
                 </Stack>
               </Grid>
@@ -163,7 +165,7 @@ export default function AuthLogin({ forgot }: { forgot?: string }) {
               <Grid item xs={12}>
                 <AnimateButton>
                   <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
-                    Login
+                    {t('login')}
                   </Button>
                 </AnimateButton>
               </Grid>

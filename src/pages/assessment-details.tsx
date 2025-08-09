@@ -14,12 +14,14 @@ import Paper from '@mui/material/Paper';
 import { getAssessmentWithEmissions } from '../api/carbonAssessment';
 import EmissionForm from '../components/EmissionForm';
 import Button from '@mui/material/Button';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export default function AssessmentDetailsPage() {
   const { id } = useParams();
   const [assessment, setAssessment] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
     if (!id) return;
@@ -38,41 +40,41 @@ export default function AssessmentDetailsPage() {
   }
 
   if (!assessment) {
-    return <Typography color="error">Aucun détail trouvé pour ce bilan.</Typography>;
+    return <Typography color="error">{t('no-details-found')}</Typography>;
   }
 
   return (
-    <MainCard title={`Détails du bilan carbone : ${assessment.name}`}>
+    <MainCard title={`${t('assessment-details')} : ${assessment.name}`}>
       <Typography variant="subtitle1" gutterBottom>
-        Année : {assessment.year}
+        {t('year')} : {assessment.year}
       </Typography>
       <Typography variant="subtitle1" gutterBottom>
-        Description : {assessment.description || '-'}
+        {t('description')} : {assessment.description || '-'}
       </Typography>
       <Typography variant="subtitle1" gutterBottom>
-        Date d'évaluation : {assessment.assessmentDate ? new Date(assessment.assessmentDate).toLocaleDateString() : '-'}
+        {t('assessment-date')} : {assessment.assessmentDate ? new Date(assessment.assessmentDate).toLocaleDateString() : '-'}
       </Typography>
       <Typography variant="subtitle1" gutterBottom>
-        Statut : {assessment.status}
+        {t('status')} : {assessment.status}
       </Typography>
       <Typography variant="subtitle1" gutterBottom>
-        Total émissions : {assessment.totalEmissions} kgCO₂e
+        {t('total-emissions')} : {assessment.totalEmissions} kgCO₂e
       </Typography>
       <Box mt={3}>
         <Typography variant="h6" gutterBottom>
-          Émissions associées
+          {t('associated-emissions')}
         </Typography>
         {assessment.emissions && assessment.emissions.length > 0 ? (
           <TableContainer component={Paper}>
             <Table size="small">
               <TableHead>
                 <TableRow>
-                  <TableCell>Source</TableCell>
-                  <TableCell>Catégorie</TableCell>
-                  <TableCell>Montant</TableCell>
-                  <TableCell>Unité</TableCell>
-                  <TableCell>Scope</TableCell>
-                  <TableCell>Description</TableCell>
+                  <TableCell>{t('source')}</TableCell>
+                  <TableCell>{t('category')}</TableCell>
+                  <TableCell>{t('amount')}</TableCell>
+                  <TableCell>{t('unit')}</TableCell>
+                  <TableCell>{t('scope')}</TableCell>
+                  <TableCell>{t('description')}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -90,7 +92,7 @@ export default function AssessmentDetailsPage() {
             </Table>
           </TableContainer>
         ) : (
-          <Typography>Aucune émission associée à ce bilan.</Typography>
+          <Typography>{t('no-emissions-associated')}</Typography>
         )}
       </Box>
       <Box mt={4}>
@@ -101,7 +103,7 @@ export default function AssessmentDetailsPage() {
           sx={{ borderRadius: 2, fontWeight: 600, px: 3, py: 1 }}
           onClick={() => setShowForm((v) => !v)}
         >
-          {showForm ? 'Fermer le formulaire' : 'Ajouter une émission'}
+          {showForm ? t('close-form') : t('add-emission')}
         </Button>
         {showForm && <EmissionForm assessmentId={assessment.id?.toString()} onSuccess={() => window.location.reload()} />}
       </Box>

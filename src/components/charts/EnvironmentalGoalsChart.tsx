@@ -1,5 +1,6 @@
 // src/components/charts/EnvironmentalGoalsChart.tsx
 import { Card, CardContent, Typography, Box, LinearProgress, Chip, Grid } from '@mui/material';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 interface Goal {
   name: string;
@@ -15,24 +16,26 @@ interface EnvironmentalGoalsChartProps {
 }
 
 const EnvironmentalGoalsChart = ({ totalEmissions, year }: EnvironmentalGoalsChartProps) => {
+  const { t } = useLanguage();
+
   // Objectifs fictifs pour démonstration
   const goals: Goal[] = [
     {
-      name: 'Réduction CO₂ par rapport à 2020',
+      name: t('co2-reduction-from-2020'),
       target: 20, // 20% de réduction
       current: totalEmissions > 10000 ? 5 : totalEmissions > 5000 ? 15 : 25, // Progression fictive
       unit: '%',
       color: totalEmissions > 10000 ? 'error' : totalEmissions > 5000 ? 'warning' : 'success'
     },
     {
-      name: 'Émissions par employé',
+      name: t('emissions-per-employee'),
       target: 2000, // 2000 kgCO₂e par employé
       current: Math.max(1000, totalEmissions / 10), // Estimation fictive
       unit: 'kgCO₂e',
       color: totalEmissions / 10 > 2000 ? 'error' : totalEmissions / 10 > 1500 ? 'warning' : 'success'
     },
     {
-      name: 'Objectif neutralité carbone',
+      name: t('carbon-neutrality-goal'),
       target: year < 2030 ? 2030 : 2040, // Objectif neutralité
       current: year,
       unit: '',
@@ -54,12 +57,12 @@ const EnvironmentalGoalsChart = ({ totalEmissions, year }: EnvironmentalGoalsCha
 
   const getStatusText = (goal: Goal) => {
     const progress = getProgressValue(goal);
-    if (goal.name.includes('neutralité')) {
+    if (goal.name.includes(t('carbon-neutrality-goal'))) {
       const yearsLeft = goal.target - goal.current;
-      return yearsLeft > 0 ? `${yearsLeft} ans restants` : 'Objectif atteint !';
+      return yearsLeft > 0 ? `${yearsLeft} ${t('years-remaining')}` : t('goal-achieved');
     }
-    if (goal.name.includes('Réduction')) {
-      return `${goal.current}% de réduction`;
+    if (goal.name.includes(t('co2-reduction-from-2020').split(' ')[0])) {
+      return `${goal.current}% ${t('reduction-percentage')}`;
     }
     return `${goal.current.toFixed(0)} ${goal.unit}`;
   };
@@ -69,10 +72,10 @@ const EnvironmentalGoalsChart = ({ totalEmissions, year }: EnvironmentalGoalsCha
       <Card sx={{ height: '100%' }}>
         <CardContent sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
           <Typography variant="h6" gutterBottom>
-            🎯 Objectifs Environnementaux
+            🎯 {t('environmental-goals')}
           </Typography>
           <Box display="flex" justifyContent="center" alignItems="center" flexGrow={1}>
-            <Typography color="text.secondary">Aucune donnée d'émissions pour définir les objectifs</Typography>
+            <Typography color="text.secondary">{t('no-emissions-for-goals')}</Typography>
           </Box>
         </CardContent>
       </Card>
@@ -83,7 +86,7 @@ const EnvironmentalGoalsChart = ({ totalEmissions, year }: EnvironmentalGoalsCha
     <Card sx={{ height: '100%' }}>
       <CardContent sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
         <Typography variant="h6" gutterBottom>
-          🎯 Objectifs Environnementaux {year}
+          🎯 {t('environmental-goals')} {year}
         </Typography>
         <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={2}>
@@ -118,7 +121,7 @@ const EnvironmentalGoalsChart = ({ totalEmissions, year }: EnvironmentalGoalsCha
                         {progress.toFixed(1)}%
                       </Typography>
                       <Typography variant="caption" color="text.secondary">
-                        Objectif: {goal.target}
+                        {t('goal')}: {goal.target}
                         {goal.unit}
                       </Typography>
                     </Box>
@@ -131,7 +134,7 @@ const EnvironmentalGoalsChart = ({ totalEmissions, year }: EnvironmentalGoalsCha
 
         <Box mt={2} p={1.5} bgcolor="grey.50" borderRadius={1}>
           <Typography variant="caption" color="text.secondary" align="center" display="block">
-            💡 Ces objectifs sont calculés automatiquement en fonction de vos émissions actuelles et des standards environnementaux.
+            💡 {t('goals-auto-calculated')}
           </Typography>
         </Box>
       </CardContent>

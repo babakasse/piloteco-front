@@ -1,6 +1,7 @@
 // src/components/charts/ScopeDistributionChart.tsx
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import { Card, CardContent, Typography, Box } from '@mui/material';
+import { useLanguage } from 'contexts/LanguageContext';
 
 interface ScopeDistributionChartProps {
   scope1: number;
@@ -11,6 +12,7 @@ interface ScopeDistributionChartProps {
 const COLORS = ['#2e7d32', '#1976d2', '#ed6c02']; // vert, bleu, orange
 
 const ScopeDistributionChart = ({ scope1, scope2, scope3 }: ScopeDistributionChartProps) => {
+  const { t } = useLanguage();
   const data = [
     { name: 'Scope 1', value: scope1, color: COLORS[0] },
     { name: 'Scope 2', value: scope2, color: COLORS[1] },
@@ -51,10 +53,10 @@ const ScopeDistributionChart = ({ scope1, scope2, scope3 }: ScopeDistributionCha
       <Card>
         <CardContent>
           <Typography variant="h6" gutterBottom>
-            Répartition par Scope
+            {t('scope-distribution')}
           </Typography>
           <Box display="flex" justifyContent="center" alignItems="center" height={400}>
-            <Typography color="text.secondary">Aucune donnée d'émissions disponible</Typography>
+            <Typography color="text.secondary">{t('no-emissions-data')}</Typography>
           </Box>
         </CardContent>
       </Card>
@@ -65,7 +67,7 @@ const ScopeDistributionChart = ({ scope1, scope2, scope3 }: ScopeDistributionCha
     <Card>
       <CardContent>
         <Typography variant="h6" gutterBottom>
-          Répartition par Scope
+          {t('scope-distribution')}
         </Typography>
         <Box height={400}>
           <ResponsiveContainer width="100%" height="100%">

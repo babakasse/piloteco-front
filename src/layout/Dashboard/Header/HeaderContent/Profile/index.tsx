@@ -27,6 +27,7 @@ import IconButton from 'components/@extended/IconButton';
 import { ThemeMode } from 'config';
 import useAuth from 'hooks/useAuth';
 import useCompany from 'hooks/useCompany';
+import { useLanguage } from 'contexts/LanguageContext';
 
 // assets
 import avatar1 from 'assets/images/users/avatar-6.png';
@@ -71,6 +72,7 @@ export default function ProfilePage() {
 
   const { logout } = useAuth();
   const { user } = useCompany();
+  const { t } = useLanguage();
   const handleLogout = async () => {
     try {
       await logout();
@@ -160,7 +162,7 @@ export default function ProfilePage() {
                         </Stack>
                       </Grid>
                       <Grid item>
-                        <Tooltip title="Logout">
+                        <Tooltip title={t('logout')}>
                           <IconButton size="large" color="error" sx={{ p: 1 }} onClick={handleLogout}>
                             <Logout variant="Bulk" />
                           </IconButton>
@@ -180,7 +182,7 @@ export default function ProfilePage() {
                           textTransform: 'capitalize'
                         }}
                         icon={<Profile size={18} style={{ marginBottom: 0, marginRight: '10px' }} />}
-                        label="Profile"
+                        label={t('profile-tab')}
                         {...a11yProps(0)}
                       />
                       <Tab
@@ -192,7 +194,7 @@ export default function ProfilePage() {
                           textTransform: 'capitalize'
                         }}
                         icon={<Setting2 size={18} style={{ marginBottom: 0, marginRight: '10px' }} />}
-                        label="Setting"
+                        label={t('settings-tab')}
                         {...a11yProps(1)}
                       />
                     </Tabs>

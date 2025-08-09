@@ -10,6 +10,7 @@ import Typography from '@mui/material/Typography';
 
 // project-imports
 import { APP_DEFAULT_PATH } from 'config';
+import { useLanguage } from 'contexts/LanguageContext';
 
 // assets
 import construction from 'assets/images/maintenance/img-cunstruct-1.svg';
@@ -19,6 +20,8 @@ import constructionbottom from 'assets/images/maintenance/img-cunstruct-1-bottom
 // ==============================|| UNDER CONSTRUCTION ||============================== //
 
 export default function UnderConstruction() {
+  const { t } = useLanguage();
+
   return (
     <Box sx={{ minHeight: '100vh', backgroundImage: `url(${constructionBg})`, backgroundSize: '100%', backgroundRepeat: 'no-repeat' }}>
       <Container fixed sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
@@ -38,13 +41,13 @@ export default function UnderConstruction() {
           <Grid item md={6}>
             <Stack spacing={2} justifyContent="center" alignItems="center">
               <Typography align="center" variant="h1">
-                Under Construction
+                {t('under-construction')}
               </Typography>
               <Typography color="text.secondary" align="center" sx={{ width: '85%' }}>
-                Hey! Please check out this site later. We are doing some maintenance on it right now.
+                {t('under-construction-description')}
               </Typography>
               <Button component={Link} to={APP_DEFAULT_PATH} variant="contained">
-                Back To Home
+                {t('back-to-home')}
               </Button>
             </Stack>
           </Grid>

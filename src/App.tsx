@@ -11,6 +11,7 @@ import Snackbar from 'components/@extended/Snackbar';
 
 // auth-provider
 import { JWTProvider as AuthProvider } from 'contexts/JWTContext';
+import { LanguageProvider } from 'contexts/LanguageContext';
 
 // ==============================|| APP - THEME, ROUTER, LOCAL  ||============================== //
 
@@ -18,16 +19,18 @@ export default function App() {
   return (
     <ThemeCustomization>
       {/* <RTLLayout> */}
-      <Locales>
-        <ScrollTop>
-          <AuthProvider>
-            <>
-              <RouterProvider router={router} />
-              <Snackbar />
-            </>
-          </AuthProvider>
-        </ScrollTop>
-      </Locales>
+      <LanguageProvider>
+        <Locales>
+          <ScrollTop>
+            <AuthProvider>
+              <>
+                <RouterProvider router={router} />
+                <Snackbar />
+              </>
+            </AuthProvider>
+          </ScrollTop>
+        </Locales>
+      </LanguageProvider>
       {/* </RTLLayout> */}
     </ThemeCustomization>
   );

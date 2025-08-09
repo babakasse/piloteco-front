@@ -18,6 +18,7 @@ import Avatar from 'components/@extended/Avatar';
 import useAuth from 'hooks/useAuth';
 import useCompany from 'hooks/useCompany';
 import { useGetMenuMaster } from 'api/menu';
+import { useLanguage } from 'contexts/LanguageContext';
 
 // assets
 import { ArrowRight2 } from 'iconsax-react';
@@ -57,6 +58,7 @@ export default function UserList() {
 
   const { logout } = useAuth();
   const { user } = useCompany();
+  const { t } = useLanguage();
   const handleLogout = async () => {
     try {
       await logout();
@@ -124,12 +126,12 @@ export default function UserList() {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       >
-        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+        <MenuItem onClick={handleLogout}>{t('logout')}</MenuItem>
         <MenuItem component={Link} to="#" onClick={handleClose}>
-          Profile
+          {t('profile')}
         </MenuItem>
         <MenuItem component={Link} to="#" onClick={handleClose}>
-          My account
+          {t('my-account')}
         </MenuItem>
       </Menu>
     </Box>

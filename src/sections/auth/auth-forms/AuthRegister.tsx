@@ -23,6 +23,7 @@ import useAuth from 'hooks/useAuth';
 import useScriptRef from 'hooks/useScriptRef';
 import IconButton from 'components/@extended/IconButton';
 import AnimateButton from 'components/@extended/AnimateButton';
+import { useLanguage } from 'contexts/LanguageContext';
 
 import { openSnackbar } from 'api/snackbar';
 import { strengthColor, strengthIndicator } from 'utils/password-strength';
@@ -40,6 +41,7 @@ export default function AuthRegister() {
   const { register } = useAuth();
   const scriptedRef = useScriptRef();
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const [level, setLevel] = useState<StringColorProps>();
   const [showPassword, setShowPassword] = useState(false);
@@ -72,10 +74,10 @@ export default function AuthRegister() {
           submit: null
         }}
         validationSchema={Yup.object().shape({
-          firstname: Yup.string().max(255).required('First Name is required'),
-          lastname: Yup.string().max(255).required('Last Name is required'),
-          email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-          password: Yup.string().max(255).required('Password is required')
+          firstname: Yup.string().max(255).required(t('first-name-required')),
+          lastname: Yup.string().max(255).required(t('last-name-required')),
+          email: Yup.string().email(t('valid-email')).max(255).required(t('email-required')),
+          password: Yup.string().max(255).required(t('password-required'))
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           try {
@@ -85,7 +87,7 @@ export default function AuthRegister() {
               setSubmitting(false);
               openSnackbar({
                 open: true,
-                message: 'Your registration has been successfully completed.',
+                message: t('registration-success'),
                 variant: 'alert',
                 alert: {
                   color: 'success'
@@ -111,7 +113,7 @@ export default function AuthRegister() {
             <Grid container spacing={3}>
               <Grid item xs={12} md={6}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="firstname-signup">First Name*</InputLabel>
+                  <InputLabel htmlFor="firstname-signup">{t('first-name')}*</InputLabel>
                   <OutlinedInput
                     id="firstname-login"
                     type="firstname"
@@ -132,7 +134,7 @@ export default function AuthRegister() {
               </Grid>
               <Grid item xs={12} md={6}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="lastname-signup">Last Name*</InputLabel>
+                  <InputLabel htmlFor="lastname-signup">{t('last-name')}*</InputLabel>
                   <OutlinedInput
                     fullWidth
                     error={Boolean(touched.lastname && errors.lastname)}
@@ -154,7 +156,7 @@ export default function AuthRegister() {
               </Grid>
               <Grid item xs={12}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="company-signup">Company</InputLabel>
+                  <InputLabel htmlFor="company-signup">{t('company')}</InputLabel>
                   <OutlinedInput
                     fullWidth
                     error={Boolean(touched.company && errors.company)}
@@ -175,7 +177,7 @@ export default function AuthRegister() {
               </Grid>
               <Grid item xs={12}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="email-signup">Email Address*</InputLabel>
+                  <InputLabel htmlFor="email-signup">{t('email-address')}*</InputLabel>
                   <OutlinedInput
                     fullWidth
                     error={Boolean(touched.email && errors.email)}
@@ -197,7 +199,7 @@ export default function AuthRegister() {
               </Grid>
               <Grid item xs={12}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="password-signup">Password</InputLabel>
+                  <InputLabel htmlFor="password-signup">{t('password')}</InputLabel>
                   <OutlinedInput
                     fullWidth
                     error={Boolean(touched.password && errors.password)}
@@ -247,13 +249,13 @@ export default function AuthRegister() {
               </Grid>
               <Grid item xs={12}>
                 <Typography variant="body2">
-                  By Signing up, you agree to our &nbsp;
+                  {t('by-signing-up')} &nbsp;
                   <Link variant="subtitle2" component={RouterLink} to="#">
-                    Terms of Service
+                    {t('terms-of-service')}
                   </Link>
-                  &nbsp; and &nbsp;
+                  &nbsp; {t('and')} &nbsp;
                   <Link variant="subtitle2" component={RouterLink} to="#">
-                    Privacy Policy
+                    {t('privacy-policy')}
                   </Link>
                 </Typography>
               </Grid>
@@ -265,7 +267,7 @@ export default function AuthRegister() {
               <Grid item xs={12}>
                 <AnimateButton>
                   <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
-                    Create Account
+                    {t('create-account')}
                   </Button>
                 </AnimateButton>
               </Grid>

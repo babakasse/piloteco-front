@@ -20,27 +20,27 @@ const icons = {
 
 const dashboard: NavItemType = {
   id: 'dashboard',
-  title: 'Tableau de bord',
+  title: <FormattedMessage id="dashboard" />,
   type: 'group',
   icon: icons.dashboard,
   children: [
     {
       id: 'dashboard-main',
-      title: 'Tableau de bord',
+      title: <FormattedMessage id="dashboard" />,
       type: 'item',
       url: '/dashboard',
       icon: icons.dashboard
     },
     {
       id: 'assessment-list',
-      title: 'Bilans carbone',
+      title: <FormattedMessage id="assessments" />,
       type: 'item',
       url: '/assessment-list',
       icon: icons.assessment
     },
     {
       id: 'companies',
-      title: 'Entreprises',
+      title: <FormattedMessage id="companies" />,
       type: 'item',
       url: '/companies',
       icon: icons.companies

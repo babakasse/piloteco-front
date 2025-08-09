@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 
 // project-imports
 import { APP_DEFAULT_PATH } from 'config';
+import { useLanguage } from 'contexts/LanguageContext';
 
 // assets
 import error500 from 'assets/images/maintenance/img-error-500.svg';
@@ -20,6 +21,7 @@ import error500 from 'assets/images/maintenance/img-error-500.svg';
 export default function Error500() {
   const theme = useTheme();
   const matchDownSM = useMediaQuery(theme.breakpoints.down('sm'));
+  const { t } = useLanguage();
 
   return (
     <Grid container direction="column" alignItems="center" justifyContent="center" sx={{ minHeight: '100vh' }} spacing={3}>
@@ -31,13 +33,13 @@ export default function Error500() {
       <Grid item xs={12}>
         <Stack justifyContent="center" alignItems="center">
           <Typography align="center" variant={matchDownSM ? 'h2' : 'h1'}>
-            Internal Server Error
+            {t('internal-server-error')}
           </Typography>
           <Typography color="text.secondary" variant="body2" align="center" sx={{ width: { xs: '73%', sm: '70%' }, mt: 1 }}>
-            Server error 500. we fixing the problem. please try again at a later stage.
+            {t('server-error-description')}
           </Typography>
           <Button component={Link} to={APP_DEFAULT_PATH} variant="contained" sx={{ textTransform: 'none', mt: 4 }}>
-            Back To Home
+            {t('back-to-home')}
           </Button>
         </Stack>
       </Grid>

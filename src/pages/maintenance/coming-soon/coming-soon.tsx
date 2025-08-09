@@ -12,6 +12,7 @@ import Chip from '@mui/material/Chip';
 
 // project-imports
 import IconButton from 'components/@extended/IconButton';
+import { useLanguage } from 'contexts/LanguageContext';
 
 // assets
 import { Facebook, Google, Notification, Trash, DocumentText, Link21, MoneyRecive, Chart21, Timer1, Global, Flash } from 'iconsax-react';
@@ -22,6 +23,8 @@ import AuthBackground from 'assets/images/auth/AuthBackground';
 // ==============================|| COMING SOON ||============================== //
 
 export default function ComingSoon() {
+  const { t } = useLanguage();
+
   return (
     <>
       <AuthBackground />
@@ -33,7 +36,7 @@ export default function ComingSoon() {
                 {/* Header Section */}
                 <Box textAlign="center">
                   <Chip
-                    label="🚀 Bientôt disponible"
+                    label={t('coming-soon-chip')}
                     variant="outlined"
                     color="primary"
                     sx={{
@@ -69,7 +72,7 @@ export default function ComingSoon() {
                       fontSize: { xs: '1.5rem', md: '2rem' }
                     }}
                   >
-                    Votre plateforme pour vous aider à suivre, réduire et valoriser votre impact environnemental.
+                    {t('environmental-platform')}
                   </Typography>
                   <Typography
                     variant="h5"
@@ -83,51 +86,50 @@ export default function ComingSoon() {
                       mb: 4
                     }}
                   >
-                    Révolutionnez votre impact environnemental
+                    {t('revolutionize-impact')}
                   </Typography>
                   <Typography
                     variant="body1"
                     color="text.secondary"
                     sx={{ fontSize: '1.25rem', lineHeight: 1.6, maxWidth: 700, mx: 'auto' }}
                   >
-                    Découvrez les fonctionnalités révolutionnaires qui transformeront votre approche de la gestion environnementale avec des
-                    outils avancés pour une gestion durable et intelligente.
+                    {t('coming-soon-description')}
                   </Typography>
                 </Box>
 
                 {/* Feature Cards Grid */}
                 <Box>
                   <Typography variant="h4" textAlign="center" color="primary.main" sx={{ fontWeight: 600, mb: 5 }}>
-                    ✨ Nouvelles fonctionnalités à venir
+                    {t('new-features')}
                   </Typography>
 
                   <Grid container spacing={{ xs: 3, md: 4 }}>
                     {[
                       {
                         icon: <Trash variant="Bold" size={48} />,
-                        title: 'Gestion des déchets intelligente',
-                        description: 'Suivi optimisé avec carte interactive des centres de recyclage et optimisation des processus',
+                        title: t('waste-management'),
+                        description: t('waste-management-description'),
                         color: '#4CAF50',
                         bgColor: 'success'
                       },
                       {
                         icon: <DocumentText variant="Bold" size={48} />,
-                        title: 'Rapports automatisés',
-                        description: 'Génération PDF instantanée, exports CSV en temps réel et notifications intelligentes',
+                        title: t('automated-reports'),
+                        description: t('automated-reports-description'),
                         color: '#2196F3',
                         bgColor: 'info'
                       },
                       {
                         icon: <Link21 variant="Bold" size={48} />,
-                        title: 'Intégrations ERP avancées',
-                        description: 'Connexion transparente avec SAP, QuickBooks, API et synchronisation automatique',
+                        title: t('erp-integrations'),
+                        description: t('erp-integrations-description'),
                         color: '#FF9800',
                         bgColor: 'warning'
                       },
                       {
                         icon: <MoneyRecive variant="Bold" size={48} />,
-                        title: 'Plans flexibles et scalables',
-                        description: "Solutions adaptées à toutes les tailles d'entreprises avec options personnalisables",
+                        title: t('flexible-plans'),
+                        description: t('flexible-plans-description'),
                         color: '#9C27B0',
                         bgColor: 'secondary'
                       }
@@ -251,7 +253,7 @@ export default function ComingSoon() {
                         color: 'primary.dark'
                       }}
                     >
-                      🎯 Tableau de bord intelligent
+                      {t('smart-dashboard')}
                     </Typography>
                     <Typography
                       variant="h6"
@@ -263,8 +265,7 @@ export default function ComingSoon() {
                         mx: 'auto'
                       }}
                     >
-                      Analytics en temps réel, notifications automatiques et suivi personnalisé de vos objectifs environnementaux pour une
-                      gestion optimale de votre empreinte carbone.
+                      {t('smart-dashboard-description')}
                     </Typography>
                   </Box>
                 </Card>
@@ -283,10 +284,10 @@ export default function ComingSoon() {
                     <Stack spacing={4}>
                       <Box textAlign="center">
                         <Typography variant="h4" sx={{ fontWeight: 600, mb: 2 }}>
-                          🔔 Restez informé des innovations
+                          {t('stay-informed')}
                         </Typography>
                         <Typography variant="h6" color="text.secondary">
-                          Soyez les premiers à découvrir ces fonctionnalités révolutionnaires !
+                          {t('be-first-to-discover')}
                         </Typography>
                       </Box>
 
@@ -294,7 +295,7 @@ export default function ComingSoon() {
                         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                           <TextField
                             fullWidth
-                            placeholder="votre@email.com"
+                            placeholder={t('email-placeholder')}
                             variant="outlined"
                             sx={{
                               '& .MuiOutlinedInput-root': {
@@ -324,14 +325,14 @@ export default function ComingSoon() {
                               }
                             }}
                           >
-                            Me notifier
+                            {t('notify-me')}
                           </Button>
                         </Stack>
                       </Box>
 
                       <Stack direction="row" spacing={3} justifyContent="center" alignItems="center">
                         <Typography variant="body1" color="text.secondary">
-                          Suivez-nous sur:
+                          {t('follow-us')}
                         </Typography>
                         <IconButton
                           color="primary"
