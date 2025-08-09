@@ -1,0 +1,416 @@
+// Dictionnaire français
+export const fr = {
+  // Navigation et menus
+  dashboard: 'Tableau de bord',
+  assessments: 'Bilans',
+  companies: 'Entreprises',
+  reports: 'Rapports',
+  settings: 'Paramètres',
+  profile: 'Profil',
+  logout: 'Déconnexion',
+  help: 'Aide',
+  support: 'Support',
+  documentation: 'Documentation',
+  'contact-us': 'Nous contacter',
+  
+  // Authentification
+  login: 'Connexion',
+  register: 'Inscription',
+  'sign-in': 'Se connecter',
+  'sign-up': "S'inscrire",
+  'sign-in-facebook': 'Se connecter avec Facebook',
+  'sign-in-google': 'Se connecter avec Google',
+  'forgot-password': 'Mot de passe oublié',
+  'reset-password': 'Réinitialiser le mot de passe',
+  'remember-me': 'Se souvenir de moi',
+  'or': 'OU',
+  'no-account': 'Pas de compte ?',
+  'have-account': 'Déjà un compte ?',
+  
+  // Formulaires
+  email: 'Email',
+  password: 'Mot de passe',
+  'confirm-password': 'Confirmer le mot de passe',
+  'first-name': 'Prénom',
+  'last-name': 'Nom',
+  'company-name': 'Nom de l\'entreprise',
+  company: 'Entreprise',
+  phone: 'Téléphone',
+  address: 'Adresse',
+  city: 'Ville',
+  'postal-code': 'Code postal',
+  country: 'Pays',
+  
+  // Actions
+  save: 'Enregistrer',
+  cancel: 'Annuler',
+  delete: 'Supprimer',
+  edit: 'Modifier',
+  add: 'Ajouter',
+  create: 'Créer',
+  update: 'Mettre à jour',
+  submit: 'Soumettre',
+  next: 'Suivant',
+  previous: 'Précédent',
+  back: 'Retour',
+  search: 'Rechercher',
+  filter: 'Filtrer',
+  export: 'Exporter',
+  import: 'Importer',
+  download: 'Télécharger',
+  upload: 'Téléverser',
+  
+  // Messages
+  welcome: 'Bienvenue',
+  'welcome-back': 'Bon retour',
+  loading: 'Chargement...',
+  'no-data': 'Aucune donnée',
+  error: 'Erreur',
+  success: 'Succès',
+  warning: 'Attention',
+  info: 'Information',
+  
+  // Évaluations carbone
+  'carbon-assessment': 'Évaluation carbone',
+  'carbon-footprint': 'Empreinte carbone',
+  'carbon-emissions': 'Émissions carbone',
+  'scope-1': 'Scope 1',
+  'scope-2': 'Scope 2',
+  'scope-3': 'Scope 3',
+  'emission-factor': 'Facteur d\'émission',
+  'co2-equivalent': 'Équivalent CO2',
+  'greenhouse-gas': 'Gaz à effet de serre',
+  
+  // Notifications
+  notifications: 'Notifications',
+  'mark-all-read': 'Tout marquer comme lu',
+  'view-all': 'Voir tout',
+  'new-feature': 'Nouvelle fonctionnalité',
+  improvement: 'Amélioration',
+  maintenance: 'Maintenance',
+  meeting: 'Réunion',
+  'just-now': 'À l\'instant',
+  'minutes-ago': 'il y a {minutes} min',
+  'hours-ago': 'il y a {hours} h',
+  'days-ago': 'il y a {days} jour(s)',
+  yesterday: 'Hier',
+  today: 'Aujourd\'hui',
+  'this-week': 'Cette semaine',
+  
+  // Messages d'erreur
+  'email-required': 'L\'email est requis',
+  'email-invalid': 'L\'email doit être valide',
+  'password-required': 'Le mot de passe est requis',
+  'password-min-length': 'Le mot de passe doit contenir au moins 8 caractères',
+  'passwords-not-match': 'Les mots de passe ne correspondent pas',
+  'field-required': 'Ce champ est requis',
+  
+  // Contact
+  'contact-info': 'Informations de contact',
+  'contact-form': 'Formulaire de contact',
+  'send-message': 'Envoyer le message',
+  message: 'Message',
+  subject: 'Sujet',
+  'full-name': 'Nom complet',
+  
+  // Footer
+  'privacy-policy': 'Politique de confidentialité',
+  'terms-of-service': 'Conditions d\'utilisation',
+  'about-us': 'À propos',
+  
+  // Dashboard
+  'total-emissions': 'Émissions totales',
+  'reduction-target': 'Objectif de réduction',
+  'progress': 'Progression',
+  'recent-assessments': 'Évaluations récentes',
+  'emission-trends': 'Tendances d\'émissions',
+  'welcome-user': 'Bienvenue, {firstName} {lastName} !',
+  'no-company-info': 'Aucune information d\'entreprise disponible.',
+  'graphic-analysis': '📊 Analyse Graphique des Émissions',
+  'emissions-detail': '📝 Détail des Émissions du Bilan Actuel',
+  'emissions-by-category': 'Émissions par catégorie',
+  'emissions-evolution': 'Évolution des émissions dans le temps',
+  'summary-objectives': 'Résumé et Objectifs',
+  'environmental-objectives': 'Objectifs environnementaux',
+  
+  // Profil utilisateur
+  'my-account': 'Mon compte',
+  'account-settings': 'Paramètres du compte',
+  'change-password': 'Changer le mot de passe',
+  'personal-info': 'Informations personnelles',
+  
+  // Paramètres
+  language: 'Langue',
+  theme: 'Thème',
+  'dark-mode': 'Mode sombre',
+  'light-mode': 'Mode clair',
+  
+  // Statuts
+  active: 'Actif',
+  inactive: 'Inactif',
+  pending: 'En attente',
+  completed: 'Terminé',
+  'in-progress': 'En cours',
+  draft: 'Brouillon',
+  published: 'Publié',
+  
+  // Temps
+  year: 'Année',
+  month: 'Mois',
+  day: 'Jour',
+  hour: 'Heure',
+  minute: 'Minute',
+  
+  // Unités
+  kg: 'kg',
+  tons: 'tonnes',
+  'co2-eq': 'éq. CO2',
+  percentage: '%',
+  
+  // Messages de confirmation
+  'confirm-delete': 'Êtes-vous sûr de vouloir supprimer cet élément ?',
+  'confirm-logout': 'Êtes-vous sûr de vouloir vous déconnecter ?',
+  'unsaved-changes': 'Vous avez des modifications non sauvegardées. Voulez-vous continuer ?',
+  
+  // Coming Soon page
+  'coming-soon': 'Bientôt disponible',
+  'coming-soon-title': 'Révolutionnez votre impact environnemental',
+  'coming-soon-subtitle': 'Votre plateforme pour vous aider à suivre, réduire et valoriser votre impact environnemental.',
+  'coming-soon-description': 'Découvrez les fonctionnalités révolutionnaires qui transformeront votre approche de la gestion environnementale avec des outils avancés pour une gestion durable et intelligente.',
+  'new-features': '✨ Nouvelles fonctionnalités à venir',
+  'coming-soon-chip': '🚀 Bientôt disponible',
+  'smart-dashboard': '🎯 Tableau de bord intelligent',
+  'smart-dashboard-description': 'Analytics en temps réel, notifications automatiques et suivi personnalisé de vos objectifs environnementaux pour une gestion optimale de votre empreinte carbone.',
+  'stay-informed': '🔔 Restez informé des innovations',
+  'be-first-to-discover': 'Soyez les premiers à découvrir ces fonctionnalités révolutionnaires !',
+  'email-placeholder': 'votre@email.com',
+  'notify-me': 'Me notifier',
+  'follow-us': 'Suivez-nous sur:',
+  'revolutionize-impact': 'Révolutionnez votre impact environnemental',
+  'environmental-platform': 'Votre plateforme pour vous aider à suivre, réduire et valoriser votre impact environnemental.',
+  
+  // Features
+  'waste-management': 'Gestion des déchets intelligente',
+  'waste-management-description': 'Suivi optimisé avec carte interactive des centres de recyclage et optimisation des processus',
+  'automated-reports': 'Rapports automatisés',
+  'automated-reports-description': 'Génération PDF instantanée, exports CSV en temps réel et notifications intelligentes',
+  'erp-integrations': 'Intégrations ERP avancées',
+  'erp-integrations-description': 'Connexion transparente avec SAP, QuickBooks, API et synchronisation automatique',
+  'flexible-plans': 'Plans flexibles et scalables',
+  'flexible-plans-description': "Solutions adaptées à toutes les tailles d'entreprises avec options personnalisables",
+  
+  // Navigation tabs
+  'profile-tab': 'Profil',
+  'settings-tab': 'Paramètres',
+  
+  // Profile menu items
+  'edit-profile': 'Modifier le profil',
+  'view-profile': 'Voir le profil',
+  'social-profile': 'Profil social',
+  'billing': 'Facturation',
+  
+  // Settings menu items
+  'privacy-center': 'Centre de confidentialité',
+  'feedback': 'Commentaires',
+  'history': 'Historique',
+  
+  // Auth form labels and placeholders (new ones only)
+  'email-address': 'Adresse e-mail',
+  'enter-email-address': 'Entrez votre adresse e-mail',
+  'enter-password': 'Entrez votre mot de passe',
+  'keep-me-sign-in': 'Rester connecté',
+  'create-account': 'Créer un compte',
+  'by-signing-up': 'En vous inscrivant, vous acceptez nos',
+  'and': 'et',
+  'registration-success': 'Votre inscription a été complétée avec succès.',
+  'valid-email': 'Doit être un e-mail valide',
+  'first-name-required': 'Le prénom est requis',
+  'last-name-required': 'Le nom de famille est requis',
+  
+  // Dashboard translations (new ones only)
+  'carbon-footprint-essentials': 'L\'essentiel de votre Bilan Carbone',
+  'key-metrics': '📊 Métriques Clés',
+  'graphical-analysis': '📈 Analyse Graphique des Émissions',
+  'carbon-footprint-summary': '📋 Résumé du Bilan Carbone',
+  'emission-details': '📝 Détail des Émissions du Bilan Actuel',
+  'complete-emissions-history': '📈 Historique Complet des Émissions',
+  'assessment-date': 'Date d\'évaluation',
+  'scope-1-direct': 'Scope 1 (Direct)',
+  'scope-2-electricity': 'Scope 2 (Électricité)',
+  'scope-3-indirect': 'Scope 3 (Indirect)',
+  'source': 'Source',
+  'category': 'Catégorie',
+  'scope': 'Scope',
+  'quantity': 'Quantité',
+  'unit': 'Unité',
+  'description': 'Description',
+  'assessment': 'Bilan',
+  'no-emissions-recorded': 'Aucune émission enregistrée',
+  'no-emissions-for-company': 'Aucune émission enregistrée pour l\'entreprise.',
+  'no-carbon-footprint': 'Aucun bilan carbone trouvé pour cette entreprise.',
+  'page': 'Page',
+  status: 'Statut',
+  
+  // Charts translations
+  'scope-distribution': 'Répartition par Scope',
+  'environmental-goals': 'Objectifs Environnementaux',
+  'no-emissions-data': 'Aucune donnée d\'émissions disponible',
+  'not-specified': 'Non spécifié',
+  'no-emissions-for-goals': 'Aucune donnée d\'émissions pour définir les objectifs',
+  'co2-reduction-from-2020': 'Réduction CO₂ par rapport à 2020',
+  'emissions-per-employee': 'Émissions par employé',
+  'carbon-neutrality-goal': 'Objectif neutralité carbone',
+  'years-remaining': 'ans restants',
+  'goal-achieved': 'Objectif atteint !',
+  'reduction-percentage': 'de réduction',
+  'goal': 'Objectif',
+  'goals-auto-calculated': 'Ces objectifs sont calculés automatiquement en fonction de vos émissions actuelles et des standards environnementaux.',
+  
+  // Assessment list page
+  'carbon-assessments-list': 'Liste des bilans carbone',
+  'assessments-description': 'Retrouvez ici tous vos bilans carbone. Vous pouvez ajouter des émissions à chaque bilan.',
+  'name': 'Nom',
+  'actions': 'Actions',
+  'details': 'Détails',
+  'no-assessment-found': 'Aucun bilan trouvé',
+  
+  // Assessment details page
+  'assessment-details': 'Détails du bilan carbone',
+  'no-details-found': 'Aucun détail trouvé pour ce bilan.',
+  'associated-emissions': 'Émissions associées',
+  'amount': 'Montant',
+  'no-emissions-associated': 'Aucune émission associée à ce bilan.',
+  'close-form': 'Fermer le formulaire',
+  'add-emission': 'Ajouter une émission',
+  
+  // Companies page
+  'companies-list': 'Liste des entreprises',
+  'no-company-found': 'Aucune entreprise trouvée.',
+  'edit-company': 'Modifier l\'entreprise',
+  'sector': 'Secteur',
+  'saving': 'Enregistrement...',
+  'delete-company': 'Supprimer l\'entreprise',
+  'delete-company-confirmation': 'Êtes-vous sûr de vouloir supprimer cette entreprise ?',
+  'deleting': 'Suppression...',
+  
+  // Contact page
+  'contact-piloteco-experts': 'Contactez nos experts PilotEco',
+  'talk-about-carbon-footprint': 'Parlons de votre empreinte carbone',
+  'personalized-advice-description': 'Obtenez des conseils personnalisés pour optimiser l\'empreinte carbone de votre entreprise et atteindre vos objectifs environnementaux.',
+  'phone-hours': 'Horaires',
+  'monday-friday': 'Lun-Ven: 9h-18h',
+  'saturday': 'Sam: 9h-12h',
+  'free-consultation-request': 'Demande de consultation gratuite',
+  'company-size': 'Taille de l\'entreprise',
+  'interest-area': 'Domaine d\'intérêt',
+  'contact-consent': 'J\'accepte d\'être contacté par PilotEco concernant mes besoins en évaluation carbone et je consens au traitement de mes données selon les',
+  'terms-conditions': 'Conditions Générales',
+  'send-consultation-request': 'Envoyer ma demande de consultation',
+  'response-guarantee': 'Réponse garantie sous 24h • Consultation gratuite • Devis personnalisé',
+  'your-first-name': 'Votre prénom',
+  'your-last-name': 'Votre nom',
+  'your-email': 'votre.email@entreprise.com',
+  'your-company-name': 'Nom de votre entreprise',
+  'describe-needs': 'Décrivez-nous vos besoins en matière d\'évaluation carbone et vos objectifs environnementaux...',
+  
+  // Company sizes
+  '1-10-employees': '1 - 10 employés',
+  '10-50-employees': '10 - 50 employés',
+  '50-200-employees': '50 - 200 employés',
+  '200-1000-employees': '200 - 1000 employés',
+  '1000-plus-employees': '1000+ employés',
+  
+  // Interest areas
+  'complete-carbon-assessment': 'Évaluation carbone complète',
+  'reports-compliance': 'Rapports et conformité',
+  'reduction-strategies': 'Stratégies de réduction',
+  'energy-optimization': 'Optimisation énergétique',
+  'other': 'Autre',
+  
+  // Enhanced companies page
+  'manage-companies': 'Gestion des entreprises',
+  'my-company': 'Mon entreprise',
+  'companies-overview': 'Vue d\'ensemble des entreprises',
+  'company-dashboard': 'Tableau de bord entreprise',
+  'total-companies': 'Total des entreprises',
+  'active-assessments': 'Bilans actifs',
+  'admin-companies-description': 'Gérez les entreprises clientes, consultez leurs bilans carbone et suivez leurs progrès environnementaux.',
+  'user-company-description': 'Consultez les informations de votre entreprise et accédez à vos bilans carbone.',
+  'add-new-company': 'Ajouter une nouvelle entreprise',
+  'view-carbon-assessments': 'Voir les bilans carbone',
+  'view-emissions': 'Voir les émissions',
+  'last-assessment': 'Dernier bilan',
+  'environmental-status': 'Statut environnemental',
+  'excellent': 'Excellent',
+  'good': 'Bon',
+  'needs-improvement': 'À améliorer',
+  'critical': 'Critique',
+  'no-assessment-yet': 'Aucun bilan disponible',
+  'create-first-assessment': 'Créer le premier bilan',
+  'kg-co2-equivalent': 'kg CO₂ éq.',
+  'employees': 'employés',
+  'address-not-provided': 'Adresse non renseignée',
+  'sector-not-provided': 'Secteur non renseigné',
+  
+  // Notifications spécifiques
+  'carbon-objective-reached': 'Nouvel objectif carbone atteint pour votre entreprise !',
+  'carbon-report-ready': 'Rapport d\'évaluation carbone prêt à être téléchargé',
+  'emissions-reduced': 'Émissions réduites de 15% ce mois-ci',
+  'assessment-reminder': 'Rappel : Évaluation carbone mensuelle à compléter',
+  'new-regulation': 'Nouvelle réglementation environnementale disponible',
+  
+  // Temps relatifs
+  '5-min-ago': 'il y a 5 min',
+  '30-min-ago': 'il y a 30 min',
+  '1-hour-ago': 'il y a 1 heure',
+  '3-hours-ago': 'il y a 3 heures',
+  '1-day-ago': 'il y a 1 jour',
+  '3-days-ago': 'il y a 3 jours',
+  '5-days-ago': 'il y a 5 jours',
+  
+  // Status des annonces
+  'new-feature-status': 'Nouvelle fonctionnalité',
+  'maintenance-status': 'Maintenance',
+  'improvement-status': 'Amélioration',
+  'update-status': 'Mise à jour',
+  'partnership-status': 'Partenariat',
+  'training-status': 'Formation',
+  
+  // Messages d'annonces
+  'scope-3-announcement': 'Découvrez notre nouvelle fonctionnalité pour calculer automatiquement vos émissions Scope 3. Intégration complète avec vos données fournisseurs.',
+  'maintenance-announcement': 'Une maintenance de 2h est prévue ce soir de 22h à 00h pour améliorer les performances de calcul des bilans carbone.',
+  'rse-indicators-announcement': 'Nous avons ajouté de nouveaux indicateurs de performance environnementale conformes aux standards GRI et CSRD.',
+  'pdf-export-announcement': 'Les rapports d\'évaluation carbone sont maintenant exportables en PDF avec graphiques interactifs et données détaillées.',
+  'ademe-partnership-announcement': 'PilotEco s\'associe avec l\'ADEME pour vous proposer les derniers facteurs d\'émissions français mis à jour.',
+  'webinar-announcement': 'Replay disponible : \'Comment réaliser son premier bilan carbone avec PilotEco\'. Durée : 45 minutes.',
+  
+  // Boutons d'action pour les annonces
+  'learn-more': 'En savoir plus',
+  'try-now': 'Essayer maintenant',
+  'watch-replay': 'Voir le replay',
+  'scheduled-maintenance': 'Maintenance programmée ce soir',
+  
+  // Titres d'annonces
+  'scope-3-module-title': 'Nouveau module Scope 3',
+  'maintenance-title': 'Maintenance programmée ce soir',
+  'rse-indicators-title': 'Nouveaux indicateurs RSE',
+  'pdf-export-title': 'Export PDF amélioré',
+  'ademe-partnership-title': 'Nouveau partenaire : ADEME',
+  'webinar-title': 'Webinaire Bilan Carbone',
+  
+  // Titre de la section des annonces
+  'piloteco-news': 'Nouveautés PilotEco',
+  
+  // Pages d'erreur et maintenance
+  'page-not-found': 'Page introuvable',
+  'page-not-found-description': 'La page que vous recherchez a été déplacée, supprimée, renommée ou n\'existe peut-être pas !',
+  'back-to-home': 'Retour à l\'accueil',
+  'internal-server-error': 'Erreur interne du serveur',
+  'server-error-description': 'Erreur serveur 500. Nous corrigeons le problème. Veuillez réessayer plus tard.',
+  'service-unavailable': 'Service indisponible',
+  'maintenance-mode': 'Mode maintenance',
+  'under-construction': 'En construction',
+  'under-construction-description': 'Hé ! Veuillez consulter ce site plus tard. Nous effectuons actuellement de la maintenance dessus.'
+};
+
+export default fr;
