@@ -58,13 +58,7 @@ const MainRoutes = {
         {
           path: 'companies',
           element: <CompaniesPage />
-        }
-      ]
-    },
-    {
-      path: '/',
-      element: <SimpleLayout layout={SimpleLayoutType.SIMPLE} />,
-      children: [
+        },
         {
           path: 'contact-us',
           element: <AppContactUS />

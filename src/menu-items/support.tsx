@@ -32,7 +32,7 @@ const support: NavItemType = {
       id: 'documentation',
       title: <FormattedMessage id="documentation" />,
       type: 'item',
-      url: 'https://phoenixcoded.gitbook.io/able-pro',
+      url: '',
       icon: icons.documentation,
       external: true,
       target: true,
@@ -40,7 +40,8 @@ const support: NavItemType = {
         label: 'gitbook',
         color: 'info',
         size: 'small'
-      }
+      },
+      disabled: true
     }
   ]
 };

@@ -71,11 +71,7 @@ export default function Dashboard() {
   }, [refresh]);
 
   return (
-    <MainCard title="Tableau de bord">
-      <Typography variant="body1" gutterBottom>
-        PILOTECO – L'outil SaaS de gestion environnementale pour les PME avec un Marketplace.
-      </Typography>
-      {/* Suppression de CompanyCard du dashboard */}
+    <MainCard title="L'essentiel de votre Bilan Carbone" sx={{ mb: 3 }}>
       {loading ? (
         <Box display="flex" justifyContent="center" mt={2}>
           <CircularProgress />

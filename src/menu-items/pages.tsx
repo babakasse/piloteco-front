@@ -62,8 +62,7 @@ const pages: NavItemType = {
       title: <FormattedMessage id="contact-us" />,
       type: 'item',
       url: '/contact-us',
-      icon: icons.contactus,
-      target: true
+      icon: icons.contactus
     }
   ]
 };

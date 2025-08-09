@@ -24,7 +24,7 @@ import Transitions from 'components/@extended/Transitions';
 import { ThemeMode } from 'config';
 
 // assets
-import { Gift, MessageText1, Notification, Setting2 } from 'iconsax-react';
+import { Gift, MessageText1, Notification, Setting2, Flash, DocumentText, Chart, Timer, Global } from 'iconsax-react';
 import Avatar from 'components/@extended/Avatar';
 
 // types
@@ -45,7 +45,7 @@ export default function NotificationPage() {
   const matchesXs = useMediaQuery(theme.breakpoints.down('md'));
 
   const anchorRef = useRef<any>(null);
-  const [read] = useState(2);
+  const [read] = useState(5);
   const [open, setOpen] = useState(false);
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -104,7 +104,7 @@ export default function NotificationPage() {
                   <Stack direction="row" alignItems="center" justifyContent="space-between">
                     <Typography variant="h5">Notifications</Typography>
                     <Link href="#" variant="h6" color="primary">
-                      Mark all read
+                      Tout marquer lu
                     </Link>
                   </Stack>
                   <List
@@ -121,105 +121,135 @@ export default function NotificationPage() {
                   >
                     <ListItemButton>
                       <ListItemAvatar>
-                        <Avatar type="filled">
-                          <Gift size={20} variant="Bold" />
+                        <Avatar type="filled" sx={{ bgcolor: 'success.main' }}>
+                          <Flash size={20} variant="Bold" />
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText
                         primary={
                           <Typography variant="h6">
-                            It&apos;s{' '}
+                            Nouvel objectif carbone{' '}
                             <Typography component="span" variant="subtitle1">
-                              Cristina danny&apos;s
+                              atteint
                             </Typography>{' '}
-                            birthday today.
+                            pour votre entreprise !
                           </Typography>
                         }
-                        secondary="2 min ago"
+                        secondary="Il y a 5 min"
                       />
                       <ListItemSecondaryAction>
                         <Typography variant="caption" noWrap>
-                          3:00 AM
+                          14:30
                         </Typography>
                       </ListItemSecondaryAction>
                     </ListItemButton>
 
                     <ListItemButton>
                       <ListItemAvatar>
-                        <Avatar type="outlined">
-                          <MessageText1 size={20} variant="Bold" />
+                        <Avatar type="outlined" sx={{ color: 'warning.main', borderColor: 'warning.main' }}>
+                          <DocumentText size={20} variant="Bold" />
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText
                         primary={
                           <Typography variant="h6">
+                            Rapport d&apos;évaluation carbone{' '}
                             <Typography component="span" variant="subtitle1">
-                              Aida Burg
+                              prêt
                             </Typography>{' '}
-                            commented your post.
+                            à être téléchargé
                           </Typography>
                         }
-                        secondary="5 August"
+                        secondary="Il y a 1 heure"
                       />
                       <ListItemSecondaryAction>
                         <Typography variant="caption" noWrap>
-                          6:00 PM
+                          13:45
                         </Typography>
                       </ListItemSecondaryAction>
                     </ListItemButton>
 
                     <ListItemButton>
                       <ListItemAvatar>
-                        <Avatar>
-                          <Setting2 size={20} variant="Bold" />
+                        <Avatar sx={{ bgcolor: 'info.main' }}>
+                          <Chart size={20} variant="Bold" />
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText
                         primary={
                           <Typography variant="h6">
-                            Your Profile is Complete &nbsp;
+                            Émissions réduites de{' '}
                             <Typography component="span" variant="subtitle1">
-                              60%
+                              15%
                             </Typography>{' '}
+                            ce mois-ci
                           </Typography>
                         }
-                        secondary="7 hours ago"
+                        secondary="Il y a 3 heures"
                       />
                       <ListItemSecondaryAction>
                         <Typography variant="caption" noWrap>
-                          2:45 PM
+                          11:20
                         </Typography>
                       </ListItemSecondaryAction>
                     </ListItemButton>
 
                     <ListItemButton>
                       <ListItemAvatar>
-                        <Avatar type="combined">C</Avatar>
+                        <Avatar type="combined" sx={{ bgcolor: 'primary.main' }}>
+                          <Timer size={20} variant="Bold" />
+                        </Avatar>
                       </ListItemAvatar>
                       <ListItemText
                         primary={
                           <Typography variant="h6">
+                            Rappel : Évaluation carbone{' '}
                             <Typography component="span" variant="subtitle1">
-                              Cristina Danny
+                              mensuelle
                             </Typography>{' '}
-                            invited to join{' '}
-                            <Typography component="span" variant="subtitle1">
-                              Meeting.
-                            </Typography>
+                            à compléter
                           </Typography>
                         }
-                        secondary="Daily scrum meeting time"
+                        secondary="Échéance dans 2 jours"
                       />
                       <ListItemSecondaryAction>
                         <Typography variant="caption" noWrap>
-                          9:10 PM
+                          08:00
+                        </Typography>
+                      </ListItemSecondaryAction>
+                    </ListItemButton>
+
+                    <ListItemButton>
+                      <ListItemAvatar>
+                        <Avatar type="filled" sx={{ bgcolor: 'secondary.main' }}>
+                          <Global size={20} variant="Bold" />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary={
+                          <Typography variant="h6">
+                            Nouvelle réglementation{' '}
+                            <Typography component="span" variant="subtitle1">
+                              environnementale
+                            </Typography>{' '}
+                            disponible
+                          </Typography>
+                        }
+                        secondary="Hier"
+                      />
+                      <ListItemSecondaryAction>
+                        <Typography variant="caption" noWrap>
+                          16:45
                         </Typography>
                       </ListItemSecondaryAction>
                     </ListItemButton>
                   </List>
-                  <Stack direction="row" justifyContent="center">
+                  <Stack direction="row" justifyContent="space-between" sx={{ pt: 1 }}>
                     <Link href="#" variant="h6" color="primary">
-                      View all
+                      Voir tout
+                    </Link>
+                    <Link href="#" variant="h6" color="secondary">
+                      Paramètres
                     </Link>
                   </Stack>
                 </MainCard>

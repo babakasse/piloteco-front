@@ -38,12 +38,7 @@ export default function Login() {
             </Grid>
             <Grid item xs={12}>
               <AuthSocButton>
-                <img src={imgTwitter} alt="Facebook" style={{ margin: '0 10px' }} /> Sign In with Twitter
-              </AuthSocButton>
-            </Grid>
-            <Grid item xs={12}>
-              <AuthSocButton>
-                <img src={imgGoogle} alt="Facebook" style={{ margin: '0 10px' }} /> Sign In with Google
+                <img src={imgGoogle} alt="Google" style={{ margin: '0 10px' }} /> Sign In with Google
               </AuthSocButton>
             </Grid>
           </Grid>
