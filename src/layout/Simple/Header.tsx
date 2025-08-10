@@ -122,7 +122,7 @@ export default function Header({ layout = 'landing', ...others }: Props) {
                 sx={{ ml: theme.direction === ThemeDirection.RTL ? 3 : 0 }}
                 color="secondary.main"
                 component={RouterLink}
-                to="/login"
+                to="/app/login"
                 target="_blank"
                 underline="none"
               >
@@ -224,7 +224,7 @@ export default function Header({ layout = 'landing', ...others }: Props) {
                   onKeyDown={drawerToggler(false)}
                 >
                   <List>
-                    <Link style={{ textDecoration: 'none' }} href="/login" target="_blank">
+                    <Link style={{ textDecoration: 'none' }} href="/app/login" target="_blank">
                       <ListItemButton>
                         <ListItemIcon>
                           <Minus color={theme.palette.secondary.main} />

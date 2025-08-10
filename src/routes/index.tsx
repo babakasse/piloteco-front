@@ -1,18 +1,10 @@
-import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 
 // project import
-import MainRoutes from './MainRoutes';
-import LoginRoutes from './LoginRoutes';
+import LandingRoutes from './LandingRoutes';
 
 // ==============================|| ROUTING RENDER ||============================== //
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <Navigate to="/login" replace />
-  },
-  LoginRoutes, 
-  MainRoutes
-], { basename: import.meta.env.VITE_APP_BASE_NAME });
+const router = createBrowserRouter([LandingRoutes], { basename: import.meta.env.VITE_APP_BASE_NAME });
 
 export default router;

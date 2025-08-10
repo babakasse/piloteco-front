@@ -25,69 +25,41 @@ const CompaniesPage = Loadable(lazy(() => import('pages/companies')));
 // ==============================|| MAIN ROUTES ||============================== //
 
 const MainRoutes = {
-  path: '/',
+  path: '',
+  element: <DashboardLayout />,
   children: [
     {
-      path: '/',
-      element: <DashboardLayout />,
-      children: [
-        {
-          path: '',
-          element: <Navigate to="/dashboard" replace />
-        },
-        {
-          path: 'dashboard',
-          element: <Dashboard />
-        },
-        {
-          path: 'assessment-create',
-          element: <AssessmentCreatePage />
-        },
-        {
-          path: 'assessment-list',
-          element: <AssessmentListPage />
-        },
-        {
-          path: 'assessment/:id/emissions',
-          element: <AssessmentEmissionsPage />
-        },
-        {
-          path: 'assessment/:id',
-          element: <AssessmentDetailsPage />
-        },
-        {
-          path: 'companies',
-          element: <CompaniesPage />
-        },
-        {
-          path: 'contact-us',
-          element: <AppContactUS />
-        }
-      ]
+      path: '',
+      element: <Navigate to="/app/dashboard" replace />
     },
     {
-      path: '/maintenance',
-      element: <PagesLayout />,
-      children: [
-        {
-          path: '404',
-          element: <MaintenanceError />
-        },
-        {
-          path: '500',
-          element: <MaintenanceError500 />
-        },
-        {
-          path: 'under-construction',
-          element: <MaintenanceUnderConstruction />
-        },
-        {
-          path: 'coming-soon',
-          element: <MaintenanceComingSoon />
-        }
-      ]
+      path: 'dashboard',
+      element: <Dashboard />
     },
-    { path: '*', element: <MaintenanceError /> }
+    {
+      path: 'assessment-create',
+      element: <AssessmentCreatePage />
+    },
+    {
+      path: 'assessment-list',
+      element: <AssessmentListPage />
+    },
+    {
+      path: 'assessment/:id/emissions',
+      element: <AssessmentEmissionsPage />
+    },
+    {
+      path: 'assessment/:id',
+      element: <AssessmentDetailsPage />
+    },
+    {
+      path: 'companies',
+      element: <CompaniesPage />
+    },
+    {
+      path: 'contact-us',
+      element: <AppContactUS />
+    }
   ]
 };
 

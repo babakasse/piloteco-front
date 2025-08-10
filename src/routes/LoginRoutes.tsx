@@ -15,37 +15,32 @@ const AuthCodeVerification = Loadable(lazy(() => import('pages/auth/auth1/code-v
 // ==============================|| AUTH ROUTES ||============================== //
 
 const LoginRoutes = {
-  path: '/',
+  path: '',
+  element: <AuthLayout />,
   children: [
     {
-      path: '/',
-      element: <AuthLayout />,
-      children: [
-        {
-          path: 'login',
-          element: <AuthLogin />
-        },
-        {
-          path: 'register',
-          element: <AuthRegister />
-        },
-        {
-          path: 'forgot-password',
-          element: <AuthForgotPassword />
-        },
-        {
-          path: 'check-mail',
-          element: <AuthCheckMail />
-        },
-        {
-          path: 'reset-password',
-          element: <AuthResetPassword />
-        },
-        {
-          path: 'code-verification',
-          element: <AuthCodeVerification />
-        }
-      ]
+      path: 'login',
+      element: <AuthLogin />
+    },
+    {
+      path: 'register',
+      element: <AuthRegister />
+    },
+    {
+      path: 'forgot-password',
+      element: <AuthForgotPassword />
+    },
+    {
+      path: 'check-mail',
+      element: <AuthCheckMail />
+    },
+    {
+      path: 'reset-password',
+      element: <AuthResetPassword />
+    },
+    {
+      path: 'code-verification',
+      element: <AuthCodeVerification />
     }
   ]
 };
