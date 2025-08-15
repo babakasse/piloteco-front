@@ -65,7 +65,7 @@ const AssessmentListPage: React.FC = () => {
                     <TableCell>{a.name}</TableCell>
                     <TableCell>{a.year}</TableCell>
                     <TableCell>{a.description}</TableCell>
-                    <TableCell>{a.totalEmissions} kgCO₂e</TableCell>
+                    <TableCell>{a.totalEmissions} tCO₂e</TableCell>
                     <TableCell>
                       <Box
                         sx={{

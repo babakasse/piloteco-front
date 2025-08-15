@@ -40,7 +40,7 @@ const ScopeDistributionChart = ({ scope1, scope2, scope3 }: ScopeDistributionCha
             <strong>{data.name}</strong>
           </Typography>
           <Typography variant="body2">
-            {data.value} kgCO₂e ({percentage}%)
+            {data.value} tCO₂e ({percentage}%)
           </Typography>
         </Box>
       );

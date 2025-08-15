@@ -107,7 +107,7 @@ export default function Dashboard() {
                       <MetricsCard
                         title={t('total-emissions')}
                         value={carbonSummary.totalEmissions}
-                        unit="kgCO₂e"
+                        unit="tCO₂e"
                         color="error"
                         icon={<Factory />}
                       />
@@ -116,7 +116,7 @@ export default function Dashboard() {
                       <MetricsCard
                         title={t('scope-1-direct')}
                         value={carbonSummary.scope1Emissions || 0}
-                        unit="kgCO₂e"
+                        unit="tCO₂e"
                         color="success"
                         icon={<LocalGasStation />}
                       />
@@ -125,7 +125,7 @@ export default function Dashboard() {
                       <MetricsCard
                         title={t('scope-2-electricity')}
                         value={carbonSummary.scope2Emissions || 0}
-                        unit="kgCO₂e"
+                        unit="tCO₂e"
                         color="info"
                         icon={<EmojiObjects />}
                       />
@@ -134,7 +134,7 @@ export default function Dashboard() {
                       <MetricsCard
                         title={t('scope-3-indirect')}
                         value={carbonSummary.scope3Emissions || 0}
-                        unit="kgCO₂e"
+                        unit="tCO₂e"
                         color="warning"
                         icon={<Timeline />}
                       />
@@ -195,7 +195,7 @@ export default function Dashboard() {
                             </Grid>
                             <Grid item xs={12}>
                               <Typography>
-                                {t('total-emissions')} : <b>{carbonSummary.totalEmissions} kgCO₂e</b>
+                                {t('total-emissions')} : <b>{carbonSummary.totalEmissions} tCO₂e</b>
                               </Typography>
                             </Grid>
                             <Grid item xs={12}>
@@ -205,9 +205,9 @@ export default function Dashboard() {
                             </Grid>
                           </Grid>
                           <Box mt={2} mb={2}>
-                            <Chip label={`Scope 1 : ${carbonSummary.scope1Emissions} kgCO₂e`} color="success" sx={{ mr: 1, mb: 1 }} />
-                            <Chip label={`Scope 2 : ${carbonSummary.scope2Emissions} kgCO₂e`} color="info" sx={{ mr: 1, mb: 1 }} />
-                            <Chip label={`Scope 3 : ${carbonSummary.scope3Emissions} kgCO₂e`} color="warning" sx={{ mb: 1 }} />
+                            <Chip label={`Scope 1 : ${carbonSummary.scope1Emissions} tCO₂e`} color="success" sx={{ mr: 1, mb: 1 }} />
+                            <Chip label={`Scope 2 : ${carbonSummary.scope2Emissions} tCO₂e`} color="info" sx={{ mr: 1, mb: 1 }} />
+                            <Chip label={`Scope 3 : ${carbonSummary.scope3Emissions} tCO₂e`} color="warning" sx={{ mb: 1 }} />
                           </Box>
                         </CardContent>
                       </Card>

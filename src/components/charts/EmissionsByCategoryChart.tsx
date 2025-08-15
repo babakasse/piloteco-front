@@ -59,7 +59,7 @@ const EmissionsByCategoryChart = ({ emissions }: EmissionsByCategoryChartProps) 
           </Typography>
           {payload.map((entry: any, index: number) => (
             <Typography key={index} variant="body2" sx={{ color: entry.color }}>
-              {entry.name}: {entry.value} kgCO₂e
+              {entry.name}: {entry.value} tCO₂e
             </Typography>
           ))}
         </Box>
@@ -102,7 +102,7 @@ const EmissionsByCategoryChart = ({ emissions }: EmissionsByCategoryChartProps) 
             >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="category" angle={-45} textAnchor="end" height={100} fontSize={12} />
-              <YAxis label={{ value: 'kgCO₂e', angle: -90, position: 'insideLeft' }} />
+              <YAxis label={{ value: 'tCO₂e', angle: -90, position: 'insideLeft' }} />
               <Tooltip content={<CustomTooltip />} />
               <Legend />
               <Bar dataKey="scope1" stackId="a" fill="#2e7d32" name="Scope 1" />

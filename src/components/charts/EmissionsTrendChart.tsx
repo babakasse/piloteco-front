@@ -47,7 +47,7 @@ const EmissionsTrendChart = ({ assessments }: EmissionsTrendChartProps) => {
           </Typography>
           {payload.map((entry: any, index: number) => (
             <Typography key={index} variant="body2" sx={{ color: entry.color }}>
-              {entry.name}: {entry.value} kgCO₂e
+              {entry.name}: {entry.value} tCO₂e
             </Typography>
           ))}
         </Box>
@@ -90,7 +90,7 @@ const EmissionsTrendChart = ({ assessments }: EmissionsTrendChartProps) => {
             >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="year" />
-              <YAxis label={{ value: 'kgCO₂e', angle: -90, position: 'insideLeft' }} />
+              <YAxis label={{ value: 'tCO₂e', angle: -90, position: 'insideLeft' }} />
               <Tooltip content={<CustomTooltip />} />
               <Legend />
               <Line

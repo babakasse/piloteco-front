@@ -58,7 +58,7 @@ export default function AssessmentDetailsPage() {
         {t('status')} : {assessment.status}
       </Typography>
       <Typography variant="subtitle1" gutterBottom>
-        {t('total-emissions')} : {assessment.totalEmissions} kgCO₂e
+        {t('total-emissions')} : {assessment.totalEmissions} tCO₂e
       </Typography>
       <Box mt={3}>
         <Typography variant="h6" gutterBottom>

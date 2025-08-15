@@ -29,9 +29,9 @@ const EnvironmentalGoalsChart = ({ totalEmissions, year }: EnvironmentalGoalsCha
     },
     {
       name: t('emissions-per-employee'),
-      target: 2000, // 2000 kgCO₂e par employé
+      target: 2000, // 2000 tCO₂e par employé
       current: Math.max(1000, totalEmissions / 10), // Estimation fictive
-      unit: 'kgCO₂e',
+      unit: 'tCO₂e',
       color: totalEmissions / 10 > 2000 ? 'error' : totalEmissions / 10 > 1500 ? 'warning' : 'success'
     },
     {

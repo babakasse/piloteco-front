@@ -14,7 +14,7 @@ const defaultEmission = {
   activityData: '',
   emissionFactor: '',
   scope: 1,
-  unit: 'kgCO₂e',
+  unit: 'tCO₂e',
   description: ''
 };
 
