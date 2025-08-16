@@ -115,12 +115,15 @@ export default function SectorTemplateWizard({ assessmentId, onSuccess }: Sector
     const factor = getEmissionFactor(emission.source, emission.subcategory);
     if (!factor) return 0;
 
-    const total = quantity * factor.value;
-    // Convert to tCO₂e if needed
+    let standardizedFactor = factor.value;
+    // Conversion automatique vers tCO₂e si nécessaire
     if (factor.unit.includes('kg')) {
-      return total / 1000;
+      standardizedFactor = factor.value / 1000;
     }
-    return total;
+
+    const total = quantity * standardizedFactor;
+    // Arrondir à 2 décimales
+    return Math.round(total * 100) / 100;
   };
 
   const getActivityUnit = (emission: EmissionTemplate) => {
@@ -182,18 +185,24 @@ export default function SectorTemplateWizard({ assessmentId, onSuccess }: Sector
         const factor = getEmissionFactor(emission.source, emission.subcategory);
         if (!factor) continue;
 
+        // Standardisation du facteur d'émission en tCO₂e
+        let standardizedFactor = factor.value;
+        if (factor.unit.includes('kg')) {
+          standardizedFactor = factor.value / 1000;
+        }
+
         await createEmission(assessmentId, {
           source: emission.source,
           category: emission.category,
           activityData: emission.quantity,
-          emissionFactor: factor.value,
+          emissionFactor: standardizedFactor,
           scope:
             emission.source === 'Company Vehicles' || emission.source === 'Natural Gas'
               ? 1
               : emission.source === 'Grid Electricity'
                 ? 2
                 : 3,
-          unit: factor.unit,
+          unit: 'tCO₂e', // Toujours standardisé en tCO₂e
           description: emission.description,
           amount: calculateEmissionTotal(emission, emission.quantity),
           factorSource: factor.source

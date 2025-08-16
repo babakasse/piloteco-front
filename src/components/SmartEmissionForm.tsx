@@ -34,30 +34,36 @@ const defaultEmission = {
   activityData: '',
   emissionFactor: '',
   scope: 1,
-  unit: '',
+  unit: 'tCO₂e',
   description: '',
   factorSource: '',
   methodology: ''
 };
 
 const sourceOptions = [
-  { value: 'Air Travel', label: '✈️ Voyage aérien' },
-  { value: 'Company Vehicles', label: '🚗 Véhicules société' },
-  { value: 'Grid Electricity', label: '⚡ Électricité' },
+  { value: 'Grid Electricity', label: '⚡ Électricité réseau' },
   { value: 'Natural Gas', label: '🔥 Gaz naturel' },
-  { value: 'Employee Meals', label: '🍽️ Repas employés' },
+  { value: 'Company Vehicles', label: '🚗 Véhicules société' },
+  { value: 'Air Travel', label: '✈️ Voyage aérien' },
   { value: 'Landfill Waste', label: '🗑️ Déchets' },
-  { value: 'Cloud Services', label: '☁️ Services cloud' }
+  { value: 'Water Supply', label: '💧 Approvisionnement eau' },
+  { value: 'Raw Materials', label: '🏗️ Matières premières' },
+  { value: 'Employee Meals', label: '🍽️ Repas employés' },
+  { value: 'Cloud Services', label: '☁️ Services cloud' },
+  { value: 'IT Equipment', label: '💻 Équipements IT' }
 ];
 
 const categoryOptions = [
-  { value: 'Business Travel', label: 'Déplacements professionnels' },
-  { value: 'Transportation', label: 'Transport' },
   { value: 'Electricity', label: 'Électricité' },
   { value: 'Heating', label: 'Chauffage' },
-  { value: 'Food', label: 'Alimentation' },
+  { value: 'Transportation', label: 'Transport' },
+  { value: 'Business Travel', label: 'Déplacements professionnels' },
   { value: 'Waste', label: 'Déchets' },
-  { value: 'Services', label: 'Services' }
+  { value: 'Water', label: 'Eau' },
+  { value: 'Materials', label: 'Matériaux' },
+  { value: 'Food', label: 'Alimentation' },
+  { value: 'Services', label: 'Services' },
+  { value: 'Equipment', label: 'Équipements' }
 ];
 
 export default function SmartEmissionForm({ assessmentId, onSuccess }: { assessmentId: string | undefined; onSuccess?: () => void }) {
@@ -87,10 +93,16 @@ export default function SmartEmissionForm({ assessmentId, onSuccess }: { assessm
             if (updatedEm.source && updatedEm.subcategory) {
               const factor = getEmissionFactor(updatedEm.source, updatedEm.subcategory);
               if (factor) {
-                updatedEm.emissionFactor = factor.value.toString();
+                // Conversion automatique vers tCO₂e si nécessaire
+                if (factor.unit.includes('kg')) {
+                  updatedEm.emissionFactor = (factor.value / 1000).toString();
+                } else {
+                  updatedEm.emissionFactor = factor.value.toString();
+                }
+
                 updatedEm.factorSource = factor.source;
                 updatedEm.methodology = factor.methodology;
-                updatedEm.unit = factor.unit;
+                updatedEm.unit = 'tCO₂e'; // Toujours standardisé en tCO₂e
 
                 // Auto-sélection du scope basé sur la source
                 if (updatedEm.source === 'Company Vehicles' || updatedEm.source === 'Natural Gas') {
@@ -109,6 +121,21 @@ export default function SmartEmissionForm({ assessmentId, onSuccess }: { assessm
               updatedEm.emissionFactor = '';
               updatedEm.factorSource = '';
               updatedEm.methodology = '';
+
+              // Auto-sélection de la catégorie basée sur la source
+              const sourceToCategory: { [key: string]: string } = {
+                'Grid Electricity': 'Electricity',
+                'Natural Gas': 'Heating',
+                'Company Vehicles': 'Transportation',
+                'Air Travel': 'Business Travel',
+                'Landfill Waste': 'Waste',
+                'Water Supply': 'Water',
+                'Raw Materials': 'Materials',
+                'Employee Meals': 'Food',
+                'Cloud Services': 'Services',
+                'IT Equipment': 'Equipment'
+              };
+              updatedEm.category = sourceToCategory[updatedEm.source] || '';
             }
           }
 
@@ -129,17 +156,33 @@ export default function SmartEmissionForm({ assessmentId, onSuccess }: { assessm
     }));
   };
 
+  const getActivityUnitFromSource = (source: string, subcategory: string) => {
+    const factor = getEmissionFactor(source, subcategory);
+    if (!factor) return 'Ex: 1000';
+
+    // Extraire l'unité d'activité à partir de l'unité du facteur
+    const parts = factor.unit.split('/');
+    if (parts.length > 1) {
+      const activityUnit = parts.slice(1).join('/');
+      return `En ${activityUnit}`;
+    }
+
+    // Cas spéciaux pour les unités par unité
+    if (factor.unit.includes('unité')) {
+      return "En nombre d'unités";
+    }
+
+    return 'Ex: 1000';
+  };
+
   const addEmission = () => setEmissions([...emissions, { ...defaultEmission }]);
   const removeEmission = (idx: number) => setEmissions((emissions) => emissions.filter((_, i) => i !== idx));
 
   const calculateTotal = (em: any) => {
     if (em.activityData && em.emissionFactor) {
       const result = parseFloat(em.activityData) * parseFloat(em.emissionFactor);
-      // Conversion en tCO₂e si nécessaire
-      if (em.unit && em.unit.includes('kg')) {
-        return (result / 1000).toFixed(3);
-      }
-      return result.toFixed(3);
+      // L'unité est toujours tCO₂e maintenant - 2 décimales
+      return result.toFixed(2);
     }
     return '';
   };
@@ -152,16 +195,23 @@ export default function SmartEmissionForm({ assessmentId, onSuccess }: { assessm
 
     try {
       const emissionsToSend = emissions
-        .filter((em) => em.source && em.subcategory && em.activityData && em.emissionFactor)
+        .filter((em) => em.source && em.category && em.subcategory && em.activityData && em.emissionFactor)
         .map((em) => ({
-          ...em,
+          source: em.source,
+          category: em.category,
+          subcategory: em.subcategory,
           activityData: parseFloat(em.activityData),
           emissionFactor: parseFloat(em.emissionFactor),
+          scope: em.scope,
+          unit: em.unit,
+          description: em.description || '',
+          factorSource: em.factorSource || '',
+          methodology: em.methodology || '',
           amount: parseFloat(calculateTotal(em)) || parseFloat(em.activityData) * parseFloat(em.emissionFactor)
         }));
 
       if (emissionsToSend.length === 0) {
-        setError('Veuillez remplir au moins une émission complète');
+        setError('Veuillez remplir au moins une émission complète (source, catégorie, type spécifique, quantité et facteur)');
         return;
       }
 
@@ -266,6 +316,28 @@ export default function SmartEmissionForm({ assessmentId, onSuccess }: { assessm
                   </TextField>
                 </Grid>
 
+                {/* Catégorie */}
+                <Grid item xs={12} md={2}>
+                  <TextField
+                    label="Catégorie"
+                    select
+                    fullWidth
+                    value={em.category}
+                    onChange={(e) => handleEmissionChange(idx, 'category', e.target.value)}
+                    helperText="Auto-sélectionnée"
+                    InputProps={{
+                      readOnly: true
+                    }}
+                    required
+                  >
+                    {categoryOptions.map((opt) => (
+                      <MenuItem key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </Grid>
+
                 {/* Quantité */}
                 <Grid item xs={12} md={2}>
                   <TextField
@@ -274,7 +346,7 @@ export default function SmartEmissionForm({ assessmentId, onSuccess }: { assessm
                     fullWidth
                     value={em.activityData}
                     onChange={(e) => handleEmissionChange(idx, 'activityData', e.target.value)}
-                    helperText={em.unit ? `En ${em.unit.split('/')[1] || em.unit}` : 'Ex: 1000'}
+                    helperText={em.source && em.subcategory ? getActivityUnitFromSource(em.source, em.subcategory) : 'Ex: 1000'}
                     required
                   />
                 </Grid>

@@ -116,13 +116,18 @@ Employee Meals,Repas moyen,250,Food,Repas équipe (50 employés × 5 jours)`;
       // Récupération automatique du facteur d'émission
       const factor = getEmissionFactor(source, subcategory);
       let emissionFactor = 0;
-      let unit = '';
+      let unit = 'tCO₂e'; // Toujours standardisé en tCO₂e
       let factorSource = '';
       let scope = 3; // Par défaut Scope 3
 
       if (factor) {
-        emissionFactor = factor.value;
-        unit = factor.unit;
+        // Conversion automatique vers tCO₂e si nécessaire
+        if (factor.unit.includes('kg')) {
+          emissionFactor = factor.value / 1000;
+        } else {
+          emissionFactor = factor.value;
+        }
+
         factorSource = factor.source;
 
         // Auto-détermination du scope
@@ -135,7 +140,7 @@ Employee Meals,Repas moyen,250,Food,Repas équipe (50 employés × 5 jours)`;
         errors.push("Facteur d'émission non trouvé pour cette combinaison");
       }
 
-      const amount = activityData * emissionFactor;
+      const amount = Math.round(activityData * emissionFactor * 100) / 100; // 2 décimales
 
       return {
         source,

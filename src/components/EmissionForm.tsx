@@ -37,25 +37,29 @@ const defaultEmission = {
 };
 
 const sourceOptions = [
-  { value: 'Air Travel', label: 'Voyage aérien' },
-  { value: 'Employee Meals', label: 'Repas employés' },
-  { value: 'Natural Gas', label: 'Gaz naturel' },
-  { value: 'Landfill Waste', label: 'Déchets' },
-  { value: 'Company Vehicles', label: 'Véhicules société' },
-  { value: 'Grid Electricity', label: 'Électricité' },
-  { value: 'Cloud Services', label: 'Services cloud' },
-  { value: 'Raw Materials', label: 'Matières premières' }
+  { value: 'Grid Electricity', label: '⚡ Électricité réseau' },
+  { value: 'Natural Gas', label: '🔥 Gaz naturel' },
+  { value: 'Company Vehicles', label: '🚗 Véhicules société' },
+  { value: 'Air Travel', label: '✈️ Voyage aérien' },
+  { value: 'Landfill Waste', label: '🗑️ Déchets' },
+  { value: 'Water Supply', label: '💧 Approvisionnement eau' },
+  { value: 'Raw Materials', label: '🏗️ Matières premières' },
+  { value: 'Employee Meals', label: '🍽️ Repas employés' },
+  { value: 'Cloud Services', label: '☁️ Services cloud' },
+  { value: 'IT Equipment', label: '💻 Équipements IT' }
 ];
 
 const categoryOptions = [
-  { value: 'Business Travel', label: 'Déplacements professionnels' },
-  { value: 'Food', label: 'Alimentation' },
-  { value: 'Heating', label: 'Chauffage' },
-  { value: 'Waste', label: 'Déchets' },
-  { value: 'Transportation', label: 'Transport' },
   { value: 'Electricity', label: 'Électricité' },
+  { value: 'Heating', label: 'Chauffage' },
+  { value: 'Transportation', label: 'Transport' },
+  { value: 'Business Travel', label: 'Déplacements professionnels' },
+  { value: 'Waste', label: 'Déchets' },
+  { value: 'Water', label: 'Eau' },
+  { value: 'Materials', label: 'Matériaux' },
+  { value: 'Food', label: 'Alimentation' },
   { value: 'Services', label: 'Services' },
-  { value: 'Materials', label: 'Matériaux' }
+  { value: 'Equipment', label: 'Équipements' }
 ];
 
 export default function EmissionForm({ assessmentId, onSuccess }: { assessmentId: string | undefined; onSuccess?: () => void }) {

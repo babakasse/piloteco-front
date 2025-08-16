@@ -170,6 +170,82 @@ export const emissionFactors: EmissionFactorsDatabase = {
       lastUpdated: '2024-01-01',
       methodology: 'PUE moyen datacenters'
     }
+  },
+  'Water Supply': {
+    'Eau potable réseau': {
+      value: 0.132,
+      unit: 'kgCO₂e/m³',
+      source: 'ADEME 2024',
+      lastUpdated: '2024-01-01',
+      methodology: 'Production et distribution eau potable'
+    },
+    'Eau embouteillée': {
+      value: 0.27,
+      unit: 'kgCO₂e/litre',
+      source: 'ADEME 2024',
+      lastUpdated: '2024-01-01',
+      methodology: 'Cycle de vie complet bouteille plastique'
+    }
+  },
+  'Raw Materials': {
+    'Acier': {
+      value: 1.95,
+      unit: 'tCO₂e/tonne',
+      source: 'ADEME 2024',
+      lastUpdated: '2024-01-01',
+      methodology: 'Production primaire acier'
+    },
+    'Aluminium': {
+      value: 8.24,
+      unit: 'tCO₂e/tonne',
+      source: 'ADEME 2024',
+      lastUpdated: '2024-01-01',
+      methodology: 'Production primaire aluminium'
+    },
+    'Béton': {
+      value: 0.324,
+      unit: 'tCO₂e/tonne',
+      source: 'ADEME 2024',
+      lastUpdated: '2024-01-01',
+      methodology: 'Production ciment + granulats'
+    },
+    'Plastique PET': {
+      value: 2.15,
+      unit: 'tCO₂e/tonne',
+      source: 'ADEME 2024',
+      lastUpdated: '2024-01-01',
+      methodology: 'Production résine plastique'
+    }
+  },
+  'IT Equipment': {
+    'Ordinateur portable': {
+      value: 300,
+      unit: 'kgCO₂e/unité',
+      source: 'ADEME 2024',
+      lastUpdated: '2024-01-01',
+      methodology: 'Cycle de vie complet sur 4 ans'
+    },
+    'Smartphone': {
+      value: 70,
+      unit: 'kgCO₂e/unité',
+      source: 'ADEME 2024',
+      lastUpdated: '2024-01-01',
+      methodology: 'Cycle de vie complet sur 3 ans'
+    },
+    'Écran 24 pouces': {
+      value: 250,
+      unit: 'kgCO₂e/unité',
+      source: 'ADEME 2024',
+      lastUpdated: '2024-01-01',
+      methodology: 'Cycle de vie complet sur 5 ans'
+    },
+    'Serveur': {
+      value: 1200,
+      unit: 'kgCO₂e/unité',
+      source: 'ADEME 2024',
+      lastUpdated: '2024-01-01',
+      methodology: 'Cycle de vie complet sur 5 ans'
+    }
   }
 };
 
