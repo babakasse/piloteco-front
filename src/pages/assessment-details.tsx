@@ -11,25 +11,33 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { getAssessmentWithEmissions } from '../api/carbonAssessment';
-import EmissionForm from '../components/EmissionForm';
 import Button from '@mui/material/Button';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import { getAssessmentWithEmissions } from '../api/carbonAssessment';
+import SmartEmissionForm from '../components/SmartEmissionForm';
+import BulkImportForm from '../components/BulkImportForm';
+import SectorTemplateWizard from '../components/SectorTemplateWizard';
 import { useLanguage } from '../contexts/LanguageContext';
 
 export default function AssessmentDetailsPage() {
   const { id } = useParams();
   const [assessment, setAssessment] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [showForm, setShowForm] = useState(false);
+  const [tabValue, setTabValue] = useState(0);
   const { t } = useLanguage();
 
   useEffect(() => {
     if (!id) return;
     setLoading(true);
-    getAssessmentWithEmissions(id)
+    getAssessmentWithEmissions(parseInt(id))
       .then((data) => setAssessment(data))
       .finally(() => setLoading(false));
   }, [id]);
+
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    setTabValue(newValue);
+  };
 
   if (loading) {
     return (
@@ -60,6 +68,7 @@ export default function AssessmentDetailsPage() {
       <Typography variant="subtitle1" gutterBottom>
         {t('total-emissions')} : {assessment.totalEmissions} tCO₂e
       </Typography>
+
       <Box mt={3}>
         <Typography variant="h6" gutterBottom>
           {t('associated-emissions')}
@@ -95,17 +104,21 @@ export default function AssessmentDetailsPage() {
           <Typography>{t('no-emissions-associated')}</Typography>
         )}
       </Box>
+
       <Box mt={4}>
-        <Button
-          variant={showForm ? 'outlined' : 'contained'}
-          color={showForm ? 'secondary' : 'primary'}
-          size="large"
-          sx={{ borderRadius: 2, fontWeight: 600, px: 3, py: 1 }}
-          onClick={() => setShowForm((v) => !v)}
-        >
-          {showForm ? t('close-form') : t('add-emission')}
-        </Button>
-        {showForm && <EmissionForm assessmentId={assessment.id?.toString()} onSuccess={() => window.location.reload()} />}
+        <Tabs value={tabValue} onChange={handleTabChange} aria-label="emission tabs">
+          <Tab label="🎯 Saisie Intelligente" />
+          <Tab label="📊 Import en masse" />
+          <Tab label="🚀 Assistant Secteur" />
+        </Tabs>
+
+        <Box mt={2}>
+          {tabValue === 0 && <SmartEmissionForm assessmentId={assessment.id?.toString()} onSuccess={() => window.location.reload()} />}
+          {tabValue === 1 && <BulkImportForm assessmentId={assessment.id?.toString() || ''} onSuccess={() => window.location.reload()} />}
+          {tabValue === 2 && (
+            <SectorTemplateWizard assessmentId={assessment.id?.toString() || ''} onSuccess={() => window.location.reload()} />
+          )}
+        </Box>
       </Box>
     </MainCard>
   );

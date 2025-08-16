@@ -1,6 +1,21 @@
 import { useEffect, useState } from 'react';
-import { Box, Button, Card, CardContent, Grid, MenuItem, Typography, CircularProgress, Paper, TextField } from '@mui/material';
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Grid,
+  MenuItem,
+  Typography,
+  CircularProgress,
+  Paper,
+  TextField,
+  Tooltip,
+  Chip
+} from '@mui/material';
 import { createEmission, getAssessmentWithEmissions } from '../api/carbonAssessment';
+import { getFactorsBySource, getEmissionFactor, EmissionFactor } from '../data/emissionFactors';
+import InfoIcon from '@mui/icons-material/Info';
 
 const scopes = [
   { value: 1, label: 'Scope 1' },
@@ -11,11 +26,14 @@ const scopes = [
 const defaultEmission = {
   source: '',
   category: '',
+  subcategory: '', // Nouveau champ pour sous-catégorie
   activityData: '',
   emissionFactor: '',
   scope: 1,
   unit: 'tCO₂e',
-  description: ''
+  description: '',
+  factorSource: '', // Source du facteur d'émission
+  methodology: '' // Méthodologie utilisée
 };
 
 const sourceOptions = [
@@ -51,13 +69,46 @@ export default function EmissionForm({ assessmentId, onSuccess }: { assessmentId
   useEffect(() => {
     if (!assessmentId) return;
     setAssessmentLoading(true);
-    getAssessmentWithEmissions(assessmentId)
+    getAssessmentWithEmissions(parseInt(assessmentId))
       .then((data) => setAssessment(data))
       .finally(() => setAssessmentLoading(false));
   }, [assessmentId]);
 
   const handleEmissionChange = (idx: number, field: string, value: any) => {
-    setEmissions((emissions) => emissions.map((em, i) => (i === idx ? { ...em, [field]: value } : em)));
+    setEmissions((emissions) =>
+      emissions.map((em, i) => {
+        if (i === idx) {
+          const updatedEm = { ...em, [field]: value };
+
+          // Auto-remplissage du facteur d'émission quand source + sous-catégorie sont sélectionnées
+          if (field === 'source' || field === 'subcategory') {
+            if (updatedEm.source && updatedEm.subcategory) {
+              const factor = getEmissionFactor(updatedEm.source, updatedEm.subcategory);
+              if (factor) {
+                updatedEm.emissionFactor = factor.value.toString();
+                updatedEm.factorSource = factor.source;
+                updatedEm.methodology = factor.methodology;
+                updatedEm.unit = factor.unit;
+              }
+            }
+          }
+
+          return updatedEm;
+        }
+        return em;
+      })
+    );
+  };
+
+  // Fonction pour obtenir les sous-catégories basées sur la source
+  const getSubcategories = (source: string) => {
+    const factors = getFactorsBySource(source);
+    if (!factors) return [];
+
+    return Object.keys(factors).map((key) => ({
+      value: key,
+      label: key
+    }));
   };
 
   const addEmission = () => setEmissions([...emissions, { ...defaultEmission }]);
@@ -65,6 +116,11 @@ export default function EmissionForm({ assessmentId, onSuccess }: { assessmentId
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!assessmentId) {
+      setError("ID d'assessment manquant");
+      return;
+    }
+
     setLoading(true);
     setError(null);
     setSuccess(false);
@@ -146,6 +202,26 @@ export default function EmissionForm({ assessmentId, onSuccess }: { assessmentId
                   ))}
                 </TextField>
               </Grid>
+
+              {/* Nouveau champ: Sous-catégorie avec facteurs automatiques */}
+              <Grid item xs={12} md={2}>
+                <TextField
+                  label="Type spécifique"
+                  select
+                  fullWidth
+                  value={em.subcategory}
+                  onChange={(e) => handleEmissionChange(idx, 'subcategory', e.target.value)}
+                  disabled={!em.source}
+                  helperText={em.source ? 'Facteur auto-calculé' : "Sélectionnez d'abord une source"}
+                >
+                  {getSubcategories(em.source).map((opt) => (
+                    <MenuItem key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Grid>
+
               <Grid item xs={12} md={2}>
                 <TextField
                   label="Catégorie"
@@ -173,14 +249,19 @@ export default function EmissionForm({ assessmentId, onSuccess }: { assessmentId
                 />
               </Grid>
               <Grid item xs={12} md={1}>
-                <TextField
-                  label="Facteur"
-                  type="number"
-                  fullWidth
-                  value={em.emissionFactor}
-                  onChange={(e) => handleEmissionChange(idx, 'emissionFactor', e.target.value)}
-                  required
-                />
+                <Tooltip title={em.factorSource ? `Source: ${em.factorSource}` : "Facteur d'émission"}>
+                  <TextField
+                    label="Facteur"
+                    type="number"
+                    fullWidth
+                    value={em.emissionFactor}
+                    onChange={(e) => handleEmissionChange(idx, 'emissionFactor', e.target.value)}
+                    required
+                    InputProps={{
+                      endAdornment: em.factorSource && <InfoIcon color="primary" fontSize="small" />
+                    }}
+                  />
+                </Tooltip>
               </Grid>
               <Grid item xs={12} md={1}>
                 <TextField label="Unité" fullWidth value={em.unit} onChange={(e) => handleEmissionChange(idx, 'unit', e.target.value)} />
