@@ -26,6 +26,11 @@ import IconButton from 'components/@extended/IconButton';
 import AnimateButton from 'components/@extended/AnimateButton';
 import { fetcher } from 'utils/axios';
 import { useLanguage } from 'contexts/LanguageContext';
+import { openSnackbar } from 'api/snackbar';
+import { getLoginErrorMessage } from 'utils/auth-errors';
+
+// types
+import { SnackbarProps } from 'types/snackbar';
 
 // assets
 import { Eye, EyeSlash } from 'iconsax-react';
@@ -52,8 +57,8 @@ export default function AuthLogin({ forgot }: { forgot?: string }) {
     <>
       <Formik
         initialValues={{
-          email: 'info@phoenixcoded.co',
-          password: '123456',
+          email: '',
+          password: '',
           submit: null
         }}
         validationSchema={Yup.object().shape({
@@ -66,15 +71,41 @@ export default function AuthLogin({ forgot }: { forgot?: string }) {
             if (scriptedRef.current) {
               setStatus({ success: true });
               setSubmitting(false);
+
+              // Afficher message de succès
+              openSnackbar({
+                open: true,
+                message: t('login-success'),
+                variant: 'alert',
+                alert: {
+                  color: 'success'
+                }
+              } as SnackbarProps);
+
               preload('api/menu/dashboard', fetcher); // load menu on login success
             }
           } catch (err: any) {
             console.error(err);
+
+            // Gestion des erreurs avec l'utilitaire
+            const errorMessage = getLoginErrorMessage(err, t);
+
+            // Toujours afficher l'erreur à l'utilisateur
             if (scriptedRef.current) {
               setStatus({ success: false });
-              setErrors({ submit: err.message });
+              setErrors({ submit: errorMessage });
               setSubmitting(false);
             }
+
+            // Afficher message d'erreur via snackbar (toujours)
+            openSnackbar({
+              open: true,
+              message: errorMessage,
+              variant: 'alert',
+              alert: {
+                color: 'error'
+              }
+            } as SnackbarProps);
           }
         }}
       >

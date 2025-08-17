@@ -20,6 +20,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import { createEmission, getAssessmentWithEmissions } from '../api/carbonAssessment';
 import { getFactorsBySource, getEmissionFactor } from '../data/emissionFactors';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const scopes = [
   { value: 1, label: 'Scope 1 - Direct' },
@@ -40,39 +41,40 @@ const defaultEmission = {
   methodology: ''
 };
 
-const sourceOptions = [
-  { value: 'Grid Electricity', label: '⚡ Électricité réseau' },
-  { value: 'Natural Gas', label: '🔥 Gaz naturel' },
-  { value: 'Company Vehicles', label: '🚗 Véhicules société' },
-  { value: 'Air Travel', label: '✈️ Voyage aérien' },
-  { value: 'Landfill Waste', label: '🗑️ Déchets' },
-  { value: 'Water Supply', label: '💧 Approvisionnement eau' },
-  { value: 'Raw Materials', label: '🏗️ Matières premières' },
-  { value: 'Employee Meals', label: '🍽️ Repas employés' },
-  { value: 'Cloud Services', label: '☁️ Services cloud' },
-  { value: 'IT Equipment', label: '💻 Équipements IT' }
-];
-
-const categoryOptions = [
-  { value: 'Electricity', label: 'Électricité' },
-  { value: 'Heating', label: 'Chauffage' },
-  { value: 'Transportation', label: 'Transport' },
-  { value: 'Business Travel', label: 'Déplacements professionnels' },
-  { value: 'Waste', label: 'Déchets' },
-  { value: 'Water', label: 'Eau' },
-  { value: 'Materials', label: 'Matériaux' },
-  { value: 'Food', label: 'Alimentation' },
-  { value: 'Services', label: 'Services' },
-  { value: 'Equipment', label: 'Équipements' }
-];
-
 export default function SmartEmissionForm({ assessmentId, onSuccess }: { assessmentId: string | undefined; onSuccess?: () => void }) {
+  const { t } = useLanguage();
   const [emissions, setEmissions] = useState([{ ...defaultEmission }]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [assessment, setAssessment] = useState<any>(null);
   const [assessmentLoading, setAssessmentLoading] = useState(true);
+
+  const sourceOptions = [
+    { value: 'Grid Electricity', label: `⚡ ${t('grid-electricity')}` },
+    { value: 'Natural Gas', label: `🔥 ${t('natural-gas')}` },
+    { value: 'Company Vehicles', label: `🚗 ${t('company-vehicles')}` },
+    { value: 'Air Travel', label: `✈️ ${t('air-travel')}` },
+    { value: 'Landfill Waste', label: `🗑️ ${t('landfill-waste')}` },
+    { value: 'Water Supply', label: `💧 ${t('water-supply')}` },
+    { value: 'Raw Materials', label: `🏗️ ${t('raw-materials')}` },
+    { value: 'Employee Meals', label: `🍽️ ${t('employee-meals')}` },
+    { value: 'Cloud Services', label: `☁️ ${t('cloud-services')}` },
+    { value: 'IT Equipment', label: `💻 ${t('it-equipment')}` }
+  ];
+
+  const categoryOptions = [
+    { value: 'Electricity', label: t('electricity') },
+    { value: 'Heating', label: t('heating') },
+    { value: 'Transportation', label: t('transportation') },
+    { value: 'Business Travel', label: t('business-travel') },
+    { value: 'Waste', label: t('waste') },
+    { value: 'Water', label: t('water') },
+    { value: 'Materials', label: t('materials') },
+    { value: 'Food', label: t('food') },
+    { value: 'Services', label: t('services') },
+    { value: 'Equipment', label: t('equipment') }
+  ];
 
   useEffect(() => {
     if (!assessmentId) return;
@@ -146,13 +148,51 @@ export default function SmartEmissionForm({ assessmentId, onSuccess }: { assessm
     );
   };
 
+  // Function to translate subcategories
+  const translateSubcategory = (subcategory: string) => {
+    const subcategoryMap: { [key: string]: string } = {
+      'Court-courrier (<1000km)': t('Court-courrier (<1000km)'),
+      'Moyen-courrier (1000-3000km)': t('Moyen-courrier (1000-3000km)'),
+      'Long-courrier (>3000km)': t('Long-courrier (>3000km)'),
+      'Voiture essence': t('Voiture essence'),
+      'Voiture diesel': t('Voiture diesel'),
+      'Voiture électrique': t('Voiture électrique'),
+      'Camionnette diesel': t('Camionnette diesel'),
+      France: t('France'),
+      Allemagne: t('Allemagne'),
+      'Royaume-Uni': t('Royaume-Uni'),
+      Espagne: t('Espagne'),
+      'Gaz naturel chauffage': t('Gaz naturel chauffage'),
+      'Gaz naturel industrie': t('Gaz naturel industrie'),
+      'Repas moyen': t('Repas moyen'),
+      'Déchets ménagers': t('Déchets ménagers'),
+      'Déchets recyclables': t('Déchets recyclables'),
+      'Eau potable réseau': t('Eau potable réseau'),
+      'Eau embouteillée': t('Eau embouteillée'),
+      Acier: t('Acier'),
+      Aluminium: t('Aluminium'),
+      Béton: t('Béton'),
+      'Plastique PET': t('Plastique PET'),
+      'Repas végétarien': t('Repas végétarien'),
+      'Repas carné': t('Repas carné'),
+      'Stockage cloud': t('Stockage cloud'),
+      'Calcul cloud': t('Calcul cloud'),
+      'Ordinateur portable': t('Ordinateur portable'),
+      Smartphone: t('Smartphone'),
+      'Écran 24 pouces': t('Écran 24 pouces'),
+      Serveur: t('Serveur')
+    };
+
+    return subcategoryMap[subcategory] || subcategory;
+  };
+
   const getSubcategories = (source: string) => {
     const factors = getFactorsBySource(source);
     if (!factors) return [];
 
     return Object.keys(factors).map((key) => ({
       value: key,
-      label: key
+      label: translateSubcategory(key)
     }));
   };
 
@@ -211,7 +251,7 @@ export default function SmartEmissionForm({ assessmentId, onSuccess }: { assessm
         }));
 
       if (emissionsToSend.length === 0) {
-        setError('Veuillez remplir au moins une émission complète (source, catégorie, type spécifique, quantité et facteur)');
+        setError(t('complete-emission-required'));
         return;
       }
 
@@ -244,30 +284,30 @@ export default function SmartEmissionForm({ assessmentId, onSuccess }: { assessm
         {assessment ? (
           <Paper elevation={2} sx={{ p: 2, mb: 3, background: '#f7f7f7' }}>
             <Typography variant="subtitle1" gutterBottom>
-              📊 Bilan sélectionné
+              📊 {t('assessment')}
             </Typography>
             <Typography>
-              <b>Nom :</b> {assessment.name}
+              <b>{t('name')} :</b> {assessment.name}
             </Typography>
             <Typography>
-              <b>Année :</b> {assessment.year}
+              <b>{t('year')} :</b> {assessment.year}
             </Typography>
             <Typography>
-              <b>Description :</b> {assessment.description || '-'}
+              <b>{t('description')} :</b> {assessment.description || '-'}
             </Typography>
           </Paper>
         ) : (
-          <Alert severity="error">Aucun bilan trouvé</Alert>
+          <Alert severity="error">{t('no-assessment-found')}</Alert>
         )}
 
         {/* Titre avec icône */}
         <Box display="flex" alignItems="center" mb={2}>
           <AutoFixHighIcon color="primary" sx={{ mr: 1 }} />
-          <Typography variant="h6">Ajouter des émissions (Facteurs automatiques)</Typography>
+          <Typography variant="h6">{t('smart-emission-form')}</Typography>
         </Box>
 
         <Alert severity="info" sx={{ mb: 2 }}>
-          💡 Sélectionnez une source et un type spécifique : les facteurs d'émission seront automatiquement remplis !
+          💡 {t('smart-form-info')}
         </Alert>
 
         <Box component="form" onSubmit={handleSubmit}>
@@ -281,7 +321,7 @@ export default function SmartEmissionForm({ assessmentId, onSuccess }: { assessm
                 {/* Source */}
                 <Grid item xs={12} md={3}>
                   <TextField
-                    label="Source d'émission"
+                    label={t('emission-source-label')}
                     select
                     fullWidth
                     value={em.source}
@@ -299,13 +339,13 @@ export default function SmartEmissionForm({ assessmentId, onSuccess }: { assessm
                 {/* Type spécifique (sous-catégorie) */}
                 <Grid item xs={12} md={3}>
                   <TextField
-                    label="Type spécifique"
+                    label={t('specific-type-label')}
                     select
                     fullWidth
                     value={em.subcategory}
                     onChange={(e) => handleEmissionChange(idx, 'subcategory', e.target.value)}
                     disabled={!em.source}
-                    helperText={em.source ? 'Facteur auto-calculé ✨' : "Sélectionnez d'abord une source"}
+                    helperText={em.source ? t('factor-auto-calculated') : t('select-source-first')}
                     required
                   >
                     {getSubcategories(em.source).map((opt) => (
@@ -319,12 +359,12 @@ export default function SmartEmissionForm({ assessmentId, onSuccess }: { assessm
                 {/* Catégorie */}
                 <Grid item xs={12} md={2}>
                   <TextField
-                    label="Catégorie"
+                    label={t('category')}
                     select
                     fullWidth
                     value={em.category}
                     onChange={(e) => handleEmissionChange(idx, 'category', e.target.value)}
-                    helperText="Auto-sélectionnée"
+                    helperText={t('auto-selected')}
                     InputProps={{
                       readOnly: true
                     }}
@@ -341,7 +381,7 @@ export default function SmartEmissionForm({ assessmentId, onSuccess }: { assessm
                 {/* Quantité */}
                 <Grid item xs={12} md={2}>
                   <TextField
-                    label="Quantité"
+                    label={t('quantity-label')}
                     type="number"
                     fullWidth
                     value={em.activityData}
@@ -353,9 +393,9 @@ export default function SmartEmissionForm({ assessmentId, onSuccess }: { assessm
 
                 {/* Facteur d'émission */}
                 <Grid item xs={12} md={2}>
-                  <Tooltip title={em.methodology || "Facteur d'émission"}>
+                  <Tooltip title={em.methodology || t('emission-factor-label')}>
                     <TextField
-                      label="Facteur"
+                      label={t('emission-factor-label')}
                       type="number"
                       fullWidth
                       value={em.emissionFactor}
@@ -373,7 +413,7 @@ export default function SmartEmissionForm({ assessmentId, onSuccess }: { assessm
                 {/* Scope */}
                 <Grid item xs={12} md={1}>
                   <TextField
-                    label="Scope"
+                    label={t('scope')}
                     select
                     fullWidth
                     value={em.scope}
@@ -397,7 +437,12 @@ export default function SmartEmissionForm({ assessmentId, onSuccess }: { assessm
                 {/* Résultat calculé */}
                 {calculateTotal(em) && (
                   <Grid item xs={12}>
-                    <Chip label={`= ${calculateTotal(em)} tCO₂e`} color="success" variant="outlined" size="small" />
+                    <Chip
+                      label={`${t('calculated-result')}: ${calculateTotal(em)} tCO₂e`}
+                      color="success"
+                      variant="outlined"
+                      size="small"
+                    />
                   </Grid>
                 )}
 
@@ -415,11 +460,11 @@ export default function SmartEmissionForm({ assessmentId, onSuccess }: { assessm
 
           <Box display="flex" gap={2} mt={2}>
             <Button variant="outlined" onClick={addEmission}>
-              ➕ Ajouter une émission
+              ➕ {t('add-emission-smart')}
             </Button>
 
             <Button type="submit" variant="contained" disabled={loading} size="large">
-              {loading ? 'Sauvegarde...' : `💾 Sauvegarder ${emissions.length} émission(s)`}
+              {loading ? t('saving-smart') : `💾 ${t('save-emissions-smart', { count: emissions.length })}`}
             </Button>
           </Box>
 
@@ -431,7 +476,7 @@ export default function SmartEmissionForm({ assessmentId, onSuccess }: { assessm
 
           {success && (
             <Alert severity="success" sx={{ mt: 2 }}>
-              ✅ Émission(s) ajoutée(s) avec succès !
+              ✅ {t('emissions-added-success')}
             </Alert>
           )}
         </Box>

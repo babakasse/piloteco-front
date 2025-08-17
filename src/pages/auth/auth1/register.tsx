@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 
 // project-imports
 import Logo from 'components/logo';
@@ -12,6 +13,7 @@ import AuthSocButton from 'sections/auth/AuthSocButton';
 import AuthDivider from 'sections/auth/AuthDivider';
 import AuthWrapper from 'sections/auth/AuthWrapper';
 import FirebaseRegister from 'sections/auth/auth-forms/AuthRegister';
+import LanguageSelector from 'components/LanguageSelector';
 import { useLanguage } from 'contexts/LanguageContext';
 
 // assets
@@ -28,6 +30,12 @@ export default function Register() {
   return (
     <AuthWrapper>
       <Grid container spacing={3}>
+        {/* Sélecteur de langue en haut à droite */}
+        <Grid item xs={12} sx={{ position: 'relative' }}>
+          <Box sx={{ position: 'absolute', top: -8, right: -8, zIndex: 1000 }}>
+            <LanguageSelector />
+          </Box>
+        </Grid>
         <Grid item xs={12} sx={{ textAlign: 'center' }}>
           <Logo />
         </Grid>

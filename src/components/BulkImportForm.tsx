@@ -25,6 +25,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
 import { createEmission } from '../api/carbonAssessment';
 import { getEmissionFactor } from '../data/emissionFactors';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -59,6 +60,7 @@ interface BulkImportFormProps {
 }
 
 export default function BulkImportForm({ assessmentId, onSuccess }: BulkImportFormProps) {
+  const { t } = useLanguage();
   const [file, setFile] = useState<File | null>(null);
   const [parsedData, setParsedData] = useState<ParsedEmission[]>([]);
   const [loading, setLoading] = useState(false);
@@ -191,7 +193,7 @@ Employee Meals,Repas moyen,250,Food,Repas équipe (50 employés × 5 jours)`;
       const validEmissions = parsedData.filter((em) => em.valid);
 
       if (validEmissions.length === 0) {
-        throw new Error('Aucune émission valide à importer');
+        throw new Error(t('no-valid-emissions'));
       }
 
       for (const emission of validEmissions) {
@@ -228,27 +230,27 @@ Employee Meals,Repas moyen,250,Food,Repas équipe (50 employés × 5 jours)`;
         <CardContent>
           <Box display="flex" alignItems="center" mb={2}>
             <CloudUploadIcon color="primary" sx={{ mr: 1 }} />
-            <Typography variant="h6">Import en masse CSV/Excel</Typography>
+            <Typography variant="h6">{t('bulk-import')}</Typography>
           </Box>
 
           <Alert severity="info" sx={{ mb: 2 }}>
-            📁 Importez plusieurs émissions d'un coup via un fichier CSV. Les facteurs d'émission seront automatiquement appliqués !
+            📁 {t('bulk-import-info')}
           </Alert>
 
           <Box display="flex" gap={2} mb={2}>
             <Button variant="outlined" onClick={downloadTemplate} startIcon={<CloudUploadIcon />}>
-              📥 Télécharger le modèle CSV
+              📥 {t('download-template')}
             </Button>
 
             <Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
-              📤 Choisir un fichier CSV
+              📤 {t('select-file')}
               <VisuallyHiddenInput type="file" accept=".csv,.txt" onChange={handleFileChange} />
             </Button>
           </Box>
 
           {file && (
             <Alert severity="success" sx={{ mb: 2 }}>
-              ✅ Fichier sélectionné: {file.name} ({file.size} octets)
+              ✅ {t('selected-file')}: {file.name} ({file.size} octets)
             </Alert>
           )}
 
@@ -263,10 +265,10 @@ Employee Meals,Repas moyen,250,Food,Repas équipe (50 employés × 5 jours)`;
       {/* Dialog de prévisualisation */}
       <Dialog open={showPreview} onClose={() => setShowPreview(false)} maxWidth="lg" fullWidth>
         <DialogTitle>
-          📊 Prévisualisation de l'import
+          📊 {t('preview-data')}
           <Box mt={1}>
-            <Chip label={`${validCount} valides`} color="success" size="small" sx={{ mr: 1 }} />
-            {invalidCount > 0 && <Chip label={`${invalidCount} erreurs`} color="error" size="small" />}
+            <Chip label={`${validCount} ${t('valid-emissions')}`} color="success" size="small" sx={{ mr: 1 }} />
+            {invalidCount > 0 && <Chip label={`${invalidCount} ${t('invalid-emissions')}`} color="error" size="small" />}
           </Box>
         </DialogTitle>
 
@@ -326,15 +328,15 @@ Employee Meals,Repas moyen,250,Food,Repas équipe (50 employés × 5 jours)`;
 
           {validCount > 0 && (
             <Alert severity="success" sx={{ mt: 2 }}>
-              🎯 {validCount} émissions seront importées avec succès
+              🎯 {validCount} {t('emissions-imported-success')}
             </Alert>
           )}
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={() => setShowPreview(false)}>Annuler</Button>
+          <Button onClick={() => setShowPreview(false)}>{t('cancel')}</Button>
           <Button onClick={handleImport} variant="contained" disabled={loading || validCount === 0}>
-            {loading ? 'Import...' : `Importer ${validCount} émissions`}
+            {loading ? t('importing') : `${t('import-emissions')} ${validCount}`}
           </Button>
         </DialogActions>
       </Dialog>

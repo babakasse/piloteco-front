@@ -56,13 +56,13 @@ export const JWTProvider = ({ children }: { children: ReactElement }) => {
     const init = async () => {
       try {
         const serviceToken = localStorage.getItem('serviceToken');
-  
+
         // Vérification du token (date d'expiration)
         if (serviceToken && verifyToken(serviceToken)) {
           setSession(serviceToken); // Définit le header Authorization
           const response = await axios.get('/me'); // Appel protégé
           const { user } = response.data;
-  
+
           dispatch({
             type: LOGIN,
             payload: {
@@ -75,19 +75,18 @@ export const JWTProvider = ({ children }: { children: ReactElement }) => {
         }
       } catch (err: any) {
         console.warn('JWTContext init error:', err?.response?.data || err.message || err);
-  
+
         // Nettoyage complet du token
         setSession(null);
-  
+
         dispatch({
           type: LOGOUT
         });
       }
     };
-  
+
     init();
   }, []);
-  
 
   const login = async (email: string, password: string) => {
     const response = await axios.post('/login', { email, password });
@@ -103,31 +102,25 @@ export const JWTProvider = ({ children }: { children: ReactElement }) => {
   };
 
   const register = async (email: string, plainPassword: string, firstName: string, lastName: string) => {
-    // todo: this flow need to be recode as it not verified
-    const id = chance.bb_pin();
     const response = await axios.post('/register', {
-      id,
       email,
       plainPassword,
       firstName,
       lastName
     });
-    let users = response.data;
 
-    if (window.localStorage.getItem('users') !== undefined && window.localStorage.getItem('users') !== null) {
-      const localUsers = window.localStorage.getItem('users');
-      users = [
-        ...JSON.parse(localUsers!),
-        {
-          id,
-          email,
-          plainPassword,
-          name: `${firstName} ${lastName}`
+    // Après inscription réussie, connecter automatiquement l'utilisateur
+    const { token, user } = response.data;
+    if (token && user) {
+      setSession(token);
+      dispatch({
+        type: LOGIN,
+        payload: {
+          isLoggedIn: true,
+          user
         }
-      ];
+      });
     }
-
-    window.localStorage.setItem('users', JSON.stringify(users));
   };
 
   const logout = () => {

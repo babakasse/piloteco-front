@@ -24,6 +24,7 @@ import useScriptRef from 'hooks/useScriptRef';
 import IconButton from 'components/@extended/IconButton';
 import AnimateButton from 'components/@extended/AnimateButton';
 import { useLanguage } from 'contexts/LanguageContext';
+import { getRegistrationErrorMessage } from 'utils/auth-errors';
 
 import { openSnackbar } from 'api/snackbar';
 import { strengthColor, strengthIndicator } from 'utils/password-strength';
@@ -85,9 +86,11 @@ export default function AuthRegister() {
             if (scriptedRef.current) {
               setStatus({ success: true });
               setSubmitting(false);
+
+              // Message de succès et redirection vers le dashboard
               openSnackbar({
                 open: true,
-                message: t('registration-success'),
+                message: t('registration-success-redirect'),
                 variant: 'alert',
                 alert: {
                   color: 'success'
@@ -95,15 +98,29 @@ export default function AuthRegister() {
               } as SnackbarProps);
 
               setTimeout(() => {
-                navigate('/login', { replace: true });
+                navigate('/dashboard', { replace: true });
               }, 1500);
             }
           } catch (err: any) {
             console.error(err);
             if (scriptedRef.current) {
               setStatus({ success: false });
-              setErrors({ submit: err.message });
+
+              // Gestion des erreurs avec l'utilitaire
+              const errorMessage = getRegistrationErrorMessage(err, t);
+
+              setErrors({ submit: errorMessage });
               setSubmitting(false);
+
+              // Afficher message d'erreur
+              openSnackbar({
+                open: true,
+                message: errorMessage,
+                variant: 'alert',
+                alert: {
+                  color: 'error'
+                }
+              } as SnackbarProps);
             }
           }
         }}
