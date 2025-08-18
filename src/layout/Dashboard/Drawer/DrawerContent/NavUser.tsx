@@ -16,7 +16,9 @@ import MenuItem from '@mui/material/MenuItem';
 // project import
 import Avatar from 'components/@extended/Avatar';
 import useAuth from 'hooks/useAuth';
+import useCompany from 'hooks/useCompany';
 import { useGetMenuMaster } from 'api/menu';
+import { useLanguage } from 'contexts/LanguageContext';
 
 // assets
 import { ArrowRight2 } from 'iconsax-react';
@@ -54,7 +56,9 @@ export default function UserList() {
   const { menuMaster } = useGetMenuMaster();
   const drawerOpen = menuMaster.isDashboardDrawerOpened;
 
-  const { logout, user } = useAuth();
+  const { logout } = useAuth();
+  const { user } = useCompany();
+  const { t } = useLanguage();
   const handleLogout = async () => {
     try {
       await logout();
@@ -106,7 +110,11 @@ export default function UserList() {
           <ListItemAvatar>
             <Avatar alt="Avatar" src={avatar1} sx={{ ...(drawerOpen && { width: 46, height: 46 }) }} />
           </ListItemAvatar>
-          <ListItemText primary={user?.name} sx={{ ...(!drawerOpen && { display: 'none' }) }} secondary="UI/UX Designer" />
+          <ListItemText
+            primary={user ? `${user.firstName} ${user.lastName}` : 'Utilisateur'}
+            sx={{ ...(!drawerOpen && { display: 'none' }) }}
+            secondary={user ? `${user.firstName} ${user.lastName}` : 'Utilisateur'}
+          />
         </ListItem>
       </List>
       <Menu
@@ -118,12 +126,12 @@ export default function UserList() {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       >
-        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+        <MenuItem onClick={handleLogout}>{t('logout')}</MenuItem>
         <MenuItem component={Link} to="#" onClick={handleClose}>
-          Profile
+          {t('profile')}
         </MenuItem>
         <MenuItem component={Link} to="#" onClick={handleClose}>
-          My account
+          {t('my-account')}
         </MenuItem>
       </Menu>
     </Box>

@@ -97,16 +97,16 @@ export default function FooterBlock({ isFull }: showProps) {
                   <Stack spacing={3}>
                     <Typography variant="h5">Help & Support</Typography>
                     <Stack spacing={{ xs: 1.5, md: 2.5 }}>
-                      <FooterLink href="https://phoenixcoded.gitbook.io/able-pro" target="_blank" underline="none">
+                      <FooterLink href="" target="_blank" underline="none">
                         Documentation
                       </FooterLink>
-                      <FooterLink href="https://phoenixcoded.gitbook.io/able-pro/v/react/roadmap/" target="_blank" underline="none">
+                      <FooterLink href="" target="_blank" underline="none">
                         Feature Request
                       </FooterLink>
-                      <FooterLink href="https://phoenixcoded.gitbook.io/able-pro/v/react/roadmap/" target="_blank" underline="none">
+                      <FooterLink href="" target="_blank" underline="none">
                         RoadMap
                       </FooterLink>
-                      <FooterLink href="https://phoenixcoded.authordesk.app/" target="_blank" underline="none">
+                      <FooterLink href="" target="_blank" underline="none">
                         Support
                       </FooterLink>
                       <FooterLink href="https://themeforest.net/user/phoenixcoded#contact" target="_blank" underline="none">

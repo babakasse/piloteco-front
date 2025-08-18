@@ -5,11 +5,14 @@ import { IntlProvider, MessageFormatElement } from 'react-intl';
 
 // project-imports
 import useConfig from 'hooks/useConfig';
+import { useLanguage } from 'contexts/LanguageContext';
 import { I18n } from 'types/config';
 
 // load locales files
 const loadLocaleData = (locale: I18n) => {
   switch (locale) {
+    case 'fr':
+      return import('utils/locales/fr.json');
     case 'en':
     default:
       return import('utils/locales/en.json');
@@ -24,19 +27,23 @@ interface Props {
 
 export default function Locales({ children }: Props) {
   const { i18n } = useConfig();
+  const { language } = useLanguage();
 
   const [messages, setMessages] = useState<Record<string, string> | Record<string, MessageFormatElement[]> | undefined>();
 
+  // Utiliser la langue de notre contexte au lieu de la config
+  const currentLocale = language as I18n;
+
   useEffect(() => {
-    loadLocaleData(i18n).then((d: { default: Record<string, string> | Record<string, MessageFormatElement[]> | undefined }) => {
+    loadLocaleData(currentLocale).then((d: { default: Record<string, string> | Record<string, MessageFormatElement[]> | undefined }) => {
       setMessages(d.default);
     });
-  }, [i18n]);
+  }, [currentLocale]);
 
   return (
     <>
       {messages && (
-        <IntlProvider locale={i18n} defaultLocale="en" messages={messages}>
+        <IntlProvider locale={currentLocale} defaultLocale="fr" messages={messages}>
           {children}
         </IntlProvider>
       )}

@@ -34,7 +34,20 @@ export default function DrawerHeader({ open }: Props) {
         paddingLeft: isHorizontal ? { xs: '24px', lg: '0' } : open ? '24px' : 0
       }}
     >
-      <Logo isIcon={!open} sx={{ width: open ? 'auto' : 52, height: 'auto' }} />
+      <Logo
+        isIcon={!open}
+        sx={{
+          width: open ? { xs: 120, sm: 140, md: 150 } : { xs: 32, sm: 40, md: 52 },
+          height: 'auto',
+          margin: open
+            ? { xs: '16px 16px 8px', sm: '20px 20px 10px', md: '24px 24px 12px' }
+            : { xs: '16px 8px 8px', sm: '20px 10px 10px', md: '24px 12px 12px' },
+          '& img': {
+            width: '100%',
+            height: 'auto'
+          }
+        }}
+      />
     </DrawerHeaderStyled>
   );
 }

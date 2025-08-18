@@ -22,9 +22,10 @@ import MainCard from 'components/MainCard';
 import IconButton from 'components/@extended/IconButton';
 import Transitions from 'components/@extended/Transitions';
 import { ThemeMode } from 'config';
+import { useLanguage } from 'contexts/LanguageContext';
 
 // assets
-import { Gift, MessageText1, Notification, Setting2 } from 'iconsax-react';
+import { Gift, MessageText1, Notification, Setting2, Flash, DocumentText, Chart, Timer, Global } from 'iconsax-react';
 import Avatar from 'components/@extended/Avatar';
 
 // types
@@ -43,9 +44,10 @@ const actionSX = {
 export default function NotificationPage() {
   const theme = useTheme();
   const matchesXs = useMediaQuery(theme.breakpoints.down('md'));
+  const { t } = useLanguage();
 
   const anchorRef = useRef<any>(null);
-  const [read] = useState(2);
+  const [read] = useState(5);
   const [open, setOpen] = useState(false);
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -102,9 +104,9 @@ export default function NotificationPage() {
               <ClickAwayListener onClickAway={handleClose}>
                 <MainCard elevation={0} border={false}>
                   <Stack direction="row" alignItems="center" justifyContent="space-between">
-                    <Typography variant="h5">Notifications</Typography>
+                    <Typography variant="h5">{t('notifications')}</Typography>
                     <Link href="#" variant="h6" color="primary">
-                      Mark all read
+                      {t('mark-all-read')}
                     </Link>
                   </Stack>
                   <List
@@ -121,105 +123,89 @@ export default function NotificationPage() {
                   >
                     <ListItemButton>
                       <ListItemAvatar>
-                        <Avatar type="filled">
-                          <Gift size={20} variant="Bold" />
+                        <Avatar type="filled" sx={{ bgcolor: 'success.main' }}>
+                          <Flash size={20} variant="Bold" />
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText
-                        primary={
-                          <Typography variant="h6">
-                            It&apos;s{' '}
-                            <Typography component="span" variant="subtitle1">
-                              Cristina danny&apos;s
-                            </Typography>{' '}
-                            birthday today.
-                          </Typography>
-                        }
-                        secondary="2 min ago"
+                        primary={<Typography variant="h6">{t('carbon-objective-reached')}</Typography>}
+                        secondary={t('5-min-ago')}
                       />
                       <ListItemSecondaryAction>
                         <Typography variant="caption" noWrap>
-                          3:00 AM
+                          14:30
                         </Typography>
                       </ListItemSecondaryAction>
                     </ListItemButton>
 
                     <ListItemButton>
                       <ListItemAvatar>
-                        <Avatar type="outlined">
-                          <MessageText1 size={20} variant="Bold" />
+                        <Avatar type="outlined" sx={{ color: 'warning.main', borderColor: 'warning.main' }}>
+                          <DocumentText size={20} variant="Bold" />
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText
-                        primary={
-                          <Typography variant="h6">
-                            <Typography component="span" variant="subtitle1">
-                              Aida Burg
-                            </Typography>{' '}
-                            commented your post.
-                          </Typography>
-                        }
-                        secondary="5 August"
+                        primary={<Typography variant="h6">{t('carbon-report-ready')}</Typography>}
+                        secondary={t('1-hour-ago')}
                       />
                       <ListItemSecondaryAction>
                         <Typography variant="caption" noWrap>
-                          6:00 PM
+                          13:45
                         </Typography>
                       </ListItemSecondaryAction>
                     </ListItemButton>
 
                     <ListItemButton>
                       <ListItemAvatar>
-                        <Avatar>
-                          <Setting2 size={20} variant="Bold" />
+                        <Avatar sx={{ bgcolor: 'info.main' }}>
+                          <Chart size={20} variant="Bold" />
                         </Avatar>
                       </ListItemAvatar>
-                      <ListItemText
-                        primary={
-                          <Typography variant="h6">
-                            Your Profile is Complete &nbsp;
-                            <Typography component="span" variant="subtitle1">
-                              60%
-                            </Typography>{' '}
-                          </Typography>
-                        }
-                        secondary="7 hours ago"
-                      />
+                      <ListItemText primary={<Typography variant="h6">{t('emissions-reduced')}</Typography>} secondary={t('3-hours-ago')} />
                       <ListItemSecondaryAction>
                         <Typography variant="caption" noWrap>
-                          2:45 PM
+                          11:20
                         </Typography>
                       </ListItemSecondaryAction>
                     </ListItemButton>
 
                     <ListItemButton>
                       <ListItemAvatar>
-                        <Avatar type="combined">C</Avatar>
+                        <Avatar type="combined" sx={{ bgcolor: 'primary.main' }}>
+                          <Timer size={20} variant="Bold" />
+                        </Avatar>
                       </ListItemAvatar>
                       <ListItemText
-                        primary={
-                          <Typography variant="h6">
-                            <Typography component="span" variant="subtitle1">
-                              Cristina Danny
-                            </Typography>{' '}
-                            invited to join{' '}
-                            <Typography component="span" variant="subtitle1">
-                              Meeting.
-                            </Typography>
-                          </Typography>
-                        }
-                        secondary="Daily scrum meeting time"
+                        primary={<Typography variant="h6">{t('assessment-reminder')}</Typography>}
+                        secondary="Échéance dans 2 jours"
                       />
                       <ListItemSecondaryAction>
                         <Typography variant="caption" noWrap>
-                          9:10 PM
+                          08:00
+                        </Typography>
+                      </ListItemSecondaryAction>
+                    </ListItemButton>
+
+                    <ListItemButton>
+                      <ListItemAvatar>
+                        <Avatar type="filled" sx={{ bgcolor: 'secondary.main' }}>
+                          <Global size={20} variant="Bold" />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText primary={<Typography variant="h6">{t('new-regulation')}</Typography>} secondary={t('yesterday')} />
+                      <ListItemSecondaryAction>
+                        <Typography variant="caption" noWrap>
+                          16:45
                         </Typography>
                       </ListItemSecondaryAction>
                     </ListItemButton>
                   </List>
-                  <Stack direction="row" justifyContent="center">
+                  <Stack direction="row" justifyContent="space-between" sx={{ pt: 1 }}>
                     <Link href="#" variant="h6" color="primary">
-                      View all
+                      {t('view-all')}
+                    </Link>
+                    <Link href="#" variant="h6" color="secondary">
+                      {t('settings')}
                     </Link>
                   </Stack>
                 </MainCard>

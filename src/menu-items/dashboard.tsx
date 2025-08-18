@@ -4,14 +4,16 @@
 import { FormattedMessage } from 'react-intl';
 
 // assets
-import { Home } from 'iconsax-react';
+import { Home, BookSquare, Buildings } from 'iconsax-react';
 
 // type
 import { NavItemType } from 'types/menu';
 
 // icons
 const icons = {
-  dashboard: Home
+  dashboard: Home,
+  assessment: BookSquare,
+  companies: Buildings
 };
 
 // ==============================|| MENU ITEMS - DASHBOARD ||============================== //
@@ -20,8 +22,30 @@ const dashboard: NavItemType = {
   id: 'dashboard',
   title: <FormattedMessage id="dashboard" />,
   type: 'group',
-  url: '/dashboard',
-  icon: icons.dashboard
+  icon: icons.dashboard,
+  children: [
+    {
+      id: 'dashboard-main',
+      title: <FormattedMessage id="dashboard" />,
+      type: 'item',
+      url: '/dashboard',
+      icon: icons.dashboard
+    },
+    {
+      id: 'assessment-list',
+      title: <FormattedMessage id="assessments" />,
+      type: 'item',
+      url: '/assessment-list',
+      icon: icons.assessment
+    },
+    {
+      id: 'companies',
+      title: <FormattedMessage id="companies" />,
+      type: 'item',
+      url: '/companies',
+      icon: icons.companies
+    }
+  ]
 };
 
-export default dashboard; 
+export default dashboard;

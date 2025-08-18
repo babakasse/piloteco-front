@@ -137,13 +137,7 @@ export default function Header({ layout = 'landing', ...others }: Props) {
               >
                 Components
               </Link>
-              <Link
-                className="header-link"
-                color="secondary.main"
-                href="https://phoenixcoded.gitbook.io/able-pro"
-                target="_blank"
-                underline="none"
-              >
+              <Link className="header-link" color="secondary.main" href="" target="_blank" underline="none">
                 Documentation
               </Link>
               <Link href="https://github.com/phoenixcoded/able-pro-free-admin-dashboard-template" target="_blank" underline="none">
@@ -258,7 +252,7 @@ export default function Header({ layout = 'landing', ...others }: Props) {
                         <ListItemText primary="Free Version" primaryTypographyProps={{ variant: 'h6', color: 'secondary.main' }} />
                       </ListItemButton>
                     </Link>
-                    <Link style={{ textDecoration: 'none' }} href="https://phoenixcoded.gitbook.io/able-pro" target="_blank">
+                    <Link style={{ textDecoration: 'none' }} href="" target="_blank">
                       <ListItemButton>
                         <ListItemIcon>
                           <Minus color={theme.palette.secondary.main} />
@@ -266,7 +260,7 @@ export default function Header({ layout = 'landing', ...others }: Props) {
                         <ListItemText primary="Documentation" primaryTypographyProps={{ variant: 'h6', color: 'secondary.main' }} />
                       </ListItemButton>
                     </Link>
-                    <Link style={{ textDecoration: 'none' }} href="https://phoenixcoded.authordesk.app/" target="_blank">
+                    <Link style={{ textDecoration: 'none' }} href="" target="_blank">
                       <ListItemButton>
                         <ListItemIcon>
                           <Minus color={theme.palette.secondary.main} />

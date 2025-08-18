@@ -33,34 +33,13 @@ export default function AuthFooter() {
         </Typography>
 
         <Stack direction={matchDownSM ? 'column' : 'row'} spacing={matchDownSM ? 1 : 3} textAlign={matchDownSM ? 'center' : 'inherit'}>
-          <Typography
-            variant="subtitle2"
-            color="secondary"
-            component={Link}
-            href="https://phoenixcoded.gitbook.io/able-pro"
-            target="_blank"
-            underline="hover"
-          >
+          <Typography variant="subtitle2" color="secondary" component={Link} href="" target="_blank" underline="hover">
             Documentation
           </Typography>
-          <Typography
-            variant="subtitle2"
-            color="secondary"
-            component={Link}
-            href="https://phoenixcoded.authordesk.app/"
-            target="_blank"
-            underline="hover"
-          >
+          <Typography variant="subtitle2" color="secondary" component={Link} href="" target="_blank" underline="hover">
             Support
           </Typography>
-          <Typography
-            variant="subtitle2"
-            color="secondary"
-            component={Link}
-            href="https://themeforest.net/user/phoenixcoded#contact"
-            target="_blank"
-            underline="hover"
-          >
+          <Typography variant="subtitle2" color="secondary" component={Link} href="" target="_blank" underline="hover">
             Contact
           </Typography>
         </Stack>

@@ -10,6 +10,7 @@ import Profile from './Profile';
 import Notification from './Notification';
 import MobileSection from './MobileSection';
 import FullScreen from './FullScreen';
+import LanguageSelector from 'components/LanguageSelector';
 
 import { MenuOrientation } from 'config';
 import useConfig from 'hooks/useConfig';
@@ -29,6 +30,7 @@ export default function HeaderContent() {
       {downLG && <Box sx={{ width: '100%', ml: 1 }} />}
 
       <Notification />
+      <LanguageSelector />
       <FullScreen />
       <Message />
       {!downLG && <Profile />}

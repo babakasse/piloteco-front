@@ -13,7 +13,13 @@ export default defineConfig(({ mode }) => {
       open: true,
       // this sets a default port to 3000
       port: PORT,
-      host: true
+      host: true,
+      watch: {
+        // Use polling instead of native file watching to avoid ENOSPC
+        usePolling: true,
+        interval: 1000,
+        ignored: ['**/node_modules/**', '**/dist/**', '**/.git/**']
+      }
     },
     preview: {
       open: true,

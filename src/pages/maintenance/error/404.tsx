@@ -9,6 +9,7 @@ import Typography from '@mui/material/Typography';
 
 // project-imports
 import { APP_DEFAULT_PATH } from 'config';
+import { useLanguage } from 'contexts/LanguageContext';
 
 // assets
 import error404 from 'assets/images/maintenance/img-error-404.svg';
@@ -16,6 +17,8 @@ import error404 from 'assets/images/maintenance/img-error-404.svg';
 // ==============================|| ERROR 404 ||============================== //
 
 export default function Error404() {
+  const { t } = useLanguage();
+
   return (
     <Grid
       container
@@ -36,12 +39,12 @@ export default function Error404() {
       </Grid>
       <Grid item xs={12}>
         <Stack spacing={2} justifyContent="center" alignItems="center">
-          <Typography variant="h1">Page Not Found</Typography>
+          <Typography variant="h1">{t('page-not-found')}</Typography>
           <Typography color="text.secondary" align="center" sx={{ width: { xs: '73%', sm: '61%' } }}>
-            The page you are looking was moved, removed, renamed, or might never exist!
+            {t('page-not-found-description')}
           </Typography>
           <Button component={Link} to={APP_DEFAULT_PATH} variant="contained">
-            Back To Home
+            {t('back-to-home')}
           </Button>
         </Stack>
       </Grid>

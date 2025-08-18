@@ -14,8 +14,13 @@ const MaintenanceUnderConstruction = Loadable(lazy(() => import('pages/maintenan
 const MaintenanceComingSoon = Loadable(lazy(() => import('pages/maintenance/coming-soon/coming-soon')));
 
 const AppContactUS = Loadable(lazy(() => import('pages/contact-us')));
+const AssessmentCreatePage = Loadable(lazy(() => import('pages/assessment-create')));
+const AssessmentListPage = Loadable(lazy(() => import('pages/assessment-list')));
+const AssessmentEmissionsPage = Loadable(lazy(() => import('pages/assessment-emissions')));
+const AssessmentDetailsPage = Loadable(lazy(() => import('pages/assessment-details')));
 // render - dashboard page
 const Dashboard = Loadable(lazy(() => import('pages/dashboard')));
+const CompaniesPage = Loadable(lazy(() => import('pages/companies')));
 
 // ==============================|| MAIN ROUTES ||============================== //
 
@@ -33,13 +38,27 @@ const MainRoutes = {
         {
           path: 'dashboard',
           element: <Dashboard />
-        }
-      ]
-    },
-    {
-      path: '/',
-      element: <SimpleLayout layout={SimpleLayoutType.SIMPLE} />,
-      children: [
+        },
+        {
+          path: 'assessment-create',
+          element: <AssessmentCreatePage />
+        },
+        {
+          path: 'assessment-list',
+          element: <AssessmentListPage />
+        },
+        {
+          path: 'assessment/:id/emissions',
+          element: <AssessmentEmissionsPage />
+        },
+        {
+          path: 'assessment/:id',
+          element: <AssessmentDetailsPage />
+        },
+        {
+          path: 'companies',
+          element: <CompaniesPage />
+        },
         {
           path: 'contact-us',
           element: <AppContactUS />

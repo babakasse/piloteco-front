@@ -14,6 +14,7 @@ import IconButton from 'components/@extended/IconButton';
 import SimpleBar from 'components/third-party/SimpleBar';
 import MessageCard from 'components/cards/statistics/MessageCard';
 import { ThemeMode } from 'config';
+import { useLanguage } from 'contexts/LanguageContext';
 
 // assets
 import { Add, NotificationStatus } from 'iconsax-react';
@@ -27,6 +28,7 @@ import message4 from 'assets/images/widget/message/message4.svg';
 
 export default function Customization() {
   const theme = useTheme();
+  const { t } = useLanguage();
 
   const [open, setOpen] = useState(false);
   const handleToggle = () => {
@@ -63,29 +65,29 @@ export default function Customization() {
             >
               <Box sx={{ p: 2.5 }}>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1.5}>
-                  <Typography variant="h5">What’s new announcement?</Typography>
+                  <Typography variant="h5">{t('piloteco-news')}</Typography>
                   <IconButton color="secondary" sx={{ p: 0 }} onClick={handleToggle}>
                     <Add size={28} style={{ transform: 'rotate(45deg)' }} />
                   </IconButton>
                 </Stack>
                 <Grid container spacing={1.5} sx={{ mt: 2 }}>
                   <Grid item xs={12}>
-                    <Typography variant="h6">Today</Typography>
+                    <Typography variant="h6">{t('today')}</Typography>
                   </Grid>
                   <Grid item xs={12}>
                     <MessageCard
-                      status={{ label: 'New Feature', color: 'success' }}
-                      time="just now"
-                      title="Select Business Unit"
-                      message="You can use the Analytics Dashboard to explore how many new users download reports daily and monthly"
+                      status={{ label: t('new-feature-status'), color: 'success' }}
+                      time={t('5-min-ago')}
+                      title={t('scope-3-module-title')}
+                      message={t('scope-3-announcement')}
                       src={message1}
                       actions={[
                         {
-                          label: 'Skip Intro',
+                          label: t('learn-more'),
                           button: { variant: 'outlined', color: 'secondary', fullWidth: true }
                         },
                         {
-                          label: 'Next',
+                          label: t('try-now'),
                           button: { variant: 'contained', fullWidth: true }
                         }
                       ]}
@@ -93,32 +95,59 @@ export default function Customization() {
                   </Grid>
                   <Grid item xs={12}>
                     <MessageCard
-                      status={{ label: 'Meeting', color: 'warning' }}
-                      time="2 min ago"
-                      title="General Meeting for update"
-                      message="You can use the Dashboard to explore how many new users download reports daily and monthly"
+                      status={{ label: t('maintenance-status'), color: 'warning' }}
+                      time={t('30-min-ago')}
+                      title={t('maintenance-title')}
+                      message={t('maintenance-announcement')}
                       src={message2}
                     />
                   </Grid>
                   <Grid item xs={12} sx={{ my: 1.25 }}>
-                    <Typography variant="h6">Yesterday</Typography>
+                    <Typography variant="h6">{t('yesterday')}</Typography>
                   </Grid>
                   <Grid item xs={12}>
                     <MessageCard
-                      status={{ label: 'Improvement', color: 'primary' }}
-                      time="2 hours ago"
-                      title="Widgets update"
-                      message="We've made some updates to the emendable widget which we think you are going to love."
+                      status={{ label: t('improvement-status'), color: 'primary' }}
+                      time={t('1-day-ago')}
+                      title={t('rse-indicators-title')}
+                      message={t('rse-indicators-announcement')}
                       src={message3}
                     />
                   </Grid>
                   <Grid item xs={12}>
                     <MessageCard
-                      status={{ label: 'Improvement', color: 'primary' }}
-                      time="1 day ago"
-                      title="Coming soon dark mode"
-                      message="We've made some updates to the emendable widget which we think you are going to love."
+                      status={{ label: t('update-status'), color: 'info' }}
+                      time={t('1-day-ago')}
+                      title={t('pdf-export-title')}
+                      message={t('pdf-export-announcement')}
                       src={message4}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sx={{ my: 1.25 }}>
+                    <Typography variant="h6">{t('this-week')}</Typography>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <MessageCard
+                      status={{ label: t('partnership-status'), color: 'secondary' }}
+                      time={t('3-days-ago')}
+                      title={t('ademe-partnership-title')}
+                      message={t('ademe-partnership-announcement')}
+                      src={message1}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <MessageCard
+                      status={{ label: t('training-status'), color: 'info' }}
+                      time={t('5-days-ago')}
+                      title={t('webinar-title')}
+                      message={t('webinar-announcement')}
+                      src={message2}
+                      actions={[
+                        {
+                          label: t('watch-replay'),
+                          button: { variant: 'contained', color: 'primary', fullWidth: true }
+                        }
+                      ]}
                     />
                   </Grid>
                 </Grid>

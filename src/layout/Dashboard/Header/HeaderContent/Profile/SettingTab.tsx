@@ -7,12 +7,16 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 
+// project imports
+import { useLanguage } from 'contexts/LanguageContext';
+
 // assets
 import { Clipboard, I24Support, Lock1, Messages1, Profile } from 'iconsax-react';
 
 // ==============================|| HEADER PROFILE - SETTING TAB ||============================== //
 
 export default function SettingTab() {
+  const { t } = useLanguage();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const handleListItemClick = (event: MouseEvent<HTMLDivElement>, index: number) => {
     setSelectedIndex(index);
@@ -25,34 +29,34 @@ export default function SettingTab() {
           <ListItemIcon>
             <I24Support variant="Bulk" size={18} />
           </ListItemIcon>
-          <ListItemText primary="Support" />
+          <ListItemText primary={t('support')} />
         </ListItemButton>
       </Link>
       <ListItemButton selected={selectedIndex === 1} onClick={(event: MouseEvent<HTMLDivElement>) => handleListItemClick(event, 1)}>
         <ListItemIcon>
           <Profile variant="Bulk" size={18} />
         </ListItemIcon>
-        <ListItemText primary="Account Settings" />
+        <ListItemText primary={t('account-settings')} />
       </ListItemButton>
       <ListItemButton selected={selectedIndex === 2} onClick={(event: MouseEvent<HTMLDivElement>) => handleListItemClick(event, 2)}>
         <ListItemIcon>
           <Lock1 variant="Bulk" size={18} />
         </ListItemIcon>
-        <ListItemText primary="Privacy Center" />
+        <ListItemText primary={t('privacy-center')} />
       </ListItemButton>
       <Link style={{ textDecoration: 'none' }}>
         <ListItemButton selected={selectedIndex === 3} onClick={(event: MouseEvent<HTMLDivElement>) => handleListItemClick(event, 3)}>
           <ListItemIcon>
             <Messages1 variant="Bulk" size={18} />
           </ListItemIcon>
-          <ListItemText primary="Feedback" />
+          <ListItemText primary={t('feedback')} />
         </ListItemButton>
       </Link>
       <ListItemButton selected={selectedIndex === 4} onClick={(event: MouseEvent<HTMLDivElement>) => handleListItemClick(event, 4)}>
         <ListItemIcon>
           <Clipboard variant="Bulk" size={18} />
         </ListItemIcon>
-        <ListItemText primary="History" />
+        <ListItemText primary={t('history')} />
       </ListItemButton>
     </List>
   );

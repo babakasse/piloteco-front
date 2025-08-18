@@ -28,74 +28,76 @@ export default function useCompany() {
   const [loading, setLoading] = useState(true);
   const { isLoggedIn } = useAuth();
 
-  useEffect(() => {
-    const fetchUserAndCompany = async () => {
-      if (!isLoggedIn) {
-        setLoading(false);
-        return;
+  const isAdmin = user?.roles?.includes('ROLE_ADMIN') || false;
+
+  const fetchUserAndCompany = async () => {
+    if (!isLoggedIn) {
+      setLoading(false);
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const response = await axios.get('/me');
+      const userData = response.data;
+      console.log('User data:', userData); // Debug log
+      setUser(userData);
+
+      if (userData.company) {
+        setCompany(userData.company);
       }
 
-      try {
-        const response = await axios.get('/me');
-        const userData = response.data;
-        setUser(userData);
+      // Si l'utilisateur est administrateur, récupérer la liste des entreprises
+      if (userData.roles && userData.roles.includes('ROLE_ADMIN')) {
+        try {
+          const companiesResponse = await axios.get('/companies');
+          console.log('Companies response:', companiesResponse.data); // Debug log
 
-        // Si l'utilisateur a une company, elle est directement dans l'objet user
-        if (userData.company) {
-          setCompany(userData.company);
-        }
-
-        // Si l'utilisateur est administrateur, récupérer la liste des entreprises
-        if (userData.roles && userData.roles.includes('ROLE_ADMIN')) {
-          try {
-            const companiesResponse = await axios.get('/companies');
-            
-            // Gérer le format spécifique de l'API avec la propriété 'member'
-            let companiesData = [];
-            if (companiesResponse.data && companiesResponse.data.member && Array.isArray(companiesResponse.data.member)) {
-              companiesData = companiesResponse.data.member;
-            } else if (companiesResponse.data && Array.isArray(companiesResponse.data)) {
-              companiesData = companiesResponse.data;
-            } else if (companiesResponse.data && Array.isArray(companiesResponse.data.companies)) {
-              companiesData = companiesResponse.data.companies;
-            } else if (companiesResponse.data && Array.isArray(companiesResponse.data.data)) {
-              companiesData = companiesResponse.data.data;
-            }
-            
-            setCompanies(companiesData);
-          } catch (error) {
-            console.error('Failed to fetch companies list', error);
-            
-            // Essayer un endpoint alternatif
-            try {
-              const altResponse = await axios.get('/api/companies');
-              
-              let companiesData = [];
-              if (altResponse.data && altResponse.data.member && Array.isArray(altResponse.data.member)) {
-                companiesData = altResponse.data.member;
-              } else if (altResponse.data && Array.isArray(altResponse.data)) {
-                companiesData = altResponse.data;
-              } else if (altResponse.data && Array.isArray(altResponse.data.companies)) {
-                companiesData = altResponse.data.companies;
-              } else if (altResponse.data && Array.isArray(altResponse.data.data)) {
-                companiesData = altResponse.data.data;
-              }
-              
-              setCompanies(companiesData);
-            } catch (altError) {
-              console.error('Alternative endpoint also failed:', altError);
-            }
+          // Gestion des différents formats possibles de réponse
+          let companiesData;
+          if (companiesResponse.data && companiesResponse.data['hydra:member']) {
+            companiesData = companiesResponse.data['hydra:member'];
+          } else if (companiesResponse.data && companiesResponse.data.member) {
+            companiesData = companiesResponse.data.member;
+          } else if (companiesResponse.data && Array.isArray(companiesResponse.data)) {
+            companiesData = companiesResponse.data;
+          } else if (companiesResponse.data && companiesResponse.data.companies) {
+            companiesData = companiesResponse.data.companies;
+          } else {
+            companiesData = [];
           }
-        }
-      } catch (error) {
-        console.error('Failed to fetch user or company', error);
-      } finally {
-        setLoading(false);
-      }
-    };
 
+          console.log('Processed companies data:', companiesData); // Debug log
+          setCompanies(companiesData);
+        } catch (error) {
+          console.error('Failed to fetch companies:', error);
+          setCompanies([]);
+        }
+      } else {
+        // Si l'utilisateur n'est pas admin, on met une liste vide
+        setCompanies([]);
+      }
+    } catch (error) {
+      console.error('Failed to fetch user data:', error);
+      setUser(null);
+      setCompany(null);
+      setCompanies([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchUserAndCompany();
   }, [isLoggedIn]);
 
-  return { company, user, companies, setCompanies, loading };
+  return {
+    company,
+    companies,
+    setCompanies,
+    user,
+    loading,
+    isAdmin,
+    refreshCompanies: fetchUserAndCompany
+  };
 }
