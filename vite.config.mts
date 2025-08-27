@@ -10,7 +10,6 @@ export default defineConfig(({ mode }) => {
   // Variables importantes
   const API_URL = env.VITE_APP_API_URL || 'http://localhost:80';
   const BASE_NAME = env.VITE_APP_BASE_NAME || '/';
-  const MERCURE_URL = env.VITE_APP_MERCURE_URL || `${API_URL}/.well-known/mercure`;
   const APP_VERSION = env.VITE_APP_VERSION || 'v9.2.0';
   const PORT = 3000;
 
@@ -35,7 +34,6 @@ export default defineConfig(({ mode }) => {
       'process.env': {
         VITE_APP_API_URL: API_URL,
         VITE_APP_BASE_NAME: BASE_NAME,
-        VITE_APP_MERCURE_URL: MERCURE_URL,
         VITE_APP_VERSION: APP_VERSION
       }
     },
