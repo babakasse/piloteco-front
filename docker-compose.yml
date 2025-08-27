@@ -1,0 +1,37 @@
+version: '3.7'
+
+services:
+  piloteco-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: piloteco-frontend
+    ports:
+      - "3000:80"
+    environment:
+      # Application configuration - Backend PHP sur port 80
+      - VITE_APP_API_URL=${VITE_APP_API_URL:-http://localhost}
+      - VITE_APP_BASE_NAME=${VITE_APP_BASE_NAME:-}
+      - VITE_APP_VERSION=${VITE_APP_VERSION:-v9.2.0}
+      # Backend URL for nginx proxy - Connexion au backend PHP existant
+      - BACKEND_URL=${BACKEND_URL:-http://host.docker.internal}
+    extra_hosts:
+      # Permet d'accéder au backend PHP qui tourne sur l'hôte
+      - "host.docker.internal:host-gateway"
+    networks:
+      - piloteco-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  piloteco-network:
+    driver: bridge
+    # Réseau externe pour se connecter au backend existant si nécessaire
+  piloteco-back_default:
+    external: true
