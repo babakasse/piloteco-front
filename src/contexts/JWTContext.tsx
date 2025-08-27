@@ -1,0 +1,144 @@
+import { createContext, useEffect, useReducer, ReactElement } from 'react';
+
+// third-party
+import { Chance } from 'chance';
+import { jwtDecode } from 'jwt-decode';
+
+// reducer - state management
+import { LOGIN, LOGOUT } from 'store/reducers/actions';
+import authReducer from 'store/reducers/auth';
+
+// project-imports
+import Loader from 'components/Loader';
+import axios from 'utils/axios';
+import { KeyedObject } from 'types/root';
+import { AuthProps, JWTContextType } from 'types/auth';
+
+const chance = new Chance();
+
+// constant
+const initialState: AuthProps = {
+  isLoggedIn: false,
+  isInitialized: false,
+  user: null
+};
+
+const verifyToken: (st: string) => boolean = (serviceToken) => {
+  if (!serviceToken) {
+    return false;
+  }
+  const decoded: KeyedObject = jwtDecode(serviceToken);
+
+  /**
+   * Property 'exp' does not exist on type '<T = unknown>(token: string, options?: JwtDecodeOptions | undefined) => T'.
+   */
+  return decoded.exp > Date.now() / 1000;
+};
+
+const setSession = (token?: string | null) => {
+  if (token) {
+    localStorage.setItem('serviceToken', token);
+    axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+  } else {
+    localStorage.removeItem('serviceToken');
+    delete axios.defaults.headers.common.Authorization;
+  }
+};
+
+// ==============================|| JWT CONTEXT & PROVIDER ||============================== //
+
+const JWTContext = createContext<JWTContextType | null>(null);
+
+export const JWTProvider = ({ children }: { children: ReactElement }) => {
+  const [state, dispatch] = useReducer(authReducer, initialState);
+
+  useEffect(() => {
+    const init = async () => {
+      try {
+        const serviceToken = localStorage.getItem('serviceToken');
+
+        // Vérification du token (date d'expiration)
+        if (serviceToken && verifyToken(serviceToken)) {
+          setSession(serviceToken); // Définit le header Authorization
+          const response = await axios.get('/me'); // Appel protégé
+          const { user } = response.data;
+
+          dispatch({
+            type: LOGIN,
+            payload: {
+              isLoggedIn: true,
+              user
+            }
+          });
+        } else {
+          throw new Error('Token expiré ou invalide');
+        }
+      } catch (err: any) {
+        console.warn('JWTContext init error:', err?.response?.data || err.message || err);
+
+        // Nettoyage complet du token
+        setSession(null);
+
+        dispatch({
+          type: LOGOUT
+        });
+      }
+    };
+
+    init();
+  }, []);
+
+  const login = async (email: string, password: string) => {
+    const response = await axios.post('/login', { email, password });
+    const { token, user } = response.data;
+    setSession(token);
+    dispatch({
+      type: LOGIN,
+      payload: {
+        isLoggedIn: true,
+        user
+      }
+    });
+  };
+
+  const register = async (email: string, plainPassword: string, firstName: string, lastName: string) => {
+    const response = await axios.post('/register', {
+      email,
+      plainPassword,
+      firstName,
+      lastName
+    });
+
+    // Après inscription réussie, connecter automatiquement l'utilisateur
+    const { token, user } = response.data;
+    if (token && user) {
+      setSession(token);
+      dispatch({
+        type: LOGIN,
+        payload: {
+          isLoggedIn: true,
+          user
+        }
+      });
+    }
+  };
+
+  const logout = () => {
+    setSession(null);
+    dispatch({ type: LOGOUT });
+  };
+
+  const resetPassword = async (email: string) => {
+    console.log('email - ', email);
+  };
+
+  const updateProfile = () => {};
+
+  if (state.isInitialized !== undefined && !state.isInitialized) {
+    return <Loader />;
+  }
+
+  return <JWTContext.Provider value={{ ...state, login, logout, register, resetPassword, updateProfile }}>{children}</JWTContext.Provider>;
+};
+
+export default JWTContext;
