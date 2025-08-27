@@ -1,0 +1,20 @@
+# Docker
+Dockerfile
+Dockerfile.dev
+docker-compose.yml
+docker-compose.dev.yml
+docker-entrypoint.sh
+nginx.conf
+
+# Logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Build outputs when mounted as volume
+dist/
+build/
