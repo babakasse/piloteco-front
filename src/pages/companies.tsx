@@ -26,7 +26,7 @@ import { Add, Assessment, TrendingUp, Factory } from '@mui/icons-material';
 import { getCompanyAssessments } from '../api/carbonAssessment';
 
 export default function CompaniesPage() {
-  const { companies, isAdmin, refreshCompanies } = useCompany();
+  const { companies, isAdmin, refreshCompanies, user, company, isSuperAdmin } = useCompany();
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
@@ -38,6 +38,9 @@ export default function CompaniesPage() {
   const [assessmentsLoading, setAssessmentsLoading] = useState(false);
   const { t } = useLanguage();
   const navigate = useNavigate();
+
+  // Vérification des rôles
+  const isRegularAdmin = isAdmin && !isSuperAdmin;
 
   // Récupération des données d'évaluation carbone
   useEffect(() => {
@@ -163,25 +166,54 @@ export default function CompaniesPage() {
 
   return (
     <Box>
+      {/* Information for Regular Admins without company */}
+      {isRegularAdmin && !company && (
+        <Alert severity="warning" sx={{ mb: 3 }}>
+          <Typography variant="h6" gutterBottom>
+            {t('access-restricted')}
+          </Typography>
+          <Typography>{t('company-management-restricted')}</Typography>
+        </Alert>
+      )}
+
+      {/* Access Denied for Users without company access */}
+      {!isSuperAdmin && !isRegularAdmin && !company && (
+        <Alert severity="warning" sx={{ mb: 3 }}>
+          <Typography variant="h6" gutterBottom>
+            {t('access-denied')}
+          </Typography>
+          <Typography>{t('insufficient-permissions')}</Typography>
+        </Alert>
+      )}
+
       {/* Header Section */}
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <Box>
           <Typography variant="h4" gutterBottom>
-            {isAdmin ? t('manage-companies') : t('my-company')}
+            {isSuperAdmin ? t('manage-companies') : isRegularAdmin ? t('company-profile') : t('company')}
           </Typography>
           <Typography variant="body1" color="text.secondary">
-            {isAdmin ? t('admin-companies-description') : t('user-company-description')}
+            {isSuperAdmin
+              ? t('super-admin-companies-description')
+              : isRegularAdmin
+                ? t('admin-company-description')
+                : t('user-company-description')}
           </Typography>
         </Box>
-        {isAdmin && (
+        {isSuperAdmin && (
           <Button variant="contained" startIcon={<Add />} onClick={() => setAddOpen(true)} sx={{ borderRadius: 2 }}>
             {t('add-new-company')}
           </Button>
         )}
+        {isRegularAdmin && company && (
+          <Button variant="outlined" startIcon={<Add />} onClick={() => handleEditClick(company)} sx={{ borderRadius: 2 }}>
+            {t('edit-my-company')}
+          </Button>
+        )}
       </Box>
 
-      {/* Statistics Cards for Admin */}
-      {isAdmin && (
+      {/* Statistics Cards for Super Admin only */}
+      {isSuperAdmin && (
         <>
           <Grid container spacing={3} sx={{ mb: 4 }}>
             <Grid item xs={12} sm={6} md={3}>
@@ -251,10 +283,11 @@ export default function CompaniesPage() {
 
       {/* Companies Grid */}
       <Typography variant="h6" sx={{ mb: 2 }}>
-        {isAdmin ? t('companies-overview') : t('company-dashboard')}
+        {isSuperAdmin ? t('companies-overview') : isRegularAdmin ? t('company-information') : t('company-dashboard')}
       </Typography>
       <Grid container spacing={2}>
-        {companies && companies.length > 0 ? (
+        {/* Super Admin: Show all companies */}
+        {isSuperAdmin && companies && companies.length > 0 ? (
           companies.map((comp) => {
             const companyEmissions = getCompanyEmissions(comp.id);
             const latestAssessment = getLatestAssessment(comp.id);
@@ -305,33 +338,97 @@ export default function CompaniesPage() {
                         {t('view-carbon-assessments')}
                       </Button>
 
-                      {isAdmin && (
-                        <>
-                          <IconButton size="small" onClick={() => handleEditClick(comp)} color="primary">
-                            ✏️
-                          </IconButton>
-                          <IconButton size="small" onClick={() => handleDeleteClick(comp)} color="error">
-                            🗑️
-                          </IconButton>
-                        </>
-                      )}
+                      <IconButton size="small" onClick={() => handleEditClick(comp)} color="primary">
+                        ✏️
+                      </IconButton>
+                      <IconButton size="small" onClick={() => handleDeleteClick(comp)} color="error">
+                        🗑️
+                      </IconButton>
                     </Stack>
                   </CardContent>
                 </Card>
               </Grid>
             );
           })
+        ) : /* Regular Admin or User: Show only their company */
+        (isRegularAdmin || !isSuperAdmin) && company ? (
+          <Grid item xs={12} sm={6} md={8}>
+            <Card sx={{ position: 'relative', height: '100%' }}>
+              <CardContent>
+                <Box display="flex" justifyContent="space-between" alignItems="flex-start" mb={2}>
+                  <Typography variant="h6" component="div">
+                    {company.name}
+                  </Typography>
+                  <Chip
+                    label={getEnvironmentalStatus(getCompanyEmissions(company.id)).status}
+                    color={getEnvironmentalStatus(getCompanyEmissions(company.id)).color}
+                    size="small"
+                  />
+                </Box>
+
+                <Typography variant="body2" color="text.secondary" gutterBottom>
+                  📍 {company.address || t('address-not-provided')}
+                </Typography>
+
+                <Typography variant="body2" color="text.secondary" gutterBottom>
+                  🏢 {company.sector || t('sector-not-provided')}
+                </Typography>
+
+                {getCompanyEmissions(company.id) > 0 && (
+                  <Typography variant="body2" color="text.secondary" gutterBottom>
+                    🌍 {getCompanyEmissions(company.id).toLocaleString()} {t('kg-co2-equivalent')}
+                  </Typography>
+                )}
+
+                {(() => {
+                  const latestAssessment = getLatestAssessment(company.id);
+                  return (
+                    latestAssessment && (
+                      <Typography variant="body2" color="text.secondary" gutterBottom>
+                        📅 {t('last-assessment')}:{' '}
+                        {new Date(latestAssessment.assessmentDate || latestAssessment.createdAt).toLocaleDateString()}
+                      </Typography>
+                    )
+                  );
+                })()}
+
+                <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    onClick={() => navigate(`/assessment-list`)}
+                    sx={{ borderRadius: 1, textTransform: 'none' }}
+                  >
+                    {t('view-carbon-assessments')}
+                  </Button>
+
+                  {isRegularAdmin && (
+                    <Button
+                      size="small"
+                      variant="contained"
+                      onClick={() => handleEditClick(company)}
+                      sx={{ borderRadius: 1, textTransform: 'none' }}
+                    >
+                      {t('edit')}
+                    </Button>
+                  )}
+                </Stack>
+              </CardContent>
+            </Card>
+          </Grid>
         ) : (
           <Grid item xs={12}>
             <Alert severity="info" sx={{ mt: 2 }}>
-              <Typography>{isAdmin ? t('no-company-found') : t('user-company-description')}</Typography>
+              <Typography>
+                {isSuperAdmin ? t('no-company-found') : isRegularAdmin ? t('user-company-description') : t('user-company-description')}
+              </Typography>
             </Alert>
           </Grid>
         )}
       </Grid>
 
-      {/* Add Company Modal */}
-      {isAdmin && (
+      {/* Add Company Modal - Super Admin only */}
+      {isSuperAdmin && (
         <Dialog open={addOpen} onClose={() => setAddOpen(false)} sx={{ '& .MuiDialogContent-root': { pt: 2 } }}>
           <DialogTitle>{t('add-new-company')}</DialogTitle>
           <DialogContent>
@@ -365,9 +462,9 @@ export default function CompaniesPage() {
         </Dialog>
       )}
 
-      {/* Edit Company Modal */}
+      {/* Edit Company Modal - Available for Super Admin and Regular Admin */}
       <Dialog open={editOpen} onClose={() => setEditOpen(false)} sx={{ '& .MuiDialogContent-root': { pt: 2 } }}>
-        <DialogTitle>{t('edit-company')}</DialogTitle>
+        <DialogTitle>{isSuperAdmin ? t('edit-company') : t('edit-my-company')}</DialogTitle>
         <DialogContent>
           <TextField label={t('name')} name="name" value={editValues.name} onChange={handleEditChange} fullWidth sx={{ mb: 2, mt: 1 }} />
           <TextField label={t('address')} name="address" value={editValues.address} onChange={handleEditChange} fullWidth sx={{ mb: 2 }} />
@@ -383,8 +480,8 @@ export default function CompaniesPage() {
         </DialogActions>
       </Dialog>
 
-      {/* Delete Company Modal */}
-      {isAdmin && (
+      {/* Delete Company Modal - Super Admin only */}
+      {isSuperAdmin && (
         <Dialog open={deleteOpen} onClose={() => setDeleteOpen(false)}>
           <DialogTitle>{t('delete-company')}</DialogTitle>
           <DialogContent>

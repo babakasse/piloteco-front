@@ -20,8 +20,26 @@ export const en = {
   'sign-in': 'Sign In',
   'sign-up': 'Sign Up',
   'sign-in-facebook': 'Sign In with Facebook',
-  'sign-in-google': 'Sign In with Google',
-  'forgot-password': 'Forgot Password',
+  'employees': 'employees',
+  'address-not-provided': 'Address not provided',
+  'sector-not-provided': 'Sector not provided',
+  
+  // Role-based access control
+  'access-denied': 'Access denied',
+  'insufficient-permissions': 'Insufficient permissions',
+  'super-admin-only': 'Super administrators only',
+  'admin-only': 'Administrators only',
+  'role-admin': 'Administrator',
+  'role-super-admin': 'Super Administrator',
+  'role-user': 'User',
+  'super-admin-companies-description': 'Manage all companies on the platform, view their carbon assessments and track their environmental progress.',
+  'admin-company-description': 'Edit your company information and manage its carbon assessments.',
+  'company-profile': 'Company Profile',
+  'edit-my-company': 'Edit My Company',
+  'company-information': 'Company Information',
+  'company-details': 'Company Details',
+  
+  // Authentication
   'reset-password': 'Reset Password',
   'remember-me': 'Remember Me',
   'or': 'OR',
@@ -526,6 +544,8 @@ export const en = {
   // Enhanced companies page
   'manage-companies': 'Company Management',
   'my-company': 'My Company',
+  'company-profile': 'Company Profile',
+  'edit-my-company': 'Edit My Company',
   'companies-overview': 'Companies Overview',
   'company-dashboard': 'Company Dashboard',
   'total-companies': 'Total Companies',
