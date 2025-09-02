@@ -1,6 +1,10 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
-const axiosServices = axios.create({ baseURL: import.meta.env.VITE_APP_API_URL || 'http://localhost:80/' });
+const axiosServices = axios.create({ 
+  baseURL: import.meta.env.VITE_APP_API_URL || 'https://localhost',
+  // En développement, accepter les certificats auto-signés
+  ...(import.meta.env.DEV && { timeout: 10000 })
+});
 
 // ==============================|| AXIOS - FOR MOCK SERVICES ||============================== //
 
@@ -20,10 +24,15 @@ axiosServices.interceptors.request.use(
 axiosServices.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response.status === 401 && !window.location.href.includes('/login')) {
+    // Vérifier si c'est une erreur réseau (pas de réponse du serveur)
+    if (!error.response) {
+      console.error('Network error or CORS issue:', error.message);
+    }
+    
+    if (error.response?.status === 401 && !window.location.href.includes('/login')) {
       window.location.pathname = '/maintenance/500';
     }
-    return Promise.reject((error.response && error.response.data) || 'Wrong Services');
+    return Promise.reject((error.response && error.response.data) || error.message || 'Network Error');
   }
 );
 

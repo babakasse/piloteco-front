@@ -34,12 +34,12 @@ Créez un fichier `.env` :
 
 ```bash
 # Configuration API
-VITE_APP_API_URL=http://localhost:3010
+VITE_APP_API_URL=http://localhost
 VITE_APP_BASE_NAME=""
 VITE_APP_VERSION=v9.2.0
 
 # Configuration Docker (production)
-BACKEND_URL=http://piloteco-backend:3010
+BACKEND_URL=http://localhost
 ```
 
 ## Accès

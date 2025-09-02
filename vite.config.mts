@@ -8,7 +8,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
 
   // Variables importantes
-  const API_URL = env.VITE_APP_API_URL || 'http://localhost:80';
+  const API_URL = env.VITE_APP_API_URL || 'https://localhost';
   const BASE_NAME = env.VITE_APP_BASE_NAME || '/';
   const APP_VERSION = env.VITE_APP_VERSION || 'v9.2.0';
   const PORT = 3000;

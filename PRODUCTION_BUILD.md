@@ -6,7 +6,7 @@ Cette application utilise des configurations différentes selon l'environnement 
 
 ### Développement local
 
-- **URL Backend** : `http://localhost:80`
+- **URL Backend** : `https://localhost`
 - **Fichier utilisé** : `.env`
 - **Commande** : `npm start`
 
@@ -21,7 +21,7 @@ Cette application utilise des configurations différentes selon l'environnement 
 ### `.env` (développement)
 
 ```bash
-VITE_APP_API_URL=http://localhost:80
+VITE_APP_API_URL=https://localhost
 ```
 
 ### `.env.production` (production)
@@ -72,11 +72,11 @@ Le workflow GitHub Actions :
 
 ## Variables d'environnement
 
-| Variable             | Développement         | Production                                |
-| -------------------- | --------------------- | ----------------------------------------- |
-| `VITE_APP_API_URL`   | `http://localhost:80` | `https://piloteco-back.azurewebsites.net` |
-| `VITE_APP_BASE_NAME` | `/`                   | `/`                                       |
-| `VITE_APP_VERSION`   | `v9.2.0`              | `v9.2.0`                                  |
+| Variable             | Développement       | Production                                |
+| -------------------- | ------------------- | ----------------------------------------- |
+| `VITE_APP_API_URL`   | `https://localhost` | `https://piloteco-back.azurewebsites.net` |
+| `VITE_APP_BASE_NAME` | `/`                 | `/`                                       |
+| `VITE_APP_VERSION`   | `v9.2.0`            | `v9.2.0`                                  |
 
 ## Architecture
 
