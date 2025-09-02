@@ -3,7 +3,7 @@
 
 window.ENV = {
   // URL du backend PHP (local par défaut, production lors du build)
-  VITE_APP_API_URL: "http://localhost:80",
+  VITE_APP_API_URL: "https://localhost",
 
   // Base path du front (utile si l'app est servie depuis un sous-chemin)
   VITE_APP_BASE_NAME: "/",
