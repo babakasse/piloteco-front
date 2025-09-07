@@ -32,7 +32,7 @@ export default function Login() {
       <Grid container spacing={3}>
         {/* Sélecteur de langue en haut à droite */}
         <Grid item xs={12} sx={{ position: 'relative' }}>
-          <Box sx={{ position: 'absolute', top: -8, right: -8, zIndex: 1000 }}>
+          <Box sx={{ position: 'absolute', top: 8, right: 8, zIndex: 1000 }}>
             <LanguageSelector />
           </Box>
         </Grid>
