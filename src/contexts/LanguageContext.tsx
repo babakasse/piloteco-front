@@ -27,7 +27,9 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
 
   // Fonction de traduction
   const t = (key: TranslationKeys, params?: Record<string, string | number>): string => {
-    let translation = translations[language][key] || translations['fr'][key] || key;
+    const langTranslations = translations[language] as Record<string, string>;
+    const frTranslations = translations['fr'] as Record<string, string>;
+    let translation = langTranslations[key as string] || frTranslations[key as string] || key;
 
     // Remplacer les paramètres dans la traduction
     if (params) {
