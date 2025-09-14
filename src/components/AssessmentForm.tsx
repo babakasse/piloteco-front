@@ -38,7 +38,7 @@ const AssessmentForm: React.FC<AssessmentFormProps> = ({ onSuccess, assessment, 
 
     try {
       const assessmentData = { name, description, year: parseInt(year), status };
-      let result;
+      let result: any;
 
       if (isEdit && assessment?.id) {
         result = await updateAssessment(parseInt(assessment.id, 10), assessmentData);
