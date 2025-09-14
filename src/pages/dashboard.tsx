@@ -46,11 +46,18 @@ export default function Dashboard() {
         const assessments = await getCompanyAssessments();
         setAllAssessments(assessments || []);
         if (assessments && assessments.length > 0) {
-          // Cherche le plus récent qui a des émissions
-          const found = assessments.find((a: any) => a.emissions && a.emissions.length > 0);
-          const assessmentToShow = found || assessments[0];
-          const summary = await getAssessmentWithEmissions(assessmentToShow.id);
+          // Trie les bilans par année décroissante pour avoir le plus récent en premier
+          const sortedAssessments = [...assessments].sort((a, b) => {
+            const yearA = a.year || 0;
+            const yearB = b.year || 0;
+            return yearB - yearA; // Tri décroissant (plus récent en premier)
+          });
+
+          // Prend le bilan le plus récent
+          const mostRecentAssessment = sortedAssessments[0];
+          const summary = await getAssessmentWithEmissions(mostRecentAssessment.id);
           setCarbonSummary(summary);
+
           // Récupère toutes les émissions de tous les bilans
           const emissions = assessments.flatMap((a: any) =>
             a.emissions && Array.isArray(a.emissions)
