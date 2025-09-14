@@ -19,7 +19,7 @@ interface EmissionsTrendChartProps {
 const EmissionsTrendChart = ({ assessments }: EmissionsTrendChartProps) => {
   // Trier les évaluations par année et préparer les données pour le graphique
   const data = assessments
-    .filter((assessment) => assessment.totalEmissions !== undefined)
+    .filter((assessment) => assessment.totalEmissions !== undefined && assessment.year !== null && assessment.year !== undefined)
     .sort((a, b) => a.year - b.year)
     .map((assessment) => ({
       year: assessment.year.toString(),
