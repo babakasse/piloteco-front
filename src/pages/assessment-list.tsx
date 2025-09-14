@@ -38,9 +38,17 @@ const AssessmentListPage: React.FC = () => {
 
   return (
     <MainCard title={t('carbon-assessments-list')}>
-      <Typography variant="body1" gutterBottom>
-        {t('assessments-description')}
-      </Typography>
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+        <Typography variant="body1">{t('assessments-description')}</Typography>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => navigate('/assessment-create')}
+          sx={{ borderRadius: 2, fontWeight: 600, px: 3, py: 1, textTransform: 'none' }}
+        >
+          {t('create-new-assessment')}
+        </Button>
+      </Box>
       {loading ? (
         <Box display="flex" justifyContent="center" mt={2}>
           <CircularProgress />
@@ -83,15 +91,26 @@ const AssessmentListPage: React.FC = () => {
                       </Box>
                     </TableCell>
                     <TableCell>
-                      <Button
-                        variant="outlined"
-                        color="primary"
-                        size="small"
-                        sx={{ borderRadius: 2, fontWeight: 600, px: 2, py: 0.5, ml: 1, textTransform: 'none' }}
-                        onClick={() => navigate(`/assessment/${a.id}`)}
-                      >
-                        {t('details')}
-                      </Button>
+                      <Box sx={{ display: 'flex', gap: 1 }}>
+                        <Button
+                          variant="outlined"
+                          color="primary"
+                          size="small"
+                          sx={{ borderRadius: 2, fontWeight: 600, px: 2, py: 0.5, textTransform: 'none' }}
+                          onClick={() => navigate(`/assessment/${a.id}`)}
+                        >
+                          {t('details')}
+                        </Button>
+                        <Button
+                          variant="outlined"
+                          color="secondary"
+                          size="small"
+                          sx={{ borderRadius: 2, fontWeight: 600, px: 2, py: 0.5, textTransform: 'none' }}
+                          onClick={() => navigate(`/assessment-edit/${a.id}`)}
+                        >
+                          {t('edit')}
+                        </Button>
+                      </Box>
                     </TableCell>
                   </TableRow>
                 ))

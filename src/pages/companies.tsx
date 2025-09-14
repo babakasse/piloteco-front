@@ -1,29 +1,17 @@
-import {
-  Box,
-  Typography,
-  Divider,
-  Grid,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  TextField,
-  DialogActions,
-  Button,
-  Card,
-  CardContent,
-  Chip,
-  IconButton,
-  Stack,
-  Alert
-} from '@mui/material';
+import { Box, Typography, Divider, Grid, Button, Alert } from '@mui/material';
 import useCompany from 'hooks/useCompany';
-import CompanyCard from 'components/cards/company/CompanyCard';
 import { useState, useEffect } from 'react';
 import axios from 'utils/axios';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useNavigate } from 'react-router-dom';
-import { Add, Assessment, TrendingUp, Factory } from '@mui/icons-material';
+import { Add } from '@mui/icons-material';
 import { getCompanyAssessments } from '../api/carbonAssessment';
+
+// Import des nouveaux composants
+import CompanyStatsCards from '../components/companies/CompanyStatsCards';
+import CompanyGridCard from '../components/companies/CompanyGridCard';
+import CompanyDetailCard from '../components/companies/CompanyDetailCard';
+import CompanyModals from '../components/companies/CompanyModals';
 
 export default function CompaniesPage() {
   const { companies, isAdmin, refreshCompanies, user, company, isSuperAdmin } = useCompany();
@@ -73,7 +61,18 @@ export default function CompaniesPage() {
   const getCompanyEmissions = (companyId: number) => {
     // Trouve le dernier bilan de cette entreprise
     const companyAssessments = assessmentsData.filter((assessment) => assessment.company?.id === companyId);
-    if (companyAssessments.length === 0) return 0;
+
+    if (companyAssessments.length === 0) {
+      // Si pas d'assessments spécifiques à cette entreprise,
+      // utiliser tous les assessments si l'entreprise courante correspond
+      if (assessmentsData.length > 0 && company && company.id === companyId) {
+        const latestAssessment = assessmentsData.sort(
+          (a, b) => new Date(b.assessmentDate || b.createdAt).getTime() - new Date(a.assessmentDate || a.createdAt).getTime()
+        )[0];
+        return latestAssessment?.totalEmissions || 0;
+      }
+      return 0;
+    }
 
     // Retourne les émissions du bilan le plus récent
     const latestAssessment = companyAssessments.sort(
@@ -86,21 +85,24 @@ export default function CompaniesPage() {
   // Fonction pour obtenir le dernier bilan d'une entreprise
   const getLatestAssessment = (companyId: number) => {
     const companyAssessments = assessmentsData.filter((assessment) => assessment.company?.id === companyId);
-    if (companyAssessments.length === 0) return null;
+
+    if (companyAssessments.length === 0) {
+      // Si pas d'assessments spécifiques à cette entreprise,
+      // utiliser tous les assessments si l'entreprise courante correspond
+      if (assessmentsData.length > 0 && company && company.id === companyId) {
+        return assessmentsData.sort(
+          (a, b) => new Date(b.assessmentDate || b.createdAt).getTime() - new Date(a.assessmentDate || a.createdAt).getTime()
+        )[0];
+      }
+      return null;
+    }
 
     return companyAssessments.sort(
       (a, b) => new Date(b.assessmentDate || b.createdAt).getTime() - new Date(a.assessmentDate || a.createdAt).getTime()
     )[0];
   };
 
-  const getEnvironmentalStatus = (emissions: number) => {
-    if (emissions === 0) return { status: t('no-assessment-yet'), color: 'default' as const };
-    if (emissions < 1000) return { status: t('excellent'), color: 'success' as const };
-    if (emissions < 5000) return { status: t('good'), color: 'info' as const };
-    if (emissions < 10000) return { status: t('needs-improvement'), color: 'warning' as const };
-    return { status: t('critical'), color: 'error' as const };
-  };
-
+  // Handlers pour les modales
   const handleEditClick = (comp: any) => {
     setSelectedCompany(comp);
     setEditValues({ name: comp.name, address: comp.address, sector: comp.sector || '' });
@@ -215,68 +217,13 @@ export default function CompaniesPage() {
       {/* Statistics Cards for Super Admin only */}
       {isSuperAdmin && (
         <>
-          <Grid container spacing={3} sx={{ mb: 4 }}>
-            <Grid item xs={12} sm={6} md={3}>
-              <Card>
-                <CardContent>
-                  <Stack direction="row" alignItems="center" spacing={2}>
-                    <Factory color="primary" />
-                    <Box>
-                      <Typography variant="h4">{companies?.length || 0}</Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {t('total-companies')}
-                      </Typography>
-                    </Box>
-                  </Stack>
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <Card>
-                <CardContent>
-                  <Stack direction="row" alignItems="center" spacing={2}>
-                    <Assessment color="info" />
-                    <Box>
-                      <Typography variant="h4">{assessmentsLoading ? '...' : activeAssessments}</Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {t('active-assessments')}
-                      </Typography>
-                    </Box>
-                  </Stack>
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <Card>
-                <CardContent>
-                  <Stack direction="row" alignItems="center" spacing={2}>
-                    <TrendingUp color="success" />
-                    <Box>
-                      <Typography variant="h4">{assessmentsLoading ? '...' : totalEmissions.toLocaleString()}</Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {t('total-emissions')} ({t('kg-co2-equivalent')})
-                      </Typography>
-                    </Box>
-                  </Stack>
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <Card>
-                <CardContent>
-                  <Stack direction="row" alignItems="center" spacing={2}>
-                    <Box sx={{ color: 'warning.main' }}>🌱</Box>
-                    <Box>
-                      <Typography variant="h4">{assessmentsLoading ? '...' : excellentCompanies}</Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {t('excellent')} {t('environmental-status')}
-                      </Typography>
-                    </Box>
-                  </Stack>
-                </CardContent>
-              </Card>
-            </Grid>
-          </Grid>
+          <CompanyStatsCards
+            totalCompanies={companies?.length || 0}
+            activeAssessments={activeAssessments}
+            totalEmissions={totalEmissions}
+            excellentCompanies={excellentCompanies}
+            assessmentsLoading={assessmentsLoading}
+          />
           <Divider sx={{ mb: 3 }} />
         </>
       )}
@@ -293,129 +240,25 @@ export default function CompaniesPage() {
             const latestAssessment = getLatestAssessment(comp.id);
 
             return (
-              <Grid item xs={12} sm={6} md={4} key={comp.id}>
-                <Card sx={{ position: 'relative', height: '100%' }}>
-                  <CardContent>
-                    <Box display="flex" justifyContent="space-between" alignItems="flex-start" mb={2}>
-                      <Typography variant="h6" component="div">
-                        {comp.name}
-                      </Typography>
-                      <Chip
-                        label={getEnvironmentalStatus(companyEmissions).status}
-                        color={getEnvironmentalStatus(companyEmissions).color}
-                        size="small"
-                      />
-                    </Box>
-
-                    <Typography variant="body2" color="text.secondary" gutterBottom>
-                      📍 {comp.address || t('address-not-provided')}
-                    </Typography>
-
-                    <Typography variant="body2" color="text.secondary" gutterBottom>
-                      🏢 {comp.sector || t('sector-not-provided')}
-                    </Typography>
-
-                    {companyEmissions > 0 && (
-                      <Typography variant="body2" color="text.secondary" gutterBottom>
-                        🌍 {companyEmissions.toLocaleString()} {t('kg-co2-equivalent')}
-                      </Typography>
-                    )}
-
-                    {latestAssessment && (
-                      <Typography variant="body2" color="text.secondary" gutterBottom>
-                        📅 {t('last-assessment')}:{' '}
-                        {new Date(latestAssessment.assessmentDate || latestAssessment.createdAt).toLocaleDateString()}
-                      </Typography>
-                    )}
-
-                    <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
-                      <Button
-                        size="small"
-                        variant="outlined"
-                        onClick={() => navigate(`/assessment-list`)}
-                        sx={{ borderRadius: 1, textTransform: 'none' }}
-                      >
-                        {t('view-carbon-assessments')}
-                      </Button>
-
-                      <IconButton size="small" onClick={() => handleEditClick(comp)} color="primary">
-                        ✏️
-                      </IconButton>
-                      <IconButton size="small" onClick={() => handleDeleteClick(comp)} color="error">
-                        🗑️
-                      </IconButton>
-                    </Stack>
-                  </CardContent>
-                </Card>
-              </Grid>
+              <CompanyGridCard
+                key={comp.id}
+                company={comp}
+                emissions={companyEmissions}
+                latestAssessment={latestAssessment}
+                onEdit={handleEditClick}
+                onDelete={handleDeleteClick}
+              />
             );
           })
         ) : /* Regular Admin or User: Show only their company */
         (isRegularAdmin || !isSuperAdmin) && company ? (
-          <Grid item xs={12} sm={6} md={8}>
-            <Card sx={{ position: 'relative', height: '100%' }}>
-              <CardContent>
-                <Box display="flex" justifyContent="space-between" alignItems="flex-start" mb={2}>
-                  <Typography variant="h6" component="div">
-                    {company.name}
-                  </Typography>
-                  <Chip
-                    label={getEnvironmentalStatus(getCompanyEmissions(company.id)).status}
-                    color={getEnvironmentalStatus(getCompanyEmissions(company.id)).color}
-                    size="small"
-                  />
-                </Box>
-
-                <Typography variant="body2" color="text.secondary" gutterBottom>
-                  📍 {company.address || t('address-not-provided')}
-                </Typography>
-
-                <Typography variant="body2" color="text.secondary" gutterBottom>
-                  🏢 {company.sector || t('sector-not-provided')}
-                </Typography>
-
-                {getCompanyEmissions(company.id) > 0 && (
-                  <Typography variant="body2" color="text.secondary" gutterBottom>
-                    🌍 {getCompanyEmissions(company.id).toLocaleString()} {t('kg-co2-equivalent')}
-                  </Typography>
-                )}
-
-                {(() => {
-                  const latestAssessment = getLatestAssessment(company.id);
-                  return (
-                    latestAssessment && (
-                      <Typography variant="body2" color="text.secondary" gutterBottom>
-                        📅 {t('last-assessment')}:{' '}
-                        {new Date(latestAssessment.assessmentDate || latestAssessment.createdAt).toLocaleDateString()}
-                      </Typography>
-                    )
-                  );
-                })()}
-
-                <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
-                  <Button
-                    size="small"
-                    variant="outlined"
-                    onClick={() => navigate(`/assessment-list`)}
-                    sx={{ borderRadius: 1, textTransform: 'none' }}
-                  >
-                    {t('view-carbon-assessments')}
-                  </Button>
-
-                  {isRegularAdmin && (
-                    <Button
-                      size="small"
-                      variant="contained"
-                      onClick={() => handleEditClick(company)}
-                      sx={{ borderRadius: 1, textTransform: 'none' }}
-                    >
-                      {t('edit')}
-                    </Button>
-                  )}
-                </Stack>
-              </CardContent>
-            </Card>
-          </Grid>
+          <CompanyDetailCard
+            company={company}
+            emissions={getCompanyEmissions(company.id)}
+            latestAssessment={getLatestAssessment(company.id)}
+            isRegularAdmin={isRegularAdmin}
+            onEdit={handleEditClick}
+          />
         ) : (
           <Grid item xs={12}>
             <Alert severity="info" sx={{ mt: 2 }}>
@@ -427,76 +270,24 @@ export default function CompaniesPage() {
         )}
       </Grid>
 
-      {/* Add Company Modal - Super Admin only */}
-      {isSuperAdmin && (
-        <Dialog open={addOpen} onClose={() => setAddOpen(false)} sx={{ '& .MuiDialogContent-root': { pt: 2 } }}>
-          <DialogTitle>{t('add-new-company')}</DialogTitle>
-          <DialogContent>
-            <TextField
-              label={t('name')}
-              name="name"
-              value={newCompanyValues.name}
-              onChange={handleNewCompanyChange}
-              fullWidth
-              sx={{ mb: 2, mt: 1 }}
-              required
-            />
-            <TextField
-              label={t('address')}
-              name="address"
-              value={newCompanyValues.address}
-              onChange={handleNewCompanyChange}
-              fullWidth
-              sx={{ mb: 2 }}
-            />
-            <TextField label={t('sector')} name="sector" value={newCompanyValues.sector} onChange={handleNewCompanyChange} fullWidth />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setAddOpen(false)} disabled={loading}>
-              {t('cancel')}
-            </Button>
-            <Button onClick={handleAddCompany} variant="contained" disabled={loading || !newCompanyValues.name}>
-              {loading ? t('saving') : t('save')}
-            </Button>
-          </DialogActions>
-        </Dialog>
-      )}
-
-      {/* Edit Company Modal - Available for Super Admin and Regular Admin */}
-      <Dialog open={editOpen} onClose={() => setEditOpen(false)} sx={{ '& .MuiDialogContent-root': { pt: 2 } }}>
-        <DialogTitle>{isSuperAdmin ? t('edit-company') : t('edit-my-company')}</DialogTitle>
-        <DialogContent>
-          <TextField label={t('name')} name="name" value={editValues.name} onChange={handleEditChange} fullWidth sx={{ mb: 2, mt: 1 }} />
-          <TextField label={t('address')} name="address" value={editValues.address} onChange={handleEditChange} fullWidth sx={{ mb: 2 }} />
-          <TextField label={t('sector')} name="sector" value={editValues.sector} onChange={handleEditChange} fullWidth />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setEditOpen(false)} disabled={loading}>
-            {t('cancel')}
-          </Button>
-          <Button onClick={handleEditSubmit} variant="contained" disabled={loading}>
-            {loading ? t('saving') : t('save')}
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Delete Company Modal - Super Admin only */}
-      {isSuperAdmin && (
-        <Dialog open={deleteOpen} onClose={() => setDeleteOpen(false)}>
-          <DialogTitle>{t('delete-company')}</DialogTitle>
-          <DialogContent>
-            <Typography>{t('delete-company-confirmation')}</Typography>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setDeleteOpen(false)} disabled={loading}>
-              {t('cancel')}
-            </Button>
-            <Button onClick={handleDeleteConfirm} color="error" variant="contained" disabled={loading}>
-              {loading ? t('deleting') : t('delete')}
-            </Button>
-          </DialogActions>
-        </Dialog>
-      )}
+      {/* Company Modals */}
+      <CompanyModals
+        editOpen={editOpen}
+        selectedCompany={selectedCompany}
+        editValues={editValues}
+        onEditClose={() => setEditOpen(false)}
+        onEditChange={handleEditChange}
+        onEditSubmit={handleEditSubmit}
+        deleteOpen={deleteOpen}
+        onDeleteClose={() => setDeleteOpen(false)}
+        onDeleteConfirm={handleDeleteConfirm}
+        addOpen={addOpen}
+        newCompanyValues={newCompanyValues}
+        onAddClose={() => setAddOpen(false)}
+        onNewCompanyChange={handleNewCompanyChange}
+        onAddSubmit={handleAddCompany}
+        loading={loading}
+      />
     </Box>
   );
 }

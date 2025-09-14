@@ -15,6 +15,7 @@ const MaintenanceComingSoon = Loadable(lazy(() => import('pages/maintenance/comi
 
 const AppContactUS = Loadable(lazy(() => import('pages/contact-us')));
 const AssessmentCreatePage = Loadable(lazy(() => import('pages/assessment-create')));
+const AssessmentEditPage = Loadable(lazy(() => import('pages/assessment-edit')));
 const AssessmentListPage = Loadable(lazy(() => import('pages/assessment-list')));
 const AssessmentEmissionsPage = Loadable(lazy(() => import('pages/assessment-emissions')));
 const AssessmentDetailsPage = Loadable(lazy(() => import('pages/assessment-details')));
@@ -42,6 +43,10 @@ const MainRoutes = {
         {
           path: 'assessment-create',
           element: <AssessmentCreatePage />
+        },
+        {
+          path: 'assessment-edit/:id',
+          element: <AssessmentEditPage />
         },
         {
           path: 'assessment-list',
