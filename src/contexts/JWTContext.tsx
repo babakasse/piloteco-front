@@ -74,7 +74,7 @@ export const JWTProvider = ({ children }: { children: ReactElement }) => {
           throw new Error('Token expiré ou invalide');
         }
       } catch (err: any) {
-        console.warn('JWTContext init error:', err?.response?.data || err.message || err);
+        console.warn('JWTContext init error:', err?.response?.data?.message || err?.message || err);
 
         // Nettoyage complet du token
         setSession(null);

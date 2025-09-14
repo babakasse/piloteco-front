@@ -29,6 +29,7 @@ export default function useCompany() {
   const { isLoggedIn } = useAuth();
 
   const isAdmin = user?.roles?.includes('ROLE_ADMIN') || false;
+  const isSuperAdmin = user?.roles?.includes('ROLE_SUPER_ADMIN') || false;
 
   const fetchUserAndCompany = async () => {
     if (!isLoggedIn) {
@@ -47,8 +48,8 @@ export default function useCompany() {
         setCompany(userData.company);
       }
 
-      // Si l'utilisateur est administrateur, récupérer la liste des entreprises
-      if (userData.roles && userData.roles.includes('ROLE_ADMIN')) {
+      // Si l'utilisateur est super administrateur, récupérer la liste des entreprises
+      if (userData.roles && userData.roles.includes('ROLE_SUPER_ADMIN')) {
         try {
           const companiesResponse = await axios.get('/companies');
           console.log('Companies response:', companiesResponse.data); // Debug log
@@ -73,8 +74,15 @@ export default function useCompany() {
           console.error('Failed to fetch companies:', error);
           setCompanies([]);
         }
+      } else if (userData.roles && userData.roles.includes('ROLE_ADMIN')) {
+        // Pour les admins réguliers, on met seulement leur entreprise dans la liste
+        if (userData.company) {
+          setCompanies([userData.company]);
+        } else {
+          setCompanies([]);
+        }
       } else {
-        // Si l'utilisateur n'est pas admin, on met une liste vide
+        // Si l'utilisateur n'est ni super admin ni admin, on met une liste vide
         setCompanies([]);
       }
     } catch (error) {
@@ -98,6 +106,7 @@ export default function useCompany() {
     user,
     loading,
     isAdmin,
+    isSuperAdmin,
     refreshCompanies: fetchUserAndCompany
   };
 }

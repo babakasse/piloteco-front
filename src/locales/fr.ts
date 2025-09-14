@@ -48,6 +48,29 @@ export const fr = {
   delete: 'Supprimer',
   edit: 'Modifier',
   add: 'Ajouter',
+  
+  // Assessments - Formulaires
+  'assessment-name': 'Nom du bilan',
+  'assessment-description-placeholder': 'Décrivez les objectifs et le périmètre de ce bilan carbone...',
+  'assessment-creation-error': 'Erreur lors de la création du bilan carbone',
+  'assessment-created-successfully': 'Bilan carbone créé avec succès !',
+  'assessment-updated-successfully': 'Bilan carbone mis à jour avec succès !',
+  'redirecting-to-assessment': 'Redirection vers le bilan...',
+  'creating-assessment': 'Création en cours...',
+  'create-assessment': 'Créer le bilan',
+  'update-assessment': 'Mettre à jour le bilan',
+  'create-assessment-description': 'Remplissez le formulaire ci-dessous pour créer un nouveau bilan carbone.',
+  'edit-assessment': 'Modifier le bilan',
+  'edit-assessment-description': 'Modifiez les informations du bilan carbone ci-dessous.',
+  'assessment-not-found': 'Bilan carbone introuvable ou accès refusé',
+  
+  // Badges environnementaux
+  'bronze-badge': 'Bronze',
+  'silver-badge': 'Argent',
+  'gold-badge': 'Or',
+  'platinum-badge': 'Platine',
+  'tco2-equivalent': 'tCO₂e',
+  'towards': 'Vers',
   create: 'Créer',
   update: 'Mettre à jour',
   submit: 'Soumettre',
@@ -389,6 +412,19 @@ export const fr = {
   'page': 'Page',
   status: 'Statut',
   
+  // Emission editing
+  'edit-emission': 'Modifier l\'émission',
+  'update-emission': 'Mettre à jour l\'émission',
+  'updating': 'Mise à jour...',
+  'error-updating-emission': 'Erreur lors de la mise à jour de l\'émission',
+  'please-fill-required-fields': 'Veuillez remplir tous les champs obligatoires',
+  'subcategory': 'Sous-catégorie',
+  'activity-data': 'Données d\'activité',
+  'calculated-emissions': 'Émissions calculées',
+  'methodology': 'Méthodologie',
+  'delete-emission': 'Supprimer l\'émission',
+  'confirm-delete-emission': 'Êtes-vous sûr de vouloir supprimer cette émission ?',
+  
   // Charts translations
   'scope-distribution': 'Répartition par Scope',
   'environmental-goals': 'Objectifs Environnementaux',
@@ -468,13 +504,19 @@ export const fr = {
   // Enhanced companies page
   'manage-companies': 'Gestion des entreprises',
   'my-company': 'Mon entreprise',
+  'company-profile': 'Profil de l\'entreprise',
+  'edit-my-company': 'Modifier mon entreprise',
   'companies-overview': 'Vue d\'ensemble des entreprises',
   'company-dashboard': 'Tableau de bord entreprise',
   'total-companies': 'Total des entreprises',
   'active-assessments': 'Bilans actifs',
   'admin-companies-description': 'Gérez les entreprises clientes, consultez leurs bilans carbone et suivez leurs progrès environnementaux.',
+  'super-admin-companies-description': 'Gérez toutes les entreprises de la plateforme, consultez leurs bilans carbone et suivez leurs progrès environnementaux.',
   'user-company-description': 'Consultez les informations de votre entreprise et accédez à vos bilans carbone.',
+  'admin-company-description': 'Modifiez les informations de votre entreprise et gérez ses bilans carbone.',
   'add-new-company': 'Ajouter une nouvelle entreprise',
+  'company-information': 'Informations de l\'entreprise',
+  'company-details': 'Détails de l\'entreprise',
   'view-carbon-assessments': 'Voir les bilans carbone',
   'view-emissions': 'Voir les émissions',
   'last-assessment': 'Dernier bilan',
@@ -489,6 +531,19 @@ export const fr = {
   'employees': 'employés',
   'address-not-provided': 'Adresse non renseignée',
   'sector-not-provided': 'Secteur non renseigné',
+  
+  // Role-based access control
+  'access-denied': 'Accès refusé',
+  'insufficient-permissions': 'Permissions insuffisantes',
+  'super-admin-only': 'Réservé aux super administrateurs',
+  'admin-only': 'Réservé aux administrateurs',
+  'role-admin': 'Administrateur',
+  'role-super-admin': 'Super Administrateur',
+  'role-user': 'Utilisateur',
+  'access-restricted': 'Accès restreint',
+  'super-admin-required': 'Droits de super administrateur requis',
+  'admin-privileges': 'Privilèges administrateur',
+  'company-management-restricted': 'La gestion complète des entreprises est réservée aux super administrateurs',
   
   // Notifications spécifiques
   'carbon-objective-reached': 'Nouvel objectif carbone atteint pour votre entreprise !',
@@ -539,6 +594,9 @@ export const fr = {
   // Titre de la section des annonces
   'piloteco-news': 'Nouveautés PilotEco',
   
+  // Assessments
+  'create-new-assessment': 'Créer un nouveau bilan',
+  
   // Pages d'erreur et maintenance
   'page-not-found': 'Page introuvable',
   'page-not-found-description': 'La page que vous recherchez a été déplacée, supprimée, renommée ou n\'existe peut-être pas !',
@@ -548,7 +606,44 @@ export const fr = {
   'service-unavailable': 'Service indisponible',
   'maintenance-mode': 'Mode maintenance',
   'under-construction': 'En construction',
-  'under-construction-description': 'Hé ! Veuillez consulter ce site plus tard. Nous effectuons actuellement de la maintenance dessus.'
+  'under-construction-description': 'Hé ! Veuillez consulter ce site plus tard. Nous effectuons actuellement de la maintenance dessus.',
+
+  // Gamification et badges
+  'start-journey': 'Commencer votre parcours écologique',
+  'complete-first-assessment': 'Complétez votre premier bilan carbone pour débloquer les badges',
+  'next-goal': 'Prochain objectif',
+  'reduction-needed': 'Réduction nécessaire',
+  'reduce-emissions-by': 'Réduisez vos émissions de',
+  'to-unlock': 'pour débloquer',
+  'current-benefits': 'Avantages actuels',
+  'view-emissions-details': 'Voir les détails des émissions',
+  'get-tips': 'Obtenir des conseils',
+  'tips-to-improve': 'Conseils pour améliorer vos performances environnementales',
+
+  // Descriptions des badges
+  'platinum-description': '🌟 Excellence environnementale ! Émissions ultra-faibles',
+  'gold-description': '🏆 Très bon niveau environnemental',
+  'silver-description': '🥈 Bon engagement environnemental',
+  'bronze-description': '🥉 Premier pas vers la durabilité',
+
+  // Messages motivationnels
+  'platinum-congrats': '🎉 Félicitations ! Vous êtes un leader en durabilité ! Votre entreprise inspire le changement positif.',
+  'gold-motivation': '✨ Excellent travail ! Plus que quelques efforts pour atteindre l\'excellence platinium !',
+  'silver-motivation': '🚀 Beau progrès ! Vous êtes sur la bonne voie vers l\'excellence environnementale !',
+  'bronze-motivation': '💪 Bon début ! Chaque action compte pour un avenir plus durable !',
+
+  // Avantages des badges
+  'platinum-benefit-1': '🌟 Reconnaissance d\'entreprise leader en durabilité',
+  'platinum-benefit-2': '📊 Accès prioritaire aux nouvelles fonctionnalités écologiques',
+  'platinum-benefit-3': '🤝 Éligibilité aux partenariats green-tech exclusifs',
+  'gold-benefit-1': '🏆 Certification de performance environnementale élevée',
+  'gold-benefit-2': '📈 Outils d\'analyse carbone avancés',
+  'silver-benefit-1': '🥈 Badge de progression environnementale',
+  'bronze-benefit-1': '🥉 Reconnaissance du premier engagement écologique',
+
+  // Composant EnvironmentalBadge
+  'current-badge': 'Badge actuel',
+  'environmental-scale': 'Échelle environnementale'
 };
 
 export default fr;

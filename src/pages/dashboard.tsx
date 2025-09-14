@@ -22,6 +22,7 @@ import Chip from '@mui/material/Chip';
 import Button from '@mui/material/Button';
 import { ScopeDistributionChart, EmissionsByCategoryChart, EmissionsTrendChart, EnvironmentalGoalsChart } from 'components/charts';
 import MetricsCard from 'components/cards/statistics/MetricsCard';
+import BadgeGamification from 'components/BadgeGamification';
 import { EmojiObjects, Factory, LocalGasStation, Timeline } from '@mui/icons-material';
 
 export default function Dashboard() {
@@ -45,11 +46,18 @@ export default function Dashboard() {
         const assessments = await getCompanyAssessments();
         setAllAssessments(assessments || []);
         if (assessments && assessments.length > 0) {
-          // Cherche le plus récent qui a des émissions
-          const found = assessments.find((a: any) => a.emissions && a.emissions.length > 0);
-          const assessmentToShow = found || assessments[0];
-          const summary = await getAssessmentWithEmissions(assessmentToShow.id);
+          // Trie les bilans par année décroissante pour avoir le plus récent en premier
+          const sortedAssessments = [...assessments].sort((a, b) => {
+            const yearA = a.year || 0;
+            const yearB = b.year || 0;
+            return yearB - yearA; // Tri décroissant (plus récent en premier)
+          });
+
+          // Prend le bilan le plus récent
+          const mostRecentAssessment = sortedAssessments[0];
+          const summary = await getAssessmentWithEmissions(mostRecentAssessment.id);
           setCarbonSummary(summary);
+
           // Récupère toutes les émissions de tous les bilans
           const emissions = assessments.flatMap((a: any) =>
             a.emissions && Array.isArray(a.emissions)
@@ -142,6 +150,21 @@ export default function Dashboard() {
                   </Grid>
                 </Box>
 
+                {/* Système de gamification */}
+                <Box mb={4}>
+                  <BadgeGamification
+                    emissions={carbonSummary.totalEmissions || 0}
+                    companyName={company?.name}
+                    onViewDetails={() => {
+                      // Scroll vers la section des émissions détaillées
+                      const emissionsSection = document.getElementById('emissions-details');
+                      if (emissionsSection) {
+                        emissionsSection.scrollIntoView({ behavior: 'smooth' });
+                      }
+                    }}
+                  />
+                </Box>
+
                 {/* Section des graphiques */}
                 <Box mb={4}>
                   <Typography variant="h5" gutterBottom sx={{ mb: 3 }}>
@@ -163,9 +186,9 @@ export default function Dashboard() {
                     </Grid>
 
                     {/* Évolution des émissions dans le temps */}
-                    {allAssessments.length > 1 && (
+                    {allAssessments && allAssessments.length > 1 && (
                       <Grid item xs={12}>
-                        <EmissionsTrendChart assessments={allAssessments} />
+                        <EmissionsTrendChart assessments={allAssessments.filter((a) => a && a.year != null)} />
                       </Grid>
                     )}
                   </Grid>
@@ -182,6 +205,7 @@ export default function Dashboard() {
                             {t('carbon-footprint-summary')}
                           </Typography>
                           <Grid container spacing={2}>
+                            métriques cléss
                             <Grid item xs={12}>
                               <Typography>
                                 {t('year')} : {carbonSummary.year}
@@ -224,7 +248,7 @@ export default function Dashboard() {
                 </Box>
 
                 {/* Tableau détaillé des émissions */}
-                <Card>
+                <Card id="emissions-details">
                   <CardContent>
                     <Typography variant="h6" gutterBottom>
                       {t('emission-details')}

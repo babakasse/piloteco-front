@@ -22,7 +22,6 @@ export const en = {
   'sign-in-facebook': 'Sign In with Facebook',
   'sign-in-google': 'Sign In with Google',
   'forgot-password': 'Forgot Password',
-  'reset-password': 'Reset Password',
   'remember-me': 'Remember Me',
   'or': 'OR',
   'no-account': "Don't have an account?",
@@ -49,6 +48,29 @@ export const en = {
   edit: 'Edit',
   add: 'Add',
   create: 'Create',
+  
+  // Assessments - Forms
+  'assessment-name': 'Assessment Name',
+  'assessment-description-placeholder': 'Describe the objectives and scope of this carbon assessment...',
+  'assessment-creation-error': 'Error creating the carbon assessment',
+  'assessment-created-successfully': 'Carbon assessment created successfully!',
+  'assessment-updated-successfully': 'Carbon assessment updated successfully!',
+  'redirecting-to-assessment': 'Redirecting to assessment...',
+  'creating-assessment': 'Creating...',
+  'create-assessment': 'Create Assessment',
+  'update-assessment': 'Update Assessment',
+  'create-assessment-description': 'Fill out the form below to create a new carbon assessment.',
+  'edit-assessment': 'Edit Assessment',
+  'edit-assessment-description': 'Modify the carbon assessment information below.',
+  'assessment-not-found': 'Assessment not found or access denied',
+  
+  // Environmental badges
+  'bronze-badge': 'Bronze',
+  'silver-badge': 'Silver',
+  'gold-badge': 'Gold',
+  'platinum-badge': 'Platinum',
+  'tco2-equivalent': 'tCO₂e',
+  'towards': 'Towards',
   update: 'Update',
   submit: 'Submit',
   next: 'Next',
@@ -447,6 +469,19 @@ export const en = {
   'page': 'Page',
   status: 'Status',
   
+  // Emission editing
+  'edit-emission': 'Edit Emission',
+  'update-emission': 'Update Emission',
+  'updating': 'Updating...',
+  'error-updating-emission': 'Error updating emission',
+  'please-fill-required-fields': 'Please fill all required fields',
+  'subcategory': 'Subcategory',
+  'activity-data': 'Activity Data',
+  'calculated-emissions': 'Calculated Emissions',
+  'methodology': 'Methodology',
+  'delete-emission': 'Delete Emission',
+  'confirm-delete-emission': 'Are you sure you want to delete this emission?',
+  
   // Charts translations
   'scope-distribution': 'Scope Distribution',
   'environmental-goals': 'Environmental Goals',
@@ -531,8 +566,12 @@ export const en = {
   'total-companies': 'Total Companies',
   'active-assessments': 'Active Assessments',
   'admin-companies-description': 'Manage client companies, review their carbon assessments and track their environmental progress.',
+  'super-admin-companies-description': 'Manage all companies on the platform, view their carbon assessments and track their environmental progress.',
   'user-company-description': 'View your company information and access your carbon assessments.',
+  'admin-company-description': 'Edit your company information and manage its carbon assessments.',
   'add-new-company': 'Add New Company',
+  'company-information': 'Company Information',
+  'company-details': 'Company Details',
   'view-carbon-assessments': 'View Carbon Assessments',
   'view-emissions': 'View Emissions',
   'last-assessment': 'Last Assessment',
@@ -544,15 +583,52 @@ export const en = {
   'no-assessment-yet': 'No assessment available',
   'create-first-assessment': 'Create first assessment',
   'kg-co2-equivalent': 'kg CO₂ eq.',
-  'employees': 'employees',
-  'address-not-provided': 'Address not provided',
-  'sector-not-provided': 'Sector not specified',
+  
+  // Assessments
+  'create-new-assessment': 'Create New Assessment',
   
   // Features descriptions
   'waste-management-description': 'Optimized tracking with interactive map of recycling centers and process optimization',
   'automated-reports-description': 'Instant PDF generation, real-time CSV exports and smart notifications',
   'erp-integrations-description': 'Seamless connection with SAP, QuickBooks, APIs and automatic synchronization',
-  'flexible-plans-description': 'Solutions adapted to all business sizes with customizable options'
+  'flexible-plans-description': 'Solutions adapted to all business sizes with customizable options',
+
+  // Gamification and badges
+  'start-journey': 'Start your environmental journey',
+  'complete-first-assessment': 'Complete your first carbon assessment to unlock badges',
+  'next-goal': 'Next goal',
+  'reduction-needed': 'Reduction needed',
+  'reduce-emissions-by': 'Reduce your emissions by',
+  'to-unlock': 'to unlock',
+  'current-benefits': 'Current benefits',
+  'view-emissions-details': 'View emissions details',
+  'get-tips': 'Get tips',
+  'tips-to-improve': 'Tips to improve your environmental performance',
+
+  // Badge descriptions
+  'platinum-description': '🌟 Environmental excellence! Ultra-low emissions',
+  'gold-description': '🏆 Very good environmental level',
+  'silver-description': '🥈 Good environmental commitment',
+  'bronze-description': '🥉 First step towards sustainability',
+
+  // Motivational messages
+  'platinum-congrats': '🎉 Congratulations! You are a sustainability leader! Your company inspires positive change.',
+  'gold-motivation': '✨ Excellent work! Just a few more efforts to reach platinum excellence!',
+  'silver-motivation': '🚀 Great progress! You are on the right track towards environmental excellence!',
+  'bronze-motivation': '💪 Good start! Every action counts for a more sustainable future!',
+
+  // Badge benefits
+  'platinum-benefit-1': '🌟 Recognition as a sustainability leader company',
+  'platinum-benefit-2': '📊 Priority access to new ecological features',
+  'platinum-benefit-3': '🤝 Eligibility for exclusive green-tech partnerships',
+  'gold-benefit-1': '🏆 High environmental performance certification',
+  'gold-benefit-2': '📈 Advanced carbon analysis tools',
+  'silver-benefit-1': '🥈 Environmental progress badge',
+  'bronze-benefit-1': '🥉 Recognition of first ecological commitment',
+
+  // EnvironmentalBadge component
+  'current-badge': 'Current Badge',
+  'environmental-scale': 'Environmental Scale'
 };
 
 export default en;

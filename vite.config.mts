@@ -1,21 +1,25 @@
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 import viteTsconfigPaths from 'vite-tsconfig-paths';
+import path from 'path';
 
 export default defineConfig(({ mode }) => {
+  // Charge les variables d'environnement définies dans Azure SWA
   const env = loadEnv(mode, process.cwd(), '');
-  const API_URL = `${env.VITE_APP_BASE_NAME}`;
+
+  // Variables importantes
+  const API_URL = env.VITE_APP_API_URL || 'https://localhost';
+  const BASE_NAME = env.VITE_APP_BASE_NAME || '/';
+  const APP_VERSION = env.VITE_APP_VERSION || 'v9.2.0';
   const PORT = 3000;
 
   return {
+    base: BASE_NAME,
     server: {
-      // this ensures that the browser opens upon server start
       open: true,
-      // this sets a default port to 3000
       port: PORT,
       host: true,
       watch: {
-        // Use polling instead of native file watching to avoid ENOSPC
         usePolling: true,
         interval: 1000,
         ignored: ['**/node_modules/**', '**/dist/**', '**/.git/**']
@@ -26,26 +30,19 @@ export default defineConfig(({ mode }) => {
       host: true
     },
     define: {
-      global: 'window'
+      global: 'window',
+      'process.env': {
+        VITE_APP_API_URL: API_URL,
+        VITE_APP_BASE_NAME: BASE_NAME,
+        VITE_APP_VERSION: APP_VERSION
+      }
     },
     resolve: {
       alias: [
-        // { find: '', replacement: path.resolve(__dirname, 'src') },
-        // {
-        //   find: /^~(.+)/,
-        //   replacement: path.join(process.cwd(), 'node_modules/$1')
-        // },
-        // {
-        //   find: /^src(.+)/,
-        //   replacement: path.join(process.cwd(), 'src/$1')
-        // }
-        // {
-        //   find: 'assets',
-        //   replacement: path.join(process.cwd(), 'src/assets')
-        // },
+        { find: '@', replacement: path.resolve(__dirname, 'src') },
+        { find: 'assets', replacement: path.resolve(__dirname, 'src/assets') }
       ]
     },
-    base: API_URL,
     plugins: [react(), viteTsconfigPaths()]
   };
 });
