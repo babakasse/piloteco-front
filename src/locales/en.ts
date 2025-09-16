@@ -628,7 +628,31 @@ export const en = {
 
   // EnvironmentalBadge component
   'current-badge': 'Current Badge',
-  'environmental-scale': 'Environmental Scale'
+  'environmental-scale': 'Environmental Scale',
+
+  // Categories - Emission categories translations
+  'category-electricity': 'Electricity',
+  'category-heating': 'Heating',
+  'category-transportation': 'Transportation',
+  'category-business-travel': 'Business Travel',
+  'category-waste': 'Waste',
+  'category-water': 'Water',
+  'category-materials': 'Materials',
+  'category-food': 'Food',
+  'category-services': 'Services',
+  'category-equipment': 'Equipment',
+
+  // Sources - Emission sources translations
+  'source-grid-electricity': 'Grid Electricity',
+  'source-natural-gas': 'Natural Gas',
+  'source-company-vehicles': 'Company Vehicles',
+  'source-air-travel': 'Air Travel',
+  'source-landfill-waste': 'Landfill Waste',
+  'source-water-supply': 'Water Supply',
+  'source-raw-materials': 'Raw Materials',
+  'source-employee-meals': 'Employee Meals',
+  'source-cloud-services': 'Cloud Services',
+  'source-it-equipment': 'IT Equipment'
 };
 
 export default en;
