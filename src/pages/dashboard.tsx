@@ -24,6 +24,7 @@ import { ScopeDistributionChart, EmissionsByCategoryChart, EmissionsTrendChart, 
 import MetricsCard from 'components/cards/statistics/MetricsCard';
 import BadgeGamification from 'components/BadgeGamification';
 import { EmojiObjects, Factory, LocalGasStation, Timeline } from '@mui/icons-material';
+import { translateCategory, translateSource } from '../utils/translationUtils';
 
 export default function Dashboard() {
   const { company, user, loading } = useCompany();
@@ -269,8 +270,8 @@ export default function Dashboard() {
                           {carbonSummary.emissions && carbonSummary.emissions.length > 0 ? (
                             carbonSummary.emissions.map((em: any) => (
                               <TableRow key={em.id}>
-                                <TableCell>{em.source}</TableCell>
-                                <TableCell>{em.category}</TableCell>
+                                <TableCell>{translateSource(em.source, t)}</TableCell>
+                                <TableCell>{translateCategory(em.category, t)}</TableCell>
                                 <TableCell>
                                   <Chip
                                     label={`Scope ${em.scope}`}
@@ -331,8 +332,8 @@ export default function Dashboard() {
                       <TableRow key={em.id}>
                         <TableCell>{em.assessmentYear}</TableCell>
                         <TableCell>{em.assessmentName}</TableCell>
-                        <TableCell>{em.source}</TableCell>
-                        <TableCell>{em.category}</TableCell>
+                        <TableCell>{translateSource(em.source, t)}</TableCell>
+                        <TableCell>{translateCategory(em.category, t)}</TableCell>
                         <TableCell>
                           <Chip
                             label={`Scope ${em.scope}`}

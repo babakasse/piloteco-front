@@ -30,6 +30,7 @@ import BulkImportForm from '../components/BulkImportForm';
 import SectorTemplateWizard from '../components/SectorTemplateWizard';
 import EditEmissionModal from '../components/EditEmissionModal';
 import { useLanguage } from '../contexts/LanguageContext';
+import { translateCategory, translateSource } from '../utils/translationUtils';
 
 export default function AssessmentDetailsPage() {
   const { id } = useParams();
@@ -155,8 +156,8 @@ export default function AssessmentDetailsPage() {
               <TableBody>
                 {assessment.emissions.map((em: any) => (
                   <TableRow key={em.id}>
-                    <TableCell>{em.source}</TableCell>
-                    <TableCell>{em.category}</TableCell>
+                    <TableCell>{translateSource(em.source, t)}</TableCell>
+                    <TableCell>{translateCategory(em.category, t)}</TableCell>
                     <TableCell>{em.amount}</TableCell>
                     <TableCell>{em.unit}</TableCell>
                     <TableCell>{em.scope}</TableCell>

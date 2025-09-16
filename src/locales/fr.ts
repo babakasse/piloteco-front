@@ -643,7 +643,31 @@ export const fr = {
 
   // Composant EnvironmentalBadge
   'current-badge': 'Badge actuel',
-  'environmental-scale': 'Échelle environnementale'
+  'environmental-scale': 'Échelle environnementale',
+
+  // Categories - Traductions des catégories d'émissions
+  'category-electricity': 'Électricité',
+  'category-heating': 'Chauffage',
+  'category-transportation': 'Transport',
+  'category-business-travel': 'Voyages d\'affaires',
+  'category-waste': 'Déchets',
+  'category-water': 'Eau',
+  'category-materials': 'Matériaux',
+  'category-food': 'Alimentation',
+  'category-services': 'Services',
+  'category-equipment': 'Équipement',
+
+  // Sources - Traductions des sources d'émissions
+  'source-grid-electricity': 'Électricité du réseau',
+  'source-natural-gas': 'Gaz naturel',
+  'source-company-vehicles': 'Véhicules d\'entreprise',
+  'source-air-travel': 'Transport aérien',
+  'source-landfill-waste': 'Déchets enfouis',
+  'source-water-supply': 'Approvisionnement en eau',
+  'source-raw-materials': 'Matières premières',
+  'source-employee-meals': 'Repas des employés',
+  'source-cloud-services': 'Services cloud',
+  'source-it-equipment': 'Équipement informatique'
 };
 
 export default fr;
