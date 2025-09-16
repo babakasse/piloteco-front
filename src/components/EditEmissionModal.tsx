@@ -58,13 +58,13 @@ const EditEmissionModal: React.FC<EditEmissionModalProps> = ({ open, onClose, em
       setFormData({
         source: emission.source || '',
         category: emission.category || '',
-        subcategory: emission.subcategory || '',
-        activityData: emission.activityData || emission.amount || '',
-        emissionFactor: emission.emissionFactor || '',
+        subcategory: emission.subcategory || emission.subCategory || emission.sub_category || '',
+        activityData: emission.activityData || emission.activity_data || emission.amount || emission.quantity || '',
+        emissionFactor: emission.emissionFactor || emission.emission_factor || emission.factor || '',
         scope: emission.scope || 1,
         unit: emission.unit || 'tCO₂e',
         description: emission.description || '',
-        factorSource: emission.factorSource || '',
+        factorSource: emission.factorSource || emission.factor_source || emission.source_factor || '',
         methodology: emission.methodology || ''
       });
       setError(null);
@@ -97,10 +97,20 @@ const EditEmissionModal: React.FC<EditEmissionModalProps> = ({ open, onClose, em
     const factors = getFactorsBySource(source);
     if (!factors) return [];
 
-    return Object.keys(factors).map((key) => ({
+    const subcategories = Object.keys(factors).map((key) => ({
       value: key,
       label: key
     }));
+
+    // Ajouter la sous-catégorie actuelle si elle n'est pas dans la liste
+    if (formData.subcategory && !subcategories.find((sub) => sub.value === formData.subcategory)) {
+      subcategories.unshift({
+        value: formData.subcategory,
+        label: `${formData.subcategory} (actuelle)`
+      });
+    }
+
+    return subcategories;
   };
 
   const handleSubmit = async () => {
@@ -124,7 +134,7 @@ const EditEmissionModal: React.FC<EditEmissionModalProps> = ({ open, onClose, em
         activityData: parseFloat(formData.activityData),
         emissionFactor: parseFloat(formData.emissionFactor),
         scope: formData.scope,
-        unit: formData.unit,
+        unit: 'tCO₂e',
         description: formData.description,
         factorSource: formData.factorSource,
         methodology: formData.methodology,
@@ -193,19 +203,34 @@ const EditEmissionModal: React.FC<EditEmissionModalProps> = ({ open, onClose, em
           {/* Sous-catégorie */}
           <Grid item xs={12} sm={6}>
             <TextField
-              select
               fullWidth
               label={t('subcategory')}
               value={formData.subcategory || ''}
               onChange={(e) => handleChange('subcategory', e.target.value)}
-              disabled={!formData.source}
-            >
-              {getSubcategories(formData.source).map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextField>
+              placeholder={formData.source ? 'Sélectionnez ou saisissez une sous-catégorie' : "Sélectionnez d'abord une source"}
+            />
+            {getSubcategories(formData.source).length > 0 && (
+              <Box mt={1}>
+                <Typography variant="caption" color="text.secondary">
+                  Suggestions disponibles :
+                </Typography>
+                <Box display="flex" flexWrap="wrap" gap={0.5} mt={0.5}>
+                  {getSubcategories(formData.source)
+                    .slice(0, 3)
+                    .map((option) => (
+                      <Chip
+                        key={option.value}
+                        size="small"
+                        label={option.label}
+                        onClick={() => handleChange('subcategory', option.value)}
+                        variant={formData.subcategory === option.value ? 'filled' : 'outlined'}
+                        color={formData.subcategory === option.value ? 'primary' : 'default'}
+                        style={{ cursor: 'pointer' }}
+                      />
+                    ))}
+                </Box>
+              </Box>
+            )}
           </Grid>
 
           {/* Scope */}
@@ -261,7 +286,7 @@ const EditEmissionModal: React.FC<EditEmissionModalProps> = ({ open, onClose, em
 
           {/* Unité */}
           <Grid item xs={12} sm={6}>
-            <TextField fullWidth label={t('unit')} value={formData.unit || ''} onChange={(e) => handleChange('unit', e.target.value)} />
+            <TextField fullWidth label={t('unit')} value="tCO₂e" disabled />
           </Grid>
 
           {/* Description */}
