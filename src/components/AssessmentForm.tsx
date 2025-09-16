@@ -11,9 +11,10 @@ interface AssessmentFormProps {
 }
 
 const AssessmentForm: React.FC<AssessmentFormProps> = ({ onSuccess, assessment, isEdit = false }) => {
+  const currentYear = new Date().getFullYear();
   const [name, setName] = useState(assessment?.name || '');
   const [description, setDescription] = useState(assessment?.description || '');
-  const [year, setYear] = useState(assessment?.year || new Date().getFullYear().toString());
+  const [year, setYear] = useState(assessment?.year ? assessment.year.toString() : currentYear.toString());
   const [status, setStatus] = useState(assessment?.status || 'draft');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -25,10 +26,10 @@ const AssessmentForm: React.FC<AssessmentFormProps> = ({ onSuccess, assessment, 
     if (assessment) {
       setName(assessment.name || '');
       setDescription(assessment.description || '');
-      setYear(assessment.year || new Date().getFullYear().toString());
+      setYear(assessment.year ? assessment.year.toString() : currentYear.toString());
       setStatus(assessment.status || 'draft');
     }
-  }, [assessment]);
+  }, [assessment, currentYear]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,7 +38,13 @@ const AssessmentForm: React.FC<AssessmentFormProps> = ({ onSuccess, assessment, 
     setSuccess(false);
 
     try {
-      const assessmentData = { name, description, year: parseInt(year), status };
+      const yearNumber = parseInt(year);
+      if (isNaN(yearNumber) || yearNumber < 2000 || yearNumber > new Date().getFullYear() + 5) {
+        setError('Année invalide');
+        return;
+      }
+
+      const assessmentData = { name, description, year: yearNumber, status };
       let result: any;
 
       if (isEdit && assessment?.id) {

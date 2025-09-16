@@ -37,7 +37,11 @@ export const createEmission = async (assessmentId: string, emission: any) => {
 };
 
 export const updateEmission = async (emissionId: number, emission: any) => {
-  const response = await axios.patch(`/emissions/${emissionId}`, emission);
+  const response = await axios.patch(`/emissions/${emissionId}`, emission, {
+    headers: {
+      'Content-Type': 'application/merge-patch+json'
+    }
+  });
   return response.data;
 };
 
