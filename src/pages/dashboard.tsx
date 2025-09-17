@@ -20,7 +20,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Chip from '@mui/material/Chip';
 import Button from '@mui/material/Button';
-import { ScopeDistributionChart, EmissionsByCategoryChart, EmissionsTrendChart, EnvironmentalGoalsChart } from 'components/charts';
+import { ScopeDistributionChart, EmissionsByCategoryChart, EmissionsTrendChart } from 'components/charts';
 import MetricsCard from 'components/cards/statistics/MetricsCard';
 import BadgeGamification from 'components/BadgeGamification';
 import { EmojiObjects, Factory, LocalGasStation, Timeline } from '@mui/icons-material';
@@ -192,59 +192,6 @@ export default function Dashboard() {
                         <EmissionsTrendChart assessments={allAssessments.filter((a) => a && a.year != null)} />
                       </Grid>
                     )}
-                  </Grid>
-                </Box>
-
-                {/* Section Résumé et Objectifs sur la même ligne */}
-                <Box mb={4}>
-                  <Grid container spacing={3}>
-                    {/* Résumé du bilan carbone */}
-                    <Grid item xs={12} md={6}>
-                      <Card sx={{ height: '100%' }}>
-                        <CardContent>
-                          <Typography variant="h6" gutterBottom>
-                            {t('carbon-footprint-summary')}
-                          </Typography>
-                          <Grid container spacing={2}>
-                            métriques cléss
-                            <Grid item xs={12}>
-                              <Typography>
-                                {t('year')} : {carbonSummary.year}
-                              </Typography>
-                            </Grid>
-                            <Grid item xs={12}>
-                              <Typography>
-                                {t('assessment-date')} :{' '}
-                                {carbonSummary.assessmentDate ? new Date(carbonSummary.assessmentDate).toLocaleDateString() : '-'}
-                              </Typography>
-                            </Grid>
-                            <Grid item xs={12}>
-                              <Typography>
-                                {t('total-emissions')} : <b>{carbonSummary.totalEmissions} tCO₂e</b>
-                              </Typography>
-                            </Grid>
-                            <Grid item xs={12}>
-                              <Typography>
-                                {t('status')} : <b>{carbonSummary.status}</b>
-                              </Typography>
-                            </Grid>
-                          </Grid>
-                          <Box mt={2} mb={2}>
-                            <Chip label={`Scope 1 : ${carbonSummary.scope1Emissions} tCO₂e`} color="success" sx={{ mr: 1, mb: 1 }} />
-                            <Chip label={`Scope 2 : ${carbonSummary.scope2Emissions} tCO₂e`} color="info" sx={{ mr: 1, mb: 1 }} />
-                            <Chip label={`Scope 3 : ${carbonSummary.scope3Emissions} tCO₂e`} color="warning" sx={{ mb: 1 }} />
-                          </Box>
-                        </CardContent>
-                      </Card>
-                    </Grid>
-
-                    {/* Objectifs environnementaux déplacés ici */}
-                    <Grid item xs={12} md={6}>
-                      <EnvironmentalGoalsChart
-                        totalEmissions={carbonSummary.totalEmissions || 0}
-                        year={carbonSummary.year || new Date().getFullYear()}
-                      />
-                    </Grid>
                   </Grid>
                 </Box>
 

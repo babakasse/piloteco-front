@@ -32,28 +32,32 @@ const pages: NavItemType = {
           title: <FormattedMessage id="error-404" />,
           type: 'item',
           url: '/maintenance/404',
-          target: true
+          target: true,
+          disabled: true
         },
         {
           id: 'error-500',
           title: <FormattedMessage id="error-500" />,
           type: 'item',
           url: '/maintenance/500',
-          target: true
+          target: true,
+          disabled: true
         },
         {
           id: 'coming-soon',
           title: <FormattedMessage id="coming-soon" />,
           type: 'item',
           url: '/maintenance/coming-soon',
-          target: true
+          target: true,
+          disabled: true
         },
         {
           id: 'under-construction',
           title: <FormattedMessage id="under-construction" />,
           type: 'item',
           url: '/maintenance/under-construction',
-          target: true
+          target: true,
+          disabled: true
         }
       ]
     },
