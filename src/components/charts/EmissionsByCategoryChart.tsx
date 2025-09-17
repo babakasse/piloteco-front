@@ -2,6 +2,7 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { Card, CardContent, Typography, Box } from '@mui/material';
 import { useLanguage } from 'contexts/LanguageContext';
+import { translateCategory } from '../../utils/translationUtils';
 
 interface Emission {
   id: string;
@@ -20,12 +21,13 @@ const EmissionsByCategoryChart = ({ emissions }: EmissionsByCategoryChartProps) 
   const { t } = useLanguage();
   // Grouper les émissions par catégorie et scope
   const categoryData = emissions.reduce((acc: any, emission) => {
-    const category = emission.category || t('not-specified');
+    const originalCategory = emission.category || t('not-specified');
+    const translatedCategory = translateCategory(originalCategory, t);
     const amount = emission.amount || emission.quantity || 0;
 
-    if (!acc[category]) {
-      acc[category] = {
-        category,
+    if (!acc[translatedCategory]) {
+      acc[translatedCategory] = {
+        category: translatedCategory,
         scope1: 0,
         scope2: 0,
         scope3: 0,
@@ -33,8 +35,8 @@ const EmissionsByCategoryChart = ({ emissions }: EmissionsByCategoryChartProps) 
       };
     }
 
-    acc[category][`scope${emission.scope}`] += amount;
-    acc[category].total += amount;
+    acc[translatedCategory][`scope${emission.scope}`] += amount;
+    acc[translatedCategory].total += amount;
 
     return acc;
   }, {});
