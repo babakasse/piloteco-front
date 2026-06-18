@@ -1,5 +1,4 @@
-// src/components/charts/EmissionsTrendChart.tsx
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { Card, CardContent, Typography, Box } from '@mui/material';
 
 interface Assessment {
@@ -16,17 +15,23 @@ interface EmissionsTrendChartProps {
   assessments: Assessment[];
 }
 
+const SERIES = [
+  { key: 'scope1', label: 'Scope 1', color: '#10b981' },
+  { key: 'scope2', label: 'Scope 2', color: '#3b82f6' },
+  { key: 'scope3', label: 'Scope 3', color: '#f59e0b' },
+  { key: 'total', label: 'Total', color: '#ef4444' }
+];
+
 const EmissionsTrendChart = ({ assessments }: EmissionsTrendChartProps) => {
-  // Trier les évaluations par année et préparer les données pour le graphique
   const data = assessments
-    .filter((assessment) => assessment.totalEmissions !== undefined && assessment.year !== null && assessment.year !== undefined)
+    .filter((a) => a.totalEmissions !== undefined && a.year != null)
     .sort((a, b) => a.year - b.year)
-    .map((assessment) => ({
-      year: assessment.year.toString(),
-      scope1: assessment.scope1Emissions || 0,
-      scope2: assessment.scope2Emissions || 0,
-      scope3: assessment.scope3Emissions || 0,
-      total: assessment.totalEmissions || 0
+    .map((a) => ({
+      year: a.year.toString(),
+      scope1: a.scope1Emissions || 0,
+      scope2: a.scope2Emissions || 0,
+      scope3: a.scope3Emissions || 0,
+      total: a.totalEmissions || 0
     }));
 
   const CustomTooltip = ({ active, payload, label }: any) => {
@@ -34,21 +39,27 @@ const EmissionsTrendChart = ({ assessments }: EmissionsTrendChartProps) => {
       return (
         <Box
           sx={{
-            backgroundColor: 'white',
-            border: 1,
-            borderColor: 'grey.300',
-            borderRadius: 1,
-            p: 1,
-            boxShadow: 2
+            background: 'rgba(255,255,255,0.97)',
+            backdropFilter: 'blur(8px)',
+            border: '1px solid rgba(0,0,0,0.08)',
+            borderRadius: 2,
+            p: 1.5,
+            boxShadow: '0 4px 20px rgba(0,0,0,0.12)',
+            minWidth: 160
           }}
         >
-          <Typography variant="body2">
-            <strong>Année {label}</strong>
+          <Typography variant="body2" fontWeight={700} mb={0.5}>
+            Année {label}
           </Typography>
-          {payload.map((entry: any, index: number) => (
-            <Typography key={index} variant="body2" sx={{ color: entry.color }}>
-              {entry.name}: {entry.value} tCO₂e
-            </Typography>
+          {payload.map((entry: any, i: number) => (
+            <Box key={i} display="flex" justifyContent="space-between" gap={2}>
+              <Typography variant="caption" sx={{ color: entry.color }}>
+                {entry.name}
+              </Typography>
+              <Typography variant="caption" fontWeight={700}>
+                {entry.value.toLocaleString()} tCO₂e
+              </Typography>
+            </Box>
           ))}
         </Box>
       );
@@ -58,9 +69,9 @@ const EmissionsTrendChart = ({ assessments }: EmissionsTrendChartProps) => {
 
   if (data.length === 0) {
     return (
-      <Card>
+      <Card sx={{ borderRadius: 3, boxShadow: '0 2px 16px rgba(0,0,0,0.07)' }}>
         <CardContent>
-          <Typography variant="h6" gutterBottom>
+          <Typography variant="h6" fontWeight={700} gutterBottom>
             Évolution des Émissions
           </Typography>
           <Box display="flex" justifyContent="center" alignItems="center" height={300}>
@@ -72,61 +83,57 @@ const EmissionsTrendChart = ({ assessments }: EmissionsTrendChartProps) => {
   }
 
   return (
-    <Card>
+    <Card sx={{ borderRadius: 3, boxShadow: '0 2px 16px rgba(0,0,0,0.07)' }}>
       <CardContent>
-        <Typography variant="h6" gutterBottom>
+        <Typography variant="h6" fontWeight={700} gutterBottom>
           Évolution des Émissions par Année
         </Typography>
-        <Box height={400}>
+        <Box height={360}>
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart
-              data={data}
-              margin={{
-                top: 20,
-                right: 30,
-                left: 20,
-                bottom: 5
-              }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="year" />
-              <YAxis label={{ value: 'tCO₂e', angle: -90, position: 'insideLeft' }} />
+            <AreaChart data={data} margin={{ top: 10, right: 30, left: 10, bottom: 0 }}>
+              <defs>
+                {SERIES.map((s) => (
+                  <linearGradient key={s.key} id={`grad-${s.key}`} x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor={s.color} stopOpacity={0.25} />
+                    <stop offset="95%" stopColor={s.color} stopOpacity={0.02} />
+                  </linearGradient>
+                ))}
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.06)" vertical={false} />
+              <XAxis
+                dataKey="year"
+                tick={{ fontSize: 12, fill: '#6b7280' }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <YAxis
+                tick={{ fontSize: 12, fill: '#6b7280' }}
+                axisLine={false}
+                tickLine={false}
+                tickFormatter={(v) => `${v.toLocaleString()}`}
+                label={{ value: 'tCO₂e', angle: -90, position: 'insideLeft', fill: '#9ca3af', fontSize: 11 }}
+              />
               <Tooltip content={<CustomTooltip />} />
-              <Legend />
-              <Line
-                type="monotone"
-                dataKey="scope1"
-                stroke="#2e7d32"
-                strokeWidth={3}
-                name="Scope 1"
-                dot={{ fill: '#2e7d32', strokeWidth: 2, r: 4 }}
+              <Legend
+                wrapperStyle={{ fontSize: 12, paddingTop: 8 }}
+                iconType="circle"
+                iconSize={8}
               />
-              <Line
-                type="monotone"
-                dataKey="scope2"
-                stroke="#1976d2"
-                strokeWidth={3}
-                name="Scope 2"
-                dot={{ fill: '#1976d2', strokeWidth: 2, r: 4 }}
-              />
-              <Line
-                type="monotone"
-                dataKey="scope3"
-                stroke="#ed6c02"
-                strokeWidth={3}
-                name="Scope 3"
-                dot={{ fill: '#ed6c02', strokeWidth: 2, r: 4 }}
-              />
-              <Line
-                type="monotone"
-                dataKey="total"
-                stroke="#d32f2f"
-                strokeWidth={4}
-                strokeDasharray="5 5"
-                name="Total"
-                dot={{ fill: '#d32f2f', strokeWidth: 2, r: 6 }}
-              />
-            </LineChart>
+              {SERIES.map((s) => (
+                <Area
+                  key={s.key}
+                  type="monotone"
+                  dataKey={s.key}
+                  name={s.label}
+                  stroke={s.color}
+                  strokeWidth={s.key === 'total' ? 2.5 : 2}
+                  strokeDasharray={s.key === 'total' ? '6 3' : undefined}
+                  fill={`url(#grad-${s.key})`}
+                  dot={{ fill: s.color, r: 4, strokeWidth: 2, stroke: '#fff' }}
+                  activeDot={{ r: 6, strokeWidth: 2, stroke: '#fff' }}
+                />
+              ))}
+            </AreaChart>
           </ResponsiveContainer>
         </Box>
       </CardContent>
