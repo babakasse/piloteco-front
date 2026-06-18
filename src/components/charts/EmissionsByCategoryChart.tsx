@@ -1,6 +1,7 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { Card, CardContent, Typography, Box } from '@mui/material';
 import { useLanguage } from 'contexts/LanguageContext';
+import { TranslationKeys } from 'locales';
 import { translateCategory } from '../../utils/translationUtils';
 
 interface Emission {
@@ -50,7 +51,7 @@ const EmissionsByCategoryChart = ({ emissions }: EmissionsByCategoryChartProps) 
 
   const data = Object.values(grouped)
     .sort((a, b) => b.total - a.total)
-    .slice(0, 8); // max 8 catégories pour la lisibilité
+    .slice(0, 8);
 
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
@@ -76,7 +77,7 @@ const EmissionsByCategoryChart = ({ emissions }: EmissionsByCategoryChartProps) 
             return (
               <Box key={scope} display="flex" justifyContent="space-between" gap={2}>
                 <Typography variant="caption" sx={{ color: SCOPE_COLORS[scope] }}>
-                  Scope {scope}
+                  {t(`scope-${scope}` as TranslationKeys)}
                 </Typography>
                 <Typography variant="caption" fontWeight={700}>
                   {val.toLocaleString()} tCO₂e
@@ -85,7 +86,7 @@ const EmissionsByCategoryChart = ({ emissions }: EmissionsByCategoryChartProps) 
             );
           })}
           <Box mt={0.5} pt={0.5} borderTop="1px solid rgba(0,0,0,0.06)" display="flex" justifyContent="space-between">
-            <Typography variant="caption" color="text.secondary">Total</Typography>
+            <Typography variant="caption" color="text.secondary">{t('total-emissions')}</Typography>
             <Typography variant="caption" fontWeight={800}>{item?.total.toLocaleString()} tCO₂e</Typography>
           </Box>
         </Box>
@@ -125,7 +126,6 @@ const EmissionsByCategoryChart = ({ emissions }: EmissionsByCategoryChartProps) 
             >
               <defs>
                 {data.map((item, i) => {
-                  // dominant scope color
                   const maxScope = [1, 2, 3].reduce((best, s) =>
                     item[`scope${s}` as 'scope1' | 'scope2' | 'scope3'] > item[`scope${best}` as 'scope1' | 'scope2' | 'scope3'] ? s : best,
                     1
@@ -165,13 +165,12 @@ const EmissionsByCategoryChart = ({ emissions }: EmissionsByCategoryChartProps) 
           </ResponsiveContainer>
         </Box>
 
-        {/* Légende scope */}
         <Box display="flex" justifyContent="center" gap={3} mt={1} flexWrap="wrap">
           {[1, 2, 3].map((s) => (
             <Box key={s} display="flex" alignItems="center" gap={0.8}>
               <Box sx={{ width: 10, height: 10, borderRadius: 1, background: SCOPE_COLORS[s] }} />
               <Typography variant="caption" color="text.secondary">
-                Scope {s}
+                {t(`scope-${s}` as TranslationKeys)}
               </Typography>
             </Box>
           ))}

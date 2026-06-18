@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { Card, CardContent, Typography, Box } from '@mui/material';
+import { useLanguage } from 'contexts/LanguageContext';
 
 interface MetricsCardProps {
   title: string;
@@ -27,6 +28,7 @@ const TREND_CONFIG = {
 };
 
 const MetricsCard = ({ title, value, unit = '', trend, trendValue, color = 'primary', icon }: MetricsCardProps) => {
+  const { t } = useLanguage();
   const palette = COLOR_MAP[color] || COLOR_MAP.primary;
   const trendCfg = trend ? TREND_CONFIG[trend] : null;
   const numVal = typeof value === 'number' ? value.toLocaleString() : value;
@@ -41,7 +43,6 @@ const MetricsCard = ({ title, value, unit = '', trend, trendValue, color = 'prim
         position: 'relative'
       }}
     >
-      {/* Accent bar top */}
       <Box
         sx={{
           position: 'absolute',
@@ -98,9 +99,6 @@ const MetricsCard = ({ title, value, unit = '', trend, trendValue, color = 'prim
             </Typography>
             <Typography variant="caption" sx={{ color: trendCfg.color, fontWeight: 600 }}>
               {trendValue}
-            </Typography>
-            <Typography variant="caption" color="text.secondary">
-              vs période préc.
             </Typography>
           </Box>
         )}

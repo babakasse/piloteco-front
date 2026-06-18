@@ -1,5 +1,7 @@
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { Card, CardContent, Typography, Box } from '@mui/material';
+import { useLanguage } from 'contexts/LanguageContext';
+import { TranslationKeys } from 'locales';
 
 interface Assessment {
   id: string;
@@ -15,14 +17,15 @@ interface EmissionsTrendChartProps {
   assessments: Assessment[];
 }
 
-const SERIES = [
-  { key: 'scope1', label: 'Scope 1', color: '#10b981' },
-  { key: 'scope2', label: 'Scope 2', color: '#3b82f6' },
-  { key: 'scope3', label: 'Scope 3', color: '#f59e0b' },
-  { key: 'total', label: 'Total', color: '#ef4444' }
+const SERIES: { key: string; labelKey: TranslationKeys; color: string }[] = [
+  { key: 'scope1', labelKey: 'scope-1', color: '#10b981' },
+  { key: 'scope2', labelKey: 'scope-2', color: '#3b82f6' },
+  { key: 'scope3', labelKey: 'scope-3', color: '#f59e0b' },
+  { key: 'total', labelKey: 'total-emissions', color: '#ef4444' }
 ];
 
 const EmissionsTrendChart = ({ assessments }: EmissionsTrendChartProps) => {
+  const { t } = useLanguage();
   const data = assessments
     .filter((a) => a.totalEmissions !== undefined && a.year != null)
     .sort((a, b) => a.year - b.year)
@@ -49,7 +52,7 @@ const EmissionsTrendChart = ({ assessments }: EmissionsTrendChartProps) => {
           }}
         >
           <Typography variant="body2" fontWeight={700} mb={0.5}>
-            Année {label}
+            {t('year')} {label}
           </Typography>
           {payload.map((entry: any, i: number) => (
             <Box key={i} display="flex" justifyContent="space-between" gap={2}>
@@ -72,10 +75,10 @@ const EmissionsTrendChart = ({ assessments }: EmissionsTrendChartProps) => {
       <Card sx={{ borderRadius: 3, boxShadow: '0 2px 16px rgba(0,0,0,0.07)' }}>
         <CardContent>
           <Typography variant="h6" fontWeight={700} gutterBottom>
-            Évolution des Émissions
+            {t('emissions-evolution')}
           </Typography>
           <Box display="flex" justifyContent="center" alignItems="center" height={300}>
-            <Typography color="text.secondary">Aucune donnée d'évolution disponible</Typography>
+            <Typography color="text.secondary">{t('no-emissions-data')}</Typography>
           </Box>
         </CardContent>
       </Card>
@@ -86,7 +89,7 @@ const EmissionsTrendChart = ({ assessments }: EmissionsTrendChartProps) => {
     <Card sx={{ borderRadius: 3, boxShadow: '0 2px 16px rgba(0,0,0,0.07)' }}>
       <CardContent>
         <Typography variant="h6" fontWeight={700} gutterBottom>
-          Évolution des Émissions par Année
+          {t('emissions-evolution')}
         </Typography>
         <Box height={360}>
           <ResponsiveContainer width="100%" height="100%">
@@ -124,7 +127,7 @@ const EmissionsTrendChart = ({ assessments }: EmissionsTrendChartProps) => {
                   key={s.key}
                   type="monotone"
                   dataKey={s.key}
-                  name={s.label}
+                  name={t(s.labelKey)}
                   stroke={s.color}
                   strokeWidth={s.key === 'total' ? 2.5 : 2}
                   strokeDasharray={s.key === 'total' ? '6 3' : undefined}

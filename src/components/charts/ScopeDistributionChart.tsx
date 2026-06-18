@@ -17,9 +17,9 @@ const PALETTE = [
 const ScopeDistributionChart = ({ scope1, scope2, scope3 }: ScopeDistributionChartProps) => {
   const { t } = useLanguage();
   const rawData = [
-    { name: 'Scope 1', value: scope1, ...PALETTE[0] },
-    { name: 'Scope 2', value: scope2, ...PALETTE[1] },
-    { name: 'Scope 3', value: scope3, ...PALETTE[2] }
+    { name: t('scope-1'), value: scope1, ...PALETTE[0] },
+    { name: t('scope-2'), value: scope2, ...PALETTE[1] },
+    { name: t('scope-3'), value: scope3, ...PALETTE[2] }
   ].filter((item) => item.value > 0);
 
   const total = scope1 + scope2 + scope3;
@@ -46,7 +46,7 @@ const ScopeDistributionChart = ({ scope1, scope2, scope3 }: ScopeDistributionCha
             {item.value.toLocaleString()} tCO₂e
           </Typography>
           <Typography variant="caption" color="text.secondary">
-            {percentage}% du total
+            {percentage}%
           </Typography>
         </Box>
       );
@@ -79,7 +79,7 @@ const ScopeDistributionChart = ({ scope1, scope2, scope3 }: ScopeDistributionCha
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <defs>
-                {PALETTE.map((p, i) => (
+                {rawData.map((p, i) => (
                   <radialGradient key={i} id={`grad-scope-${i}`} cx="50%" cy="50%" r="50%">
                     <stop offset="0%" stopColor={p.base} stopOpacity={0.9} />
                     <stop offset="100%" stopColor={p.base} stopOpacity={0.7} />
@@ -104,7 +104,6 @@ const ScopeDistributionChart = ({ scope1, scope2, scope3 }: ScopeDistributionCha
             </PieChart>
           </ResponsiveContainer>
 
-          {/* Total centré dans le donut */}
           <Box
             position="absolute"
             top="50%"
@@ -120,7 +119,6 @@ const ScopeDistributionChart = ({ scope1, scope2, scope3 }: ScopeDistributionCha
           </Box>
         </Box>
 
-        {/* Légende custom */}
         <Box display="flex" justifyContent="center" gap={3} mt={1} flexWrap="wrap">
           {rawData.map((item, i) => (
             <Box key={i} display="flex" alignItems="center" gap={0.8}>
