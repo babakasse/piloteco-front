@@ -3,9 +3,34 @@ import { KpiSummaryType, MonthlyEvolutionItemType, SiteRankingItemType, Resource
 
 // ==============================|| API — ENERGY KPI ||============================== //
 
-export async function fetchKpiSummary(resourceCategory: ResourceCategory, month: string, countryCode?: string): Promise<KpiSummaryType[]> {
-  const params: Record<string, string> = { resourceCategory, month };
-  if (countryCode) params['countryCode'] = countryCode;
+/**
+ * Build URLSearchParams supporting repeated keys for array values.
+ * e.g. countryCodes=['FR','ES'] → ?countryCodes[]=FR&countryCodes[]=ES
+ */
+function buildParams(base: Record<string, string | number | undefined>, countryCodes?: string[]): URLSearchParams {
+  const params = new URLSearchParams();
+
+  for (const [key, value] of Object.entries(base)) {
+    if (value !== undefined) {
+      params.append(key, String(value));
+    }
+  }
+
+  if (countryCodes && countryCodes.length > 0) {
+    for (const code of countryCodes) {
+      params.append('countryCodes[]', code);
+    }
+  }
+
+  return params;
+}
+
+export async function fetchKpiSummary(
+  resourceCategory: ResourceCategory,
+  month: string,
+  countryCodes?: string[]
+): Promise<KpiSummaryType[]> {
+  const params = buildParams({ resourceCategory, month }, countryCodes);
 
   const response = await axiosServices.get<KpiSummaryType[]>('/kpi/summary', {
     params,
@@ -18,10 +43,9 @@ export async function fetchKpiSummary(resourceCategory: ResourceCategory, month:
 export async function fetchMonthlyEvolution(
   resourceCategory: ResourceCategory,
   year: number,
-  countryCode?: string
+  countryCodes?: string[]
 ): Promise<MonthlyEvolutionItemType[]> {
-  const params: Record<string, string | number> = { resourceCategory, year };
-  if (countryCode) params['countryCode'] = countryCode;
+  const params = buildParams({ resourceCategory, year }, countryCodes);
 
   const response = await axiosServices.get<MonthlyEvolutionItemType[]>('/kpi/monthly-evolution', {
     params,
@@ -36,10 +60,9 @@ export async function fetchSiteRanking(
   month: string,
   limit = 10,
   order: 'DESC' | 'ASC' = 'DESC',
-  countryCode?: string
+  countryCodes?: string[]
 ): Promise<SiteRankingItemType[]> {
-  const params: Record<string, string | number> = { resourceCategory, month, limit, order };
-  if (countryCode) params['countryCode'] = countryCode;
+  const params = buildParams({ resourceCategory, month, limit, order }, countryCodes);
 
   const response = await axiosServices.get<SiteRankingItemType[]>('/kpi/site-ranking', {
     params,

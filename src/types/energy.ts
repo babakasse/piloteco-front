@@ -32,5 +32,6 @@ export interface EnergyFiltersType {
   resourceCategory: ResourceCategory;
   month: string;
   year: number;
-  countryCode?: string;
+  /** Multi-country filter — empty array or undefined = all countries */
+  countryCodes?: string[];
 }

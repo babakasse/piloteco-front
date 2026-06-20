@@ -7,7 +7,6 @@ import Stack from '@mui/material/Stack';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Divider from '@mui/material/Divider';
-import Typography from '@mui/material/Typography';
 
 import { EnergyFiltersType, ResourceCategory } from 'types/energy';
 import { useLanguage } from 'contexts/LanguageContext';
@@ -34,23 +33,6 @@ const MONTHS = [
   { value: '10', label: 'Octobre' },
   { value: '11', label: 'Novembre' },
   { value: '12', label: 'Décembre' }
-];
-
-const COUNTRIES = [
-  { code: '', label: 'Tous les pays' },
-  { code: 'FR', label: 'France' },
-  { code: 'ES', label: 'Espagne' },
-  { code: 'PL', label: 'Pologne' },
-  { code: 'PT', label: 'Portugal' },
-  { code: 'RO', label: 'Roumanie' },
-  { code: 'HU', label: 'Hongrie' },
-  { code: 'CH', label: 'Suisse' },
-  { code: 'LU', label: 'Luxembourg' },
-  { code: 'UA', label: 'Ukraine' },
-  { code: 'RU', label: 'Russie' },
-  { code: 'CI', label: "Côte d'Ivoire" },
-  { code: 'SN', label: 'Sénégal' },
-  { code: 'PDG', label: 'Congo' }
 ];
 
 // Années proposées dans la liste — de l'année en cours jusqu'à 5 ans en arrière
@@ -83,10 +65,6 @@ export default function DashboardFilters({ filters, onChange }: DashboardFilters
 
   function handleMonthChange(event: SelectChangeEvent) {
     onChange({ ...filters, month: `${filters.year}-${event.target.value}` });
-  }
-
-  function handleCountryChange(event: SelectChangeEvent) {
-    onChange({ ...filters, countryCode: event.target.value || undefined });
   }
 
   return (
@@ -150,24 +128,6 @@ export default function DashboardFilters({ filters, onChange }: DashboardFilters
         </Select>
       </FormControl>
 
-      <Divider orientation="vertical" flexItem sx={{ my: 0.5 }} />
-
-      {/* Pays */}
-      <FormControl size="small" sx={{ minWidth: 160 }}>
-        <InputLabel>{t('energy-country')}</InputLabel>
-        <Select value={filters.countryCode ?? ''} label={t('energy-country')} onChange={handleCountryChange}>
-          {COUNTRIES.map(({ code, label }) => (
-            <MenuItem key={code} value={code}>
-              {label}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-
-      {/* Indicateur période active */}
-      <Typography variant="caption" color="text.secondary" sx={{ ml: 'auto', fontStyle: 'italic' }}>
-        {t('energy-period-hint', { month: filters.month, year: String(filters.year) })}
-      </Typography>
     </Stack>
   );
 }

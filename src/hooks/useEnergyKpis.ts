@@ -27,11 +27,15 @@ export function useEnergyKpis(filters: EnergyFiltersType): UseEnergyKpisState & 
     setState((prev) => ({ ...prev, loading: true, error: null }));
 
     try {
+      const codes = filters.countryCodes && filters.countryCodes.length > 0 ? filters.countryCodes : undefined;
+
       const [summaryData, evolution, top, flop] = await Promise.all([
-        fetchKpiSummary(filters.resourceCategory, filters.month, filters.countryCode),
-        fetchMonthlyEvolution(filters.resourceCategory, filters.year, filters.countryCode),
-        fetchSiteRanking(filters.resourceCategory, filters.month, 10, 'DESC', filters.countryCode),
-        fetchSiteRanking(filters.resourceCategory, filters.month, 10, 'ASC', filters.countryCode)
+        fetchKpiSummary(filters.resourceCategory, filters.month, codes),
+        fetchMonthlyEvolution(filters.resourceCategory, filters.year, codes),
+        // Top = lowest intensity (most energy-efficient sites) → ASC
+        fetchSiteRanking(filters.resourceCategory, filters.month, 10, 'ASC', codes),
+        // Flop = highest intensity (worst energy consumers) → DESC
+        fetchSiteRanking(filters.resourceCategory, filters.month, 10, 'DESC', codes)
       ]);
 
       setState({
@@ -45,7 +49,8 @@ export function useEnergyKpis(filters: EnergyFiltersType): UseEnergyKpisState & 
     } catch {
       setState((prev) => ({ ...prev, loading: false, error: 'Erreur lors du chargement des KPI.' }));
     }
-  }, [filters.resourceCategory, filters.month, filters.year, filters.countryCode]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filters.resourceCategory, filters.month, filters.year, JSON.stringify(filters.countryCodes)]);
 
   useEffect(() => {
     load();

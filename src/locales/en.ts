@@ -681,7 +681,8 @@ export const en = {
   'energy-summary-detail': 'Summary detail',
   'energy-no-data': 'No data available for this selection.',
   'energy-year': 'Year',
-  'energy-period-hint': 'KPI MTD: {month} · Evolution: {year}'
+  'energy-period-hint': 'KPI MTD: {month} · Evolution: {year}',
+  'energy-kpi-summary': 'Key Indicators'
 };
 
 export default en;
