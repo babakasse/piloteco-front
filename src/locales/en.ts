@@ -652,7 +652,36 @@ export const en = {
   'source-raw-materials': 'Raw Materials',
   'source-employee-meals': 'Employee Meals',
   'source-cloud-services': 'Cloud Services',
-  'source-it-equipment': 'IT Equipment'
+  'source-it-equipment': 'IT Equipment',
+
+  // ── Energy ─────────────────────────────────────────────────────────────────
+  'energy-dashboard': 'Energy & KPIs',
+  'energy-resource': 'Resource',
+  'energy-month': 'Month',
+  'energy-country': 'Country',
+  'resource-elec': 'Electricity',
+  'resource-gas': 'Gas',
+  'resource-water': 'Water',
+  'energy-total-consumption-mtd': 'Consumption MTD',
+  'energy-total-consumption-ytd': 'Consumption YTD',
+  'energy-intensity-mtd': 'Intensity MTD',
+  'energy-intensity-ytd': 'Intensity YTD',
+  'energy-evolution-mtd': 'Evolution MTD vs N-1',
+  'energy-evolution-ytd': 'Evolution YTD vs N-1',
+  'energy-refrigerant-ytd': 'Refrigerant Fluids YTD',
+  'energy-monthly-evolution': 'Monthly Evolution',
+  'energy-monthly-evolution-unit': 'Consumption in MWh',
+  'energy-current-year': 'N (current)',
+  'energy-previous-year': 'N-1',
+  'energy-site-ranking': 'Site Ranking',
+  'energy-top-sites': '🏆 Top 10 — best sites',
+  'energy-flop-sites': '⚠️ Flop 10 — sites to improve',
+  'energy-site-code': 'Site code',
+  'energy-intensity': 'Intensity',
+  'energy-summary-detail': 'Summary detail',
+  'energy-no-data': 'No data available for this selection.',
+  'energy-year': 'Year',
+  'energy-period-hint': 'KPI MTD: {month} · Evolution: {year}'
 };
 
 export default en;

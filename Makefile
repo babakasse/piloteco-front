@@ -10,7 +10,7 @@ DOCKER_COMP_PROD = docker compose -f docker-compose.yml
         start stop logs restart build start-build prod-start-build \
         up up-build quick-start deploy \
         health backend backend-check integration status \
-        shell clean npm-lint npm-build npm-dev npm-lint-fix npm-prettier
+        shell clean npm-lint npm-build npm-dev
 
 ## —— 🌿 PilotEco Frontend Makefile ——————————————————————————————————————————
 help: ## Affiche cette aide
