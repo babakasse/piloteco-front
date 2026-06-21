@@ -28,6 +28,20 @@ export interface SiteRankingItemType {
   intensity: number;
 }
 
+export interface CountryIntensityItemType {
+  countryCode: string;
+  intensity: number | null;
+  totalConsumptionKwh: number | null;
+  totalAreaM2: number | null;
+}
+
+export interface RefrigerantByCountryItemType {
+  countryCode: string;
+  totalKg: number;
+  quarterStart: string;
+  quarterEnd: string;
+}
+
 export interface EnergyFiltersType {
   resourceCategory: ResourceCategory;
   month: string;

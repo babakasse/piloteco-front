@@ -1,6 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
-import { fetchKpiSummary, fetchMonthlyEvolution, fetchSiteRanking } from 'api/energyApi';
-import { KpiSummaryType, MonthlyEvolutionItemType, SiteRankingItemType, EnergyFiltersType } from 'types/energy';
+import { fetchKpiSummary, fetchMonthlyEvolution, fetchSiteRanking, fetchCountryIntensity, fetchRefrigerantByCountry } from 'api/energyApi';
+import {
+  KpiSummaryType,
+  MonthlyEvolutionItemType,
+  SiteRankingItemType,
+  CountryIntensityItemType,
+  RefrigerantByCountryItemType,
+  EnergyFiltersType
+} from 'types/energy';
 
 // ==============================|| HOOK — ENERGY KPI ||============================== //
 
@@ -9,6 +16,8 @@ interface UseEnergyKpisState {
   monthlyEvolution: MonthlyEvolutionItemType[];
   topSites: SiteRankingItemType[];
   flopSites: SiteRankingItemType[];
+  countryIntensity: CountryIntensityItemType[];
+  refrigerantByCountry: RefrigerantByCountryItemType[];
   loading: boolean;
   error: string | null;
 }
@@ -19,6 +28,8 @@ export function useEnergyKpis(filters: EnergyFiltersType): UseEnergyKpisState & 
     monthlyEvolution: [],
     topSites: [],
     flopSites: [],
+    countryIntensity: [],
+    refrigerantByCountry: [],
     loading: false,
     error: null
   });
@@ -29,13 +40,15 @@ export function useEnergyKpis(filters: EnergyFiltersType): UseEnergyKpisState & 
     try {
       const codes = filters.countryCodes && filters.countryCodes.length > 0 ? filters.countryCodes : undefined;
 
-      const [summaryData, evolution, top, flop] = await Promise.all([
+      const [summaryData, evolution, top, flop, countryIntensityData, refrigerantData] = await Promise.all([
         fetchKpiSummary(filters.resourceCategory, filters.month, codes),
         fetchMonthlyEvolution(filters.resourceCategory, filters.year, codes),
         // Top = lowest intensity (most energy-efficient sites) → ASC
         fetchSiteRanking(filters.resourceCategory, filters.month, 10, 'ASC', codes),
         // Flop = highest intensity (worst energy consumers) → DESC
-        fetchSiteRanking(filters.resourceCategory, filters.month, 10, 'DESC', codes)
+        fetchSiteRanking(filters.resourceCategory, filters.month, 10, 'DESC', codes),
+        fetchCountryIntensity(filters.resourceCategory, filters.month, codes),
+        fetchRefrigerantByCountry(filters.month, codes)
       ]);
 
       setState({
@@ -43,6 +56,8 @@ export function useEnergyKpis(filters: EnergyFiltersType): UseEnergyKpisState & 
         monthlyEvolution: evolution,
         topSites: top,
         flopSites: flop,
+        countryIntensity: countryIntensityData,
+        refrigerantByCountry: refrigerantData,
         loading: false,
         error: null
       });

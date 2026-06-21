@@ -17,6 +17,8 @@ import CountryChips from 'sections/energy/CountryChips';
 import KpiSummaryPanel from 'sections/energy/KpiSummaryPanel';
 import EnergyIntensityYtdChart from 'sections/energy/EnergyIntensityYtdChart';
 import HorizontalRankingChart from 'sections/energy/HorizontalRankingChart';
+import CountryIntensityChart from 'sections/energy/CountryIntensityChart';
+import RefrigerantByCountryChart from 'sections/energy/RefrigerantByCountryChart';
 
 // ==============================|| PAGE — ENERGY DASHBOARD ||============================== //
 
@@ -40,7 +42,7 @@ export default function EnergyDashboard() {
     setFilters((prev) => ({ ...prev, countryCodes: codes.length > 0 ? codes : undefined }));
   }
 
-  const { summary, monthlyEvolution, topSites, flopSites, loading, error } = useEnergyKpis(filters);
+  const { summary, monthlyEvolution, topSites, flopSites, countryIntensity, refrigerantByCountry, loading, error } = useEnergyKpis(filters);
 
   return (
     <Box>
@@ -87,7 +89,26 @@ export default function EnergyDashboard() {
             </MainCard>
           </Grid>
 
-          {/* ── Row 2 : Top 10 (left) + Flop 10 (right) ── */}
+          {/* ── Row 2 : Intensity by country (left) + Refrigerant by country (right) ── */}
+          <Grid item xs={12} md={6}>
+            <MainCard>
+              <CountryIntensityChart
+                data={countryIntensity}
+                title={t('energy-intensity-by-country')}
+              />
+            </MainCard>
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <MainCard>
+              <RefrigerantByCountryChart
+                data={refrigerantByCountry}
+                title={t('energy-refrigerant-by-country')}
+              />
+            </MainCard>
+          </Grid>
+
+          {/* ── Row 3 : Top 10 (left) + Flop 10 (right) ── */}
           <Grid item xs={12} md={6}>
             <MainCard>
               <HorizontalRankingChart sites={topSites} title={t('energy-top-sites')} color="success" />

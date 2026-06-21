@@ -676,6 +676,8 @@ export const en = {
   'energy-site-ranking': 'Site Ranking',
   'energy-top-sites': '🏆 Top 10 — best sites',
   'energy-flop-sites': '⚠️ Flop 10 — sites to improve',
+  'energy-intensity-by-country': 'Energy Intensity by Country (kWh/m²)',
+  'energy-refrigerant-by-country': 'Refrigerant Fluids by Country (kg QTD)',
   'energy-site-code': 'Site code',
   'energy-intensity': 'Intensity',
   'energy-summary-detail': 'Summary detail',

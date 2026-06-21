@@ -1,5 +1,12 @@
 import axiosServices from 'utils/axios';
-import { KpiSummaryType, MonthlyEvolutionItemType, SiteRankingItemType, ResourceCategory } from 'types/energy';
+import {
+  KpiSummaryType,
+  MonthlyEvolutionItemType,
+  SiteRankingItemType,
+  CountryIntensityItemType,
+  RefrigerantByCountryItemType,
+  ResourceCategory
+} from 'types/energy';
 
 // ==============================|| API — ENERGY KPI ||============================== //
 
@@ -48,6 +55,35 @@ export async function fetchMonthlyEvolution(
   const params = buildParams({ resourceCategory, year }, countryCodes);
 
   const response = await axiosServices.get<MonthlyEvolutionItemType[]>('/kpi/monthly-evolution', {
+    params,
+    headers: { Accept: 'application/json' }
+  });
+
+  return response.data;
+}
+
+export async function fetchCountryIntensity(
+  resourceCategory: ResourceCategory,
+  month: string,
+  countryCodes?: string[]
+): Promise<CountryIntensityItemType[]> {
+  const params = buildParams({ resourceCategory, month }, countryCodes);
+
+  const response = await axiosServices.get<CountryIntensityItemType[]>('/kpi/country-intensity', {
+    params,
+    headers: { Accept: 'application/json' }
+  });
+
+  return response.data;
+}
+
+export async function fetchRefrigerantByCountry(
+  month: string,
+  countryCodes?: string[]
+): Promise<RefrigerantByCountryItemType[]> {
+  const params = buildParams({ month }, countryCodes);
+
+  const response = await axiosServices.get<RefrigerantByCountryItemType[]>('/kpi/refrigerant-by-country', {
     params,
     headers: { Accept: 'application/json' }
   });
