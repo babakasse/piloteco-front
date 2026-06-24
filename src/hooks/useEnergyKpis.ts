@@ -1,11 +1,23 @@
 import { useState, useEffect, useCallback } from 'react';
-import { fetchKpiSummary, fetchMonthlyEvolution, fetchSiteRanking, fetchCountryIntensity, fetchRefrigerantByCountry } from 'api/energyApi';
+import {
+  fetchKpiSummary,
+  fetchMonthlyEvolution,
+  fetchSiteRanking,
+  fetchCountryIntensity,
+  fetchCountryIntensityMonthly,
+  fetchRefrigerantByCountry,
+  fetchRefrigerantByQuarter,
+  fetchRefrigerantBreakdown
+} from 'api/energyApi';
 import {
   KpiSummaryType,
   MonthlyEvolutionItemType,
   SiteRankingItemType,
   CountryIntensityItemType,
+  CountryIntensityMonthlyItemType,
   RefrigerantByCountryItemType,
+  RefrigerantByQuarterItemType,
+  RefrigerantBreakdownItemType,
   EnergyFiltersType
 } from 'types/energy';
 
@@ -17,7 +29,10 @@ interface UseEnergyKpisState {
   topSites: SiteRankingItemType[];
   flopSites: SiteRankingItemType[];
   countryIntensity: CountryIntensityItemType[];
+  countryIntensityMonthly: CountryIntensityMonthlyItemType[];
   refrigerantByCountry: RefrigerantByCountryItemType[];
+  refrigerantByQuarter: RefrigerantByQuarterItemType[];
+  refrigerantBreakdown: RefrigerantBreakdownItemType[];
   loading: boolean;
   error: string | null;
 }
@@ -29,7 +44,10 @@ export function useEnergyKpis(filters: EnergyFiltersType): UseEnergyKpisState & 
     topSites: [],
     flopSites: [],
     countryIntensity: [],
+    countryIntensityMonthly: [],
     refrigerantByCountry: [],
+    refrigerantByQuarter: [],
+    refrigerantBreakdown: [],
     loading: false,
     error: null
   });
@@ -38,17 +56,36 @@ export function useEnergyKpis(filters: EnergyFiltersType): UseEnergyKpisState & 
     setState((prev) => ({ ...prev, loading: true, error: null }));
 
     try {
-      const codes = filters.countryCodes && filters.countryCodes.length > 0 ? filters.countryCodes : undefined;
+      const extra = {
+        countryCodes: filters.countryCodes && filters.countryCodes.length > 0 ? filters.countryCodes : undefined,
+        resourceCategories: filters.resourceCategories && filters.resourceCategories.length > 0
+          ? filters.resourceCategories
+          : undefined,
+        resourceSubCategory: filters.resourceSubCategory,
+        comparable: filters.comparable,
+        dataSource: filters.dataSource
+      };
 
-      const [summaryData, evolution, top, flop, countryIntensityData, refrigerantData] = await Promise.all([
-        fetchKpiSummary(filters.resourceCategory, filters.month, codes),
-        fetchMonthlyEvolution(filters.resourceCategory, filters.year, codes),
-        // Top = lowest intensity (most energy-efficient sites) → ASC
-        fetchSiteRanking(filters.resourceCategory, filters.month, 10, 'ASC', codes),
-        // Flop = highest intensity (worst energy consumers) → DESC
-        fetchSiteRanking(filters.resourceCategory, filters.month, 10, 'DESC', codes),
-        fetchCountryIntensity(filters.resourceCategory, filters.month, codes),
-        fetchRefrigerantByCountry(filters.month, codes)
+      const [
+        summaryData,
+        evolution,
+        top,
+        flop,
+        countryIntensityData,
+        countryIntensityMonthlyData,
+        refrigerantData,
+        refrigerantByQuarterData,
+        refrigerantBreakdownData
+      ] = await Promise.all([
+        fetchKpiSummary(filters.resourceCategory, filters.month, extra),
+        fetchMonthlyEvolution(filters.resourceCategory, filters.year, extra),
+        fetchSiteRanking(filters.resourceCategory, filters.month, 10, 'ASC', extra),
+        fetchSiteRanking(filters.resourceCategory, filters.month, 10, 'DESC', extra),
+        fetchCountryIntensity(filters.resourceCategory, filters.month, extra),
+        fetchCountryIntensityMonthly(filters.resourceCategory, filters.year, extra),
+        fetchRefrigerantByCountry(filters.month, extra),
+        fetchRefrigerantByQuarter(filters.month, extra),
+        fetchRefrigerantBreakdown(filters.month, extra)
       ]);
 
       setState({
@@ -57,7 +94,10 @@ export function useEnergyKpis(filters: EnergyFiltersType): UseEnergyKpisState & 
         topSites: top,
         flopSites: flop,
         countryIntensity: countryIntensityData,
+        countryIntensityMonthly: countryIntensityMonthlyData,
         refrigerantByCountry: refrigerantData,
+        refrigerantByQuarter: refrigerantByQuarterData,
+        refrigerantBreakdown: refrigerantBreakdownData,
         loading: false,
         error: null
       });
@@ -65,7 +105,16 @@ export function useEnergyKpis(filters: EnergyFiltersType): UseEnergyKpisState & 
       setState((prev) => ({ ...prev, loading: false, error: 'Erreur lors du chargement des KPI.' }));
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters.resourceCategory, filters.month, filters.year, JSON.stringify(filters.countryCodes)]);
+  }, [
+    filters.resourceCategory,
+    filters.month,
+    filters.year,
+    JSON.stringify(filters.countryCodes),
+    JSON.stringify(filters.resourceCategories),
+    filters.resourceSubCategory,
+    filters.comparable,
+    filters.dataSource
+  ]);
 
   useEffect(() => {
     load();

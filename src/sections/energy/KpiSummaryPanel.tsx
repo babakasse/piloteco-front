@@ -1,12 +1,9 @@
+import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import Chip from '@mui/material/Chip';
-import { TrendingDownOutlined, TrendingUpOutlined, RemoveOutlined } from '@mui/icons-material';
+import { useTheme } from '@mui/material/styles';
 
 import { KpiSummaryType } from 'types/energy';
-import { useLanguage } from 'contexts/LanguageContext';
 
 // ==============================|| ENERGY — KPI SUMMARY PANEL ||============================== //
 
@@ -14,88 +11,139 @@ interface KpiSummaryPanelProps {
   summary: KpiSummaryType | null;
 }
 
-interface MetricRowProps {
+interface KpiCardProps {
   label: string;
-  value: string | number;
-  unit: string;
-  evolutionPercent?: number;
+  value: string;
+  unit?: string;
+  color?: 'default' | 'green';
 }
 
-function EvolutionChip({ percent }: { percent?: number }) {
-  if (percent === undefined || percent === null) return null;
-  const isDown = percent < 0;
-  const isStable = percent === 0;
-  return (
-    <Chip
-      size="small"
-      icon={isStable ? <RemoveOutlined /> : isDown ? <TrendingDownOutlined /> : <TrendingUpOutlined />}
-      label={`${percent > 0 ? '+' : ''}${percent.toFixed(1)} %`}
-      color={isDown ? 'success' : isStable ? 'default' : 'error'}
-      variant="outlined"
-      sx={{ height: 20, fontSize: '0.65rem', fontWeight: 700 }}
-    />
-  );
-}
+function KpiCard({ label, value, unit, color = 'default' }: KpiCardProps) {
+  const theme = useTheme();
 
-function MetricRow({ label, value, unit, evolutionPercent }: MetricRowProps) {
+  const isGreen = color === 'green';
+
   return (
-    <Box sx={{ py: 1.25 }}>
-      <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 0.25 }}>
+    <Box
+      sx={{
+        p: 1.5,
+        borderRadius: 1.5,
+        bgcolor: isGreen
+          ? `${theme.palette.success.main}18`
+          : theme.palette.mode === 'dark'
+          ? 'background.paper'
+          : 'grey.50',
+        border: `1px solid ${isGreen ? theme.palette.success.light : theme.palette.divider}`,
+        height: '100%',
+      }}
+    >
+      <Typography
+        variant="caption"
+        color={isGreen ? 'success.dark' : 'text.secondary'}
+        sx={{ display: 'block', mb: 0.5, lineHeight: 1.3, fontWeight: 500 }}
+      >
         {label}
       </Typography>
-      <Stack direction="row" alignItems="baseline" spacing={0.75}>
-        <Typography variant="h5" fontWeight={700} lineHeight={1}>
+      <Box display="flex" alignItems="baseline" gap={0.5} flexWrap="wrap">
+        <Typography
+          variant="h6"
+          fontWeight={700}
+          lineHeight={1.1}
+          color={isGreen ? 'success.dark' : 'text.primary'}
+          sx={{ fontSize: { xs: '1rem', md: '1.1rem' } }}
+        >
           {value}
         </Typography>
-        <Typography variant="caption" color="text.secondary">
-          {unit}
-        </Typography>
-        <EvolutionChip percent={evolutionPercent} />
-      </Stack>
+        {unit && (
+          <Typography variant="caption" color={isGreen ? 'success.main' : 'text.secondary'} fontWeight={600}>
+            {unit}
+          </Typography>
+        )}
+      </Box>
     </Box>
   );
 }
 
+function fmt(value?: number, decimals = 0): string {
+  if (value === undefined || value === null) return '--';
+  return value.toLocaleString('fr-FR', { maximumFractionDigits: decimals });
+}
+
+function fmtGwh(kwh?: number): string {
+  if (kwh === undefined || kwh === null) return '--';
+  return (kwh / 1_000_000).toLocaleString('fr-FR', { maximumFractionDigits: 2 });
+}
+
 export default function KpiSummaryPanel({ summary }: KpiSummaryPanelProps) {
-  const { t } = useLanguage();
-
-  const noData = '--';
-
   return (
-    <Stack divider={<Divider flexItem />} spacing={0}>
-      <MetricRow
-        label={t('energy-total-consumption-mtd')}
-        value={summary?.totalConsumptionMtd !== undefined ? Math.round(summary.totalConsumptionMtd / 1000) : noData}
-        unit="MWh"
-        evolutionPercent={summary?.evolutionMtdVsN1Percent}
-      />
+    <Grid container spacing={1.5}>
+      {/* Row 1: Sales Surface + Commercial Energy Intensity */}
+      <Grid item xs={6}>
+        <KpiCard
+          label="Sales Surface"
+          value={fmt(summary?.salesSurfaceM2)}
+          unit="m²"
+        />
+      </Grid>
+      <Grid item xs={6}>
+        <KpiCard
+          label="Commercial Energy Intensity"
+          value={fmt(summary?.commercialEnergyIntensityYtd, 2)}
+          unit="kWh/m²"
+        />
+      </Grid>
 
-      <MetricRow
-        label={t('energy-total-consumption-ytd')}
-        value={summary?.totalConsumptionYtd !== undefined ? Math.round(summary.totalConsumptionYtd / 1000) : noData}
-        unit="MWh"
-        evolutionPercent={summary?.evolutionYtdVsN1Percent}
-      />
+      {/* Row 2: Total Surface + Building Energy Intensity */}
+      <Grid item xs={6}>
+        <KpiCard
+          label="Total Surface"
+          value={fmt(summary?.totalSurfaceM2)}
+          unit="m²"
+        />
+      </Grid>
+      <Grid item xs={6}>
+        <KpiCard
+          label="Building Energy Intensity"
+          value={fmt(summary?.buildingEnergyIntensityYtd, 2)}
+          unit="kWh/m²"
+        />
+      </Grid>
 
-      <MetricRow
-        label={t('energy-intensity-mtd')}
-        value={summary?.energyIntensityMtd !== undefined ? summary.energyIntensityMtd.toFixed(2) : noData}
-        unit="kWh/m²"
-        evolutionPercent={summary?.evolutionMtdVsN1Percent}
-      />
+      {/* Row 3: Green Electricity Consumption + % */}
+      <Grid item xs={6}>
+        <KpiCard
+          label="Green Electricity Consumption"
+          value={fmtGwh(summary?.greenElectricityConsumptionKwh)}
+          unit="GWh"
+          color="green"
+        />
+      </Grid>
+      <Grid item xs={6}>
+        <KpiCard
+          label="% Green Electricity Consumption"
+          value={fmt(summary?.greenElectricityConsumptionPercent, 0)}
+          unit="%"
+          color="green"
+        />
+      </Grid>
 
-      <MetricRow
-        label={t('energy-intensity-ytd')}
-        value={summary?.energyIntensityYtd !== undefined ? summary.energyIntensityYtd.toFixed(2) : noData}
-        unit="kWh/m²"
-        evolutionPercent={summary?.evolutionYtdVsN1Percent}
-      />
-
-      <MetricRow
-        label={t('energy-refrigerant-ytd')}
-        value={summary?.refrigerantTotalYtdKg !== undefined ? summary.refrigerantTotalYtdKg.toFixed(1) : noData}
-        unit="kg"
-      />
-    </Stack>
+      {/* Row 4: Green Electricity Production + % */}
+      <Grid item xs={6}>
+        <KpiCard
+          label="Green Electricity Production"
+          value={fmtGwh(summary?.greenElectricityProductionKwh)}
+          unit="GWh"
+          color="green"
+        />
+      </Grid>
+      <Grid item xs={6}>
+        <KpiCard
+          label="% Green Electricity Production"
+          value={fmt(summary?.greenElectricityProductionPercent, 0)}
+          unit="%"
+          color="green"
+        />
+      </Grid>
+    </Grid>
   );
 }

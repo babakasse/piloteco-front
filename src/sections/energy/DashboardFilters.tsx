@@ -7,8 +7,11 @@ import Stack from '@mui/material/Stack';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Divider from '@mui/material/Divider';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import Typography from '@mui/material/Typography';
 
-import { EnergyFiltersType, ResourceCategory } from 'types/energy';
+import { EnergyFiltersType, ResourceCategory, ComparableFilter, DataSourceFilter } from 'types/energy';
 import { useLanguage } from 'contexts/LanguageContext';
 
 // ==============================|| ENERGY — DASHBOARD FILTERS ||============================== //
@@ -35,7 +38,25 @@ const MONTHS = [
   { value: '12', label: 'Décembre' }
 ];
 
-// Années proposées dans la liste — de l'année en cours jusqu'à 5 ans en arrière
+const SUB_CATEGORIES: Record<ResourceCategory, string[]> = {
+  ELEC: [
+    'Default retail not supported by EACs',
+    'Default retail supported by EACs',
+    'Off-site Physical PPA',
+    'Project specific contract',
+    'Off-site Financial PPA',
+    'Lease & operation (as if self-consumption)',
+    'Self-consumption (owned & operated)',
+    'On-site PPA',
+    'Off-site Direct PPA',
+    'Unbundled EACs',
+    'Retail Green Electricity',
+    'Self-consumption (owned)',
+  ],
+  GAS: ['NG', 'HN'],
+  WATER: ['CONSUMED', 'WATER', 'STORED'],
+};
+
 const CURRENT_YEAR = new Date().getFullYear();
 const YEAR_OPTIONS = Array.from({ length: 8 }, (_, i) => String(CURRENT_YEAR - i));
 
@@ -43,8 +64,6 @@ export default function DashboardFilters({ filters, onChange }: DashboardFilters
   const { t } = useLanguage();
 
   const currentMonthNum = filters.month.split('-')[1] ?? '01';
-
-  // Draft local pour permettre la saisie partielle sans reset
   const [yearDraft, setYearDraft] = useState(String(filters.year));
 
   useEffect(() => {
@@ -59,75 +78,198 @@ export default function DashboardFilters({ filters, onChange }: DashboardFilters
     }
   }
 
-  function handleResourceChange(event: SelectChangeEvent) {
-    onChange({ ...filters, resourceCategory: event.target.value as ResourceCategory });
+  // ── Resource multi-select (toggle chips) ──────────────────────────────────
+
+  const activeCategories: ResourceCategory[] = filters.resourceCategories ?? [filters.resourceCategory];
+
+  function handleResourceToggle(_: React.MouseEvent, values: ResourceCategory[]) {
+    if (values.length === 0) return; // at least one must remain
+    const primary = values[0];
+    onChange({
+      ...filters,
+      resourceCategory: primary,
+      resourceCategories: values.length > 1 ? values : undefined,
+      // reset sub-category when resource changes
+      resourceSubCategory: undefined
+    });
   }
+
+  // ── Sub-category (only shown when single resource is selected) ────────────
+
+  const singleResource: ResourceCategory | null =
+    !filters.resourceCategories || filters.resourceCategories.length <= 1
+      ? filters.resourceCategory
+      : null;
+
+  const subCategoryOptions = singleResource ? SUB_CATEGORIES[singleResource] : [];
+
+  function handleSubCategoryChange(event: SelectChangeEvent) {
+    const value = event.target.value;
+    onChange({ ...filters, resourceSubCategory: value === '' ? undefined : value });
+  }
+
+  // ── Month ─────────────────────────────────────────────────────────────────
 
   function handleMonthChange(event: SelectChangeEvent) {
     onChange({ ...filters, month: `${filters.year}-${event.target.value}` });
   }
 
+  // ── Comparable ────────────────────────────────────────────────────────────
+
+  function handleComparableChange(_: React.MouseEvent, value: ComparableFilter | null) {
+    if (!value) return;
+    onChange({ ...filters, comparable: value === 'all' ? undefined : value });
+  }
+
+  // ── Data source ───────────────────────────────────────────────────────────
+
+  function handleDataSourceChange(_: React.MouseEvent, value: DataSourceFilter | null) {
+    if (!value) return;
+    onChange({ ...filters, dataSource: value === 'total' ? undefined : value });
+  }
+
   return (
-    <Stack direction="row" spacing={2} flexWrap="wrap" useFlexGap alignItems="center">
-      {/* Ressource */}
-      <FormControl size="small" sx={{ minWidth: 140 }}>
-        <InputLabel>{t('energy-resource')}</InputLabel>
-        <Select value={filters.resourceCategory} label={t('energy-resource')} onChange={handleResourceChange}>
-          {RESOURCE_CATEGORIES.map((cat) => (
-            <MenuItem key={cat} value={cat}>
-              {t(`resource-${cat.toLowerCase()}` as any)}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+    <Stack spacing={1.5}>
+      {/* Row 1: période → ressources → sous-catégorie */}
+      <Stack direction="row" spacing={2} flexWrap="wrap" useFlexGap alignItems="center">
+        {/* Année */}
+        <Autocomplete
+          freeSolo
+          size="small"
+          options={YEAR_OPTIONS}
+          value={yearDraft}
+          onInputChange={(_event, newValue) => {
+            const cleaned = newValue.replace(/\D/g, '').slice(0, 4);
+            setYearDraft(cleaned);
+            applyYear(cleaned);
+          }}
+          onChange={(_event, newValue) => {
+            if (newValue) {
+              setYearDraft(newValue);
+              applyYear(newValue);
+            }
+          }}
+          sx={{ width: 110 }}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label={t('energy-year')}
+              inputProps={{ ...params.inputProps, inputMode: 'numeric', maxLength: 4 }}
+              onBlur={() => {
+                const year = parseInt(yearDraft, 10);
+                if (isNaN(year) || year < 2000 || year > 2100) {
+                  setYearDraft(String(filters.year));
+                }
+              }}
+            />
+          )}
+        />
 
-      <Divider orientation="vertical" flexItem sx={{ my: 0.5 }} />
+        {/* Mois */}
+        <FormControl size="small" sx={{ minWidth: 140 }}>
+          <InputLabel>{t('energy-month')}</InputLabel>
+          <Select value={currentMonthNum} label={t('energy-month')} onChange={handleMonthChange}>
+            {MONTHS.map(({ value, label }) => (
+              <MenuItem key={value} value={value}>
+                {label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
 
-      {/* Année — liste + saisie libre */}
-      <Autocomplete
-        freeSolo
-        size="small"
-        options={YEAR_OPTIONS}
-        value={yearDraft}
-        onInputChange={(_event, newValue) => {
-          const cleaned = newValue.replace(/\D/g, '').slice(0, 4);
-          setYearDraft(cleaned);
-          applyYear(cleaned);
-        }}
-        onChange={(_event, newValue) => {
-          if (newValue) {
-            setYearDraft(newValue);
-            applyYear(newValue);
-          }
-        }}
-        sx={{ width: 110 }}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            label={t('energy-year')}
-            inputProps={{ ...params.inputProps, inputMode: 'numeric', maxLength: 4 }}
-            onBlur={() => {
-              const year = parseInt(yearDraft, 10);
-              if (isNaN(year) || year < 2000 || year > 2100) {
-                setYearDraft(String(filters.year));
-              }
-            }}
-          />
+        <Divider orientation="vertical" flexItem sx={{ my: 0.5 }} />
+
+        {/* Ressources (multi-toggle) */}
+        <Stack direction="row" alignItems="center" spacing={1}>
+          <Typography variant="caption" color="text.secondary" noWrap>
+            {t('energy-resource')}
+          </Typography>
+          <ToggleButtonGroup
+            value={activeCategories}
+            onChange={handleResourceToggle}
+            size="small"
+            color="primary"
+          >
+            {RESOURCE_CATEGORIES.map((cat) => (
+              <ToggleButton key={cat} value={cat} sx={{ px: 1.5, textTransform: 'none' }}>
+                {t(`resource-${cat.toLowerCase()}` as any)}
+              </ToggleButton>
+            ))}
+          </ToggleButtonGroup>
+        </Stack>
+
+        {/* Sous-catégorie (affiché uniquement si 1 ressource sélectionnée) */}
+        {singleResource && subCategoryOptions.length > 0 && (
+          <>
+            <Divider orientation="vertical" flexItem sx={{ my: 0.5 }} />
+            <FormControl size="small" sx={{ minWidth: 220 }}>
+              <InputLabel>{t('energy-sub-category')}</InputLabel>
+              <Select
+                value={filters.resourceSubCategory ?? ''}
+                label={t('energy-sub-category')}
+                onChange={handleSubCategoryChange}
+              >
+                <MenuItem value="">
+                  <em>{t('energy-all-sub-categories')}</em>
+                </MenuItem>
+                {subCategoryOptions.map((sub) => (
+                  <MenuItem key={sub} value={sub}>
+                    {sub}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </>
         )}
-      />
+      </Stack>
 
-      {/* Mois */}
-      <FormControl size="small" sx={{ minWidth: 140 }}>
-        <InputLabel>{t('energy-month')}</InputLabel>
-        <Select value={currentMonthNum} label={t('energy-month')} onChange={handleMonthChange}>
-          {MONTHS.map(({ value, label }) => (
-            <MenuItem key={value} value={value}>
-              {label}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      {/* Row 2: comparable + data source */}
+      <Stack direction="row" spacing={2} flexWrap="wrap" useFlexGap alignItems="center">
+        {/* Comparable */}
+        <Stack direction="row" alignItems="center" spacing={1}>
+          <Typography variant="caption" color="text.secondary" noWrap>
+            {t('energy-filter-site')}
+          </Typography>
+          <ToggleButtonGroup
+            value={filters.comparable ?? 'all'}
+            exclusive
+            onChange={handleComparableChange}
+            size="small"
+          >
+            <ToggleButton value="all" sx={{ px: 1.5, textTransform: 'none' }}>
+              {t('energy-filter-all')}
+            </ToggleButton>
+            <ToggleButton value="comparable" sx={{ px: 1.5, textTransform: 'none' }}>
+              {t('energy-filter-comparable')}
+            </ToggleButton>
+            <ToggleButton value="non-comparable" sx={{ px: 1.5, textTransform: 'none' }}>
+              {t('energy-filter-non-comparable')}
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </Stack>
 
+        <Divider orientation="vertical" flexItem sx={{ my: 0.5 }} />
+
+        {/* Source de données */}
+        <Stack direction="row" alignItems="center" spacing={1}>
+          <Typography variant="caption" color="text.secondary" noWrap>
+            {t('energy-filter-data-source')}
+          </Typography>
+          <ToggleButtonGroup
+            value={filters.dataSource ?? 'total'}
+            exclusive
+            onChange={handleDataSourceChange}
+            size="small"
+          >
+            <ToggleButton value="total" sx={{ px: 1.5, textTransform: 'none' }}>
+              {t('energy-filter-total')}
+            </ToggleButton>
+            <ToggleButton value="real" sx={{ px: 1.5, textTransform: 'none' }}>
+              {t('energy-filter-real')}
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </Stack>
+      </Stack>
     </Stack>
   );
 }

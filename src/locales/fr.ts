@@ -691,15 +691,27 @@ export const fr = {
   'energy-site-ranking': 'Classement des sites',
   'energy-top-sites': '🏆 Top 10 — meilleurs sites',
   'energy-flop-sites': '⚠️ Flop 10 — sites à améliorer',
-  'energy-intensity-by-country': 'Intensité énergétique par pays (kWh/m²)',
-  'energy-refrigerant-by-country': 'Fluides frigorigènes par pays (kg QTD)',
+  'energy-intensity-by-country': 'Intensité énergétique par surface de vente (kWh/m²)',
+  'energy-intensity-surface-ytd': 'Intensité énergétique par surface de vente YTD',
+  'energy-refrigerant-by-country': 'Quantité de fluides frigorigènes rechargés',
+  'energy-refrigerant-reloaded': 'Fluides frigorigènes rechargés',
   'energy-site-code': 'Code site',
   'energy-intensity': 'Intensité',
   'energy-summary-detail': 'Détail du résumé',
   'energy-no-data': 'Aucune donnée disponible pour cette sélection.',
   'energy-year': 'Année',
   'energy-period-hint': 'KPI MTD : {month} · Évolution : {year}',
-  'energy-kpi-summary': 'Indicateurs clés'
+  'energy-kpi-summary': 'Indicateurs clés',
+  'energy-sub-category': 'Sous-catégorie',
+  'energy-all-sub-categories': 'Toutes',
+  'energy-filter-site': 'Sites',
+  'energy-filter-all': 'Tout',
+  'energy-filter-comparable': 'Comparables',
+  'energy-filter-non-comparable': 'Non comparables',
+  'energy-filter-data-source': 'Source',
+  'energy-filter-total': 'Total',
+  'energy-filter-real': 'Réel',
+  'energy-refrigerant-breakdown': 'Répartition des fluides frigorigènes (YTD)'
 };
 
 export default fr;

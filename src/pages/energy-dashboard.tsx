@@ -18,13 +18,15 @@ import KpiSummaryPanel from 'sections/energy/KpiSummaryPanel';
 import EnergyIntensityYtdChart from 'sections/energy/EnergyIntensityYtdChart';
 import HorizontalRankingChart from 'sections/energy/HorizontalRankingChart';
 import CountryIntensityChart from 'sections/energy/CountryIntensityChart';
-import RefrigerantByCountryChart from 'sections/energy/RefrigerantByCountryChart';
+import CountryIntensityMonthlyChart from 'sections/energy/CountryIntensityMonthlyChart';
+import RefrigerantByQuarterChart from 'sections/energy/RefrigerantByQuarterChart';
+import RefrigerantBreakdownChart from 'sections/energy/RefrigerantBreakdownChart';
 
 // ==============================|| PAGE — ENERGY DASHBOARD ||============================== //
 
-const CURRENT_YEAR = new Date().getFullYear();
-const DEFAULT_MONTH = `${CURRENT_YEAR}-01`;
-const DEFAULT_YEAR = CURRENT_YEAR;
+// Default to the latest month with available data
+const DEFAULT_YEAR = 2025;
+const DEFAULT_MONTH = '2025-12';
 
 export default function EnergyDashboard() {
   const { t } = useLanguage();
@@ -42,7 +44,18 @@ export default function EnergyDashboard() {
     setFilters((prev) => ({ ...prev, countryCodes: codes.length > 0 ? codes : undefined }));
   }
 
-  const { summary, monthlyEvolution, topSites, flopSites, countryIntensity, refrigerantByCountry, loading, error } = useEnergyKpis(filters);
+  const {
+    summary,
+    monthlyEvolution,
+    topSites,
+    flopSites,
+    countryIntensity,
+    countryIntensityMonthly,
+    refrigerantByQuarter,
+    refrigerantBreakdown,
+    loading,
+    error
+  } = useEnergyKpis(filters);
 
   return (
     <Box>
@@ -70,45 +83,61 @@ export default function EnergyDashboard() {
 
       {!loading && !error && (
         <Grid container spacing={2}>
-          {/* ── Row 1 : KPI panel (left) + Intensity chart (right) ── */}
-          <Grid item xs={12} md={4}>
+          {/* ── Row 1 : KPI panel (left) + Energy intensity YTD chart (right) ── */}
+          <Grid item xs={12} md={5}>
             <MainCard sx={{ height: '100%' }}>
-              <Typography variant="subtitle1" fontWeight={700} gutterBottom>
-                {t('energy-kpi-summary')}
-              </Typography>
               <KpiSummaryPanel summary={summary} />
             </MainCard>
           </Grid>
 
-          <Grid item xs={12} md={8}>
+          <Grid item xs={12} md={7}>
             <MainCard sx={{ height: '100%' }}>
               <Typography variant="subtitle1" fontWeight={700} gutterBottom>
-                {t('energy-monthly-evolution')} — {filters.year}
+                {t('energy-intensity-surface-ytd')} — {filters.year}
               </Typography>
               <EnergyIntensityYtdChart data={monthlyEvolution} year={filters.year} />
             </MainCard>
           </Grid>
 
-          {/* ── Row 2 : Intensity by country (left) + Refrigerant by country (right) ── */}
+          {/* ── Row 2 : Intensity MTD by country (left) + Intensity YTD per sales surface (right) ── */}
           <Grid item xs={12} md={6}>
             <MainCard>
               <CountryIntensityChart
                 data={countryIntensity}
-                title={t('energy-intensity-by-country')}
+                title={`${t('energy-intensity-by-country')} — MTD`}
               />
             </MainCard>
           </Grid>
 
           <Grid item xs={12} md={6}>
             <MainCard>
-              <RefrigerantByCountryChart
-                data={refrigerantByCountry}
-                title={t('energy-refrigerant-by-country')}
+              <CountryIntensityMonthlyChart
+                data={countryIntensityMonthly}
+                title={`${t('energy-intensity-surface-ytd')} — ${filters.year}`}
               />
             </MainCard>
           </Grid>
 
-          {/* ── Row 3 : Top 10 (left) + Flop 10 (right) ── */}
+          {/* ── Row 3 : Refrigerant reloaded by quarter (left) + Refrigerant breakdown pie (right) ── */}
+          <Grid item xs={12} md={6}>
+            <MainCard>
+              <RefrigerantByQuarterChart
+                data={refrigerantByQuarter}
+                title={`${t('energy-refrigerant-by-country')} (${filters.year} T1 – T4)`}
+              />
+            </MainCard>
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <MainCard>
+              <RefrigerantBreakdownChart
+                data={refrigerantBreakdown}
+                title={`${t('energy-refrigerant-breakdown')} (${filters.year} T1 – T4)`}
+              />
+            </MainCard>
+          </Grid>
+
+          {/* ── Row 4 : Top 10 (left) + Flop 10 (right) ── */}
           <Grid item xs={12} md={6}>
             <MainCard>
               <HorizontalRankingChart sites={topSites} title={t('energy-top-sites')} color="success" />

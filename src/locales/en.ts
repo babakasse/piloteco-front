@@ -676,15 +676,27 @@ export const en = {
   'energy-site-ranking': 'Site Ranking',
   'energy-top-sites': '🏆 Top 10 — best sites',
   'energy-flop-sites': '⚠️ Flop 10 — sites to improve',
-  'energy-intensity-by-country': 'Energy Intensity by Country (kWh/m²)',
-  'energy-refrigerant-by-country': 'Refrigerant Fluids by Country (kg QTD)',
+  'energy-intensity-by-country': 'Energy Intensity per Sales Surface (kWh/m²)',
+  'energy-intensity-surface-ytd': 'Energy Intensity per Sales Surface YTD',
+  'energy-refrigerant-by-country': 'Refrigerant Fluids Reloaded Quantity',
+  'energy-refrigerant-reloaded': 'Refrigerant Fluids Reloaded',
   'energy-site-code': 'Site code',
   'energy-intensity': 'Intensity',
   'energy-summary-detail': 'Summary detail',
   'energy-no-data': 'No data available for this selection.',
   'energy-year': 'Year',
   'energy-period-hint': 'KPI MTD: {month} · Evolution: {year}',
-  'energy-kpi-summary': 'Key Indicators'
+  'energy-kpi-summary': 'Key Indicators',
+  'energy-sub-category': 'Sub-category',
+  'energy-all-sub-categories': 'All',
+  'energy-filter-site': 'Sites',
+  'energy-filter-all': 'All',
+  'energy-filter-comparable': 'Comparable',
+  'energy-filter-non-comparable': 'Non-comparable',
+  'energy-filter-data-source': 'Source',
+  'energy-filter-total': 'Total',
+  'energy-filter-real': 'Real',
+  'energy-refrigerant-breakdown': 'Refrigerant Fluid Breakdown (YTD)'
 };
 
 export default en;
