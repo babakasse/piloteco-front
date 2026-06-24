@@ -22,6 +22,7 @@ const AssessmentDetailsPage = Loadable(lazy(() => import('pages/assessment-detai
 // render - dashboard page
 const Dashboard = Loadable(lazy(() => import('pages/dashboard')));
 const CompaniesPage = Loadable(lazy(() => import('pages/companies')));
+const EnergyDashboardPage = Loadable(lazy(() => import('pages/energy-dashboard')));
 
 // ==============================|| MAIN ROUTES ||============================== //
 
@@ -63,6 +64,10 @@ const MainRoutes = {
         {
           path: 'companies',
           element: <CompaniesPage />
+        },
+        {
+          path: 'energy',
+          element: <EnergyDashboardPage />
         },
         {
           path: 'contact-us',

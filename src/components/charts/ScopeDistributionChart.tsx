@@ -40,7 +40,7 @@ const ScopeDistributionChart = ({ scope1, scope2, scope3 }: ScopeDistributionCha
           }}
         >
           <Typography variant="body2" fontWeight={700} sx={{ color: item.payload.base }}>
-            {item.payload.name}
+            {item.name}
           </Typography>
           <Typography variant="body2" color="text.secondary">
             {item.value.toLocaleString()} tCO₂e

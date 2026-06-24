@@ -4,7 +4,7 @@
 import { FormattedMessage } from 'react-intl';
 
 // assets
-import { Home, BookSquare, Buildings } from 'iconsax-react';
+import { Home, BookSquare, Buildings, Flash } from 'iconsax-react';
 
 // type
 import { NavItemType } from 'types/menu';
@@ -13,7 +13,8 @@ import { NavItemType } from 'types/menu';
 const icons = {
   dashboard: Home,
   assessment: BookSquare,
-  companies: Buildings
+  companies: Buildings,
+  energy: Flash
 };
 
 // ==============================|| MENU ITEMS - DASHBOARD ||============================== //
@@ -44,6 +45,13 @@ const dashboard: NavItemType = {
       type: 'item',
       url: '/companies',
       icon: icons.companies
+    },
+    {
+      id: 'energy',
+      title: <FormattedMessage id="energy-dashboard" />,
+      type: 'item',
+      url: '/energy',
+      icon: icons.energy
     }
   ]
 };
