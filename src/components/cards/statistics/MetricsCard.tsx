@@ -1,6 +1,5 @@
 import { ReactNode } from 'react';
 import { Card, CardContent, Typography, Box } from '@mui/material';
-import { useLanguage } from 'contexts/LanguageContext';
 
 interface MetricsCardProps {
   title: string;
@@ -28,7 +27,6 @@ const TREND_CONFIG = {
 };
 
 const MetricsCard = ({ title, value, unit = '', trend, trendValue, color = 'primary', icon }: MetricsCardProps) => {
-  const { t } = useLanguage();
   const palette = COLOR_MAP[color] || COLOR_MAP.primary;
   const trendCfg = trend ? TREND_CONFIG[trend] : null;
   const numVal = typeof value === 'number' ? value.toLocaleString() : value;

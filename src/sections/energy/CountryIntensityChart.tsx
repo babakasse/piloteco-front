@@ -37,6 +37,21 @@ export default function CountryIntensityChart({ data, title }: CountryIntensityC
       value: +(d.intensity as number).toFixed(2)
     }));
 
+  if (chartData.length === 0) {
+    return (
+      <Box>
+        <Typography variant="subtitle2" fontWeight={700} gutterBottom>
+          {title}
+        </Typography>
+        <Box display="flex" alignItems="center" justifyContent="center" height={220}>
+          <Typography color="text.secondary" variant="body2">
+            No data
+          </Typography>
+        </Box>
+      </Box>
+    );
+  }
+
   // Colour gradient: higher intensity = warmer colour (warning → error)
   const maxIntensity = Math.max(...chartData.map((d) => d.value), 1);
 

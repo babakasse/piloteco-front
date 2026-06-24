@@ -58,7 +58,7 @@ export default function RefrigerantByCountryChart({ data, title }: RefrigerantBy
             tick={{ fontSize: 10 }}
             label={{ value: 'kg', angle: -90, position: 'insideLeft', style: { fontSize: 10 } }}
           />
-          <Tooltip formatter={(v: number) => [`${v} kg`, 'Reloaded']} />
+          <Tooltip formatter={(v: number) => [`${v} kg`, 'Refrigerant reloaded']} />
           <Bar dataKey="value" fill={theme.palette.info.main} radius={[3, 3, 0, 0]} maxBarSize={40}>
             <LabelList dataKey="value" position="top" style={{ fontSize: 10 }} formatter={(v) => `${v}`} />
           </Bar>

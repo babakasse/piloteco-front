@@ -699,6 +699,7 @@ export const fr = {
   'energy-intensity': 'Intensité',
   'energy-summary-detail': 'Détail du résumé',
   'energy-no-data': 'Aucune donnée disponible pour cette sélection.',
+  'energy-kpi-load-error': 'Erreur lors du chargement des KPI.',
   'energy-year': 'Année',
   'energy-period-hint': 'KPI MTD : {month} · Évolution : {year}',
   'energy-kpi-summary': 'Indicateurs clés',

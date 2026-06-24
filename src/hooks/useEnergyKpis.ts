@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useLanguage } from 'contexts/LanguageContext';
 import {
   fetchKpiSummary,
   fetchMonthlyEvolution,
@@ -38,6 +39,7 @@ interface UseEnergyKpisState {
 }
 
 export function useEnergyKpis(filters: EnergyFiltersType): UseEnergyKpisState & { reload: () => void } {
+  const { t } = useLanguage();
   const [state, setState] = useState<UseEnergyKpisState>({
     summary: null,
     monthlyEvolution: [],
@@ -102,7 +104,7 @@ export function useEnergyKpis(filters: EnergyFiltersType): UseEnergyKpisState & 
         error: null
       });
     } catch {
-      setState((prev) => ({ ...prev, loading: false, error: 'Erreur lors du chargement des KPI.' }));
+      setState((prev) => ({ ...prev, loading: false, error: t('energy-kpi-load-error') }));
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [

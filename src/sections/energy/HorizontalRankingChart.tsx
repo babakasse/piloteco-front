@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 
 import { SiteRankingItemType } from 'types/energy';
+import { useLanguage } from 'contexts/LanguageContext';
 
 // ==============================|| ENERGY — HORIZONTAL RANKING CHART ||============================== //
 
@@ -15,6 +16,7 @@ interface HorizontalRankingChartProps {
 
 export default function HorizontalRankingChart({ sites, title, color = 'success' }: HorizontalRankingChartProps) {
   const theme = useTheme();
+  const { t } = useLanguage();
   const barColor = color === 'success' ? theme.palette.success.main : theme.palette.error.main;
 
   const chartData = sites.map((s) => ({
@@ -31,7 +33,7 @@ export default function HorizontalRankingChart({ sites, title, color = 'success'
         </Typography>
         <Box display="flex" alignItems="center" justifyContent="center" height={200}>
           <Typography color="text.secondary" variant="body2">
-            No data
+            {t('energy-no-data')}
           </Typography>
         </Box>
       </Box>

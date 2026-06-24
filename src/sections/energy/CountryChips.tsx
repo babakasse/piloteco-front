@@ -3,6 +3,7 @@ import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import { useLanguage } from 'contexts/LanguageContext';
 
 // ==============================|| ENERGY — COUNTRY CHIPS ||============================== //
 
@@ -30,6 +31,7 @@ const COUNTRIES = [
 const ALL_CODES = COUNTRIES.map((c) => c.code);
 
 export default function CountryChips({ selected, onChange }: CountryChipsProps) {
+  const { t } = useLanguage();
   // Keep a ref always pointing at the latest `selected` prop to avoid stale
   // closures when multiple chips are clicked in rapid succession.
   const selectedRef = useRef(selected);
@@ -53,11 +55,11 @@ export default function CountryChips({ selected, onChange }: CountryChipsProps) 
   return (
     <Box>
       <Typography variant="caption" color="text.secondary" sx={{ mb: 1, display: 'block', fontWeight: 600 }}>
-        Countries
+        {t('energy-country')}
       </Typography>
       <Stack direction="row" spacing={0.75} flexWrap="wrap" useFlexGap>
         <Chip
-          label="All"
+          label={t('energy-filter-all')}
           size="small"
           onClick={toggleAll}
           color={allSelected ? 'success' : 'default'}

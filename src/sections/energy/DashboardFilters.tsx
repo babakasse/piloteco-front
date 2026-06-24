@@ -23,6 +23,12 @@ interface DashboardFiltersProps {
 
 const RESOURCE_CATEGORIES: ResourceCategory[] = ['ELEC', 'GAS', 'WATER'];
 
+const RESOURCE_TRANSLATION_KEYS: Record<ResourceCategory, string> = {
+  ELEC: 'resource-elec',
+  GAS: 'resource-gas',
+  WATER: 'resource-water',
+};
+
 const MONTHS = [
   { value: '01', label: 'Janvier' },
   { value: '02', label: 'Février' },
@@ -192,7 +198,7 @@ export default function DashboardFilters({ filters, onChange }: DashboardFilters
           >
             {RESOURCE_CATEGORIES.map((cat) => (
               <ToggleButton key={cat} value={cat} sx={{ px: 1.5, textTransform: 'none' }}>
-                {t(`resource-${cat.toLowerCase()}` as any)}
+                {t(RESOURCE_TRANSLATION_KEYS[cat])}
               </ToggleButton>
             ))}
           </ToggleButtonGroup>
