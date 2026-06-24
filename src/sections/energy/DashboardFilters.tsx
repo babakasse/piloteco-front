@@ -13,6 +13,7 @@ import Typography from '@mui/material/Typography';
 
 import { EnergyFiltersType, ResourceCategory, ComparableFilter, DataSourceFilter } from 'types/energy';
 import { useLanguage } from 'contexts/LanguageContext';
+import type { TranslationKeys } from 'locales';
 
 // ==============================|| ENERGY — DASHBOARD FILTERS ||============================== //
 
@@ -23,7 +24,7 @@ interface DashboardFiltersProps {
 
 const RESOURCE_CATEGORIES: ResourceCategory[] = ['ELEC', 'GAS', 'WATER'];
 
-const RESOURCE_TRANSLATION_KEYS: Record<ResourceCategory, string> = {
+const RESOURCE_TRANSLATION_KEYS: Record<ResourceCategory, TranslationKeys> = {
   ELEC: 'resource-elec',
   GAS: 'resource-gas',
   WATER: 'resource-water',
