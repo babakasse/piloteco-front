@@ -23,9 +23,7 @@ const COUNTRIES = [
   { code: 'RU', label: 'Russia' },
   { code: 'SN', label: 'Senegal' },
   { code: 'ES', label: 'Spain' },
-  { code: 'UA', label: 'Ukraine' },
-  { code: 'PDG', label: 'Congo' },
-  { code: 'CH', label: 'Switzerland' }
+  { code: 'UA', label: 'Ukraine' }
 ];
 
 const ALL_CODES = COUNTRIES.map((c) => c.code);

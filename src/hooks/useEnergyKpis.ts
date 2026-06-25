@@ -80,7 +80,7 @@ export function useEnergyKpis(filters: EnergyFiltersType): UseEnergyKpisState & 
         refrigerantBreakdownData
       ] = await Promise.all([
         fetchKpiSummary(filters.resourceCategory, filters.month, extra),
-        fetchMonthlyEvolution(filters.resourceCategory, filters.year, extra),
+        fetchMonthlyEvolution(filters.resourceCategory, filters.year, filters.month, extra),
         fetchSiteRanking(filters.resourceCategory, filters.month, 10, 'ASC', extra),
         fetchSiteRanking(filters.resourceCategory, filters.month, 10, 'DESC', extra),
         fetchCountryIntensity(filters.resourceCategory, filters.month, extra),

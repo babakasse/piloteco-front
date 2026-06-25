@@ -75,6 +75,8 @@ function fmtGwh(kwh?: number): string {
 }
 
 export default function KpiSummaryPanel({ summary }: KpiSummaryPanelProps) {
+  const isElec = !summary || summary.resourceCategory === 'ELEC';
+
   return (
     <Grid container spacing={1.5}>
       {/* Row 1: Sales Surface + Commercial Energy Intensity */}
@@ -109,41 +111,43 @@ export default function KpiSummaryPanel({ summary }: KpiSummaryPanelProps) {
         />
       </Grid>
 
-      {/* Row 3: Green Electricity Consumption + % */}
-      <Grid item xs={6}>
-        <KpiCard
-          label="Green Electricity Consumption"
-          value={fmtGwh(summary?.greenElectricityConsumptionKwh)}
-          unit="GWh"
-          color="green"
-        />
-      </Grid>
-      <Grid item xs={6}>
-        <KpiCard
-          label="% Green Electricity Consumption"
-          value={fmt(summary?.greenElectricityConsumptionPercent, 0)}
-          unit="%"
-          color="green"
-        />
-      </Grid>
-
-      {/* Row 4: Green Electricity Production + % */}
-      <Grid item xs={6}>
-        <KpiCard
-          label="Green Electricity Production"
-          value={fmtGwh(summary?.greenElectricityProductionKwh)}
-          unit="GWh"
-          color="green"
-        />
-      </Grid>
-      <Grid item xs={6}>
-        <KpiCard
-          label="% Green Electricity Production"
-          value={fmt(summary?.greenElectricityProductionPercent, 0)}
-          unit="%"
-          color="green"
-        />
-      </Grid>
+      {/* Rows 3-4: Green metrics — ELEC only */}
+      {isElec && (
+        <>
+          <Grid item xs={6}>
+            <KpiCard
+              label="Green Electricity Consumption"
+              value={fmtGwh(summary?.greenElectricityConsumptionKwh)}
+              unit="GWh"
+              color="green"
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <KpiCard
+              label="% Green Electricity Consumption"
+              value={fmt(summary?.greenElectricityConsumptionPercent, 0)}
+              unit="%"
+              color="green"
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <KpiCard
+              label="Green Electricity Production"
+              value={fmtGwh(summary?.greenElectricityProductionKwh)}
+              unit="GWh"
+              color="green"
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <KpiCard
+              label="% Green Electricity Production"
+              value={fmt(summary?.greenElectricityProductionPercent, 0)}
+              unit="%"
+              color="green"
+            />
+          </Grid>
+        </>
+      )}
     </Grid>
   );
 }

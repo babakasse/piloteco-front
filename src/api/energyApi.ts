@@ -84,9 +84,10 @@ export async function fetchKpiSummary(
 export async function fetchMonthlyEvolution(
   resourceCategory: ResourceCategory,
   year: number,
+  month: string,
   extra: ExtraFilters = {}
 ): Promise<MonthlyEvolutionItemType[]> {
-  const params = buildParams({ resourceCategory, year }, extra);
+  const params = buildParams({ resourceCategory, year, month }, extra);
 
   const response = await axiosServices.get<MonthlyEvolutionItemType[]>('/kpi/monthly-evolution', {
     params,
