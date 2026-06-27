@@ -205,29 +205,27 @@ export default function DashboardFilters({ filters, onChange }: DashboardFilters
           </ToggleButtonGroup>
         </Stack>
 
-        {/* Sous-catégorie (affiché uniquement si 1 ressource sélectionnée) */}
-        {singleResource && subCategoryOptions.length > 0 && (
-          <>
-            <Divider orientation="vertical" flexItem sx={{ my: 0.5 }} />
-            <FormControl size="small" sx={{ minWidth: 220 }}>
-              <InputLabel>{t('energy-sub-category')}</InputLabel>
-              <Select
-                value={filters.resourceSubCategory ?? ''}
-                label={t('energy-sub-category')}
-                onChange={handleSubCategoryChange}
-              >
-                <MenuItem value="">
-                  <em>{t('energy-all-sub-categories')}</em>
+        {/* Sous-catégorie — toujours visible, désactivée si multi-ressources */}
+        <>
+          <Divider orientation="vertical" flexItem sx={{ my: 0.5 }} />
+          <FormControl size="small" sx={{ minWidth: 220 }} disabled={!singleResource}>
+            <InputLabel>{t('energy-sub-category')}</InputLabel>
+            <Select
+              value={singleResource ? (filters.resourceSubCategory ?? '') : ''}
+              label={t('energy-sub-category')}
+              onChange={handleSubCategoryChange}
+            >
+              <MenuItem value="">
+                <em>{t('energy-all-sub-categories')}</em>
+              </MenuItem>
+              {subCategoryOptions.map((sub) => (
+                <MenuItem key={sub} value={sub}>
+                  {sub}
                 </MenuItem>
-                {subCategoryOptions.map((sub) => (
-                  <MenuItem key={sub} value={sub}>
-                    {sub}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </>
-        )}
+              ))}
+            </Select>
+          </FormControl>
+        </>
       </Stack>
 
       {/* Row 2: comparable + data source */}
