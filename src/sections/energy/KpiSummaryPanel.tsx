@@ -80,14 +80,14 @@ export default function KpiSummaryPanel({ summary }: KpiSummaryPanelProps) {
       {/* Row 1: Sales Surface (MAG only) + Commercial Energy Intensity */}
       <Grid item xs={6}>
         <KpiCard
-          label="Sales Surface"
+          label="Surface commerciale (MAG)"
           value={fmt(summary?.salesSurfaceM2)}
           unit="m²"
         />
       </Grid>
       <Grid item xs={6}>
         <KpiCard
-          label="Commercial Energy Intensity"
+          label="Intensité commerciale YTD"
           value={fmt(summary?.commercialEnergyIntensityYtd, 2)}
           unit="kWh/m²"
         />
@@ -96,14 +96,14 @@ export default function KpiSummaryPanel({ summary }: KpiSummaryPanelProps) {
       {/* Row 2: Total Surface (all types) + Building Energy Intensity */}
       <Grid item xs={6}>
         <KpiCard
-          label="Total Surface"
+          label="Surface totale bâtiment"
           value={fmt(summary?.totalSurfaceM2)}
           unit="m²"
         />
       </Grid>
       <Grid item xs={6}>
         <KpiCard
-          label="Building Energy Intensity"
+          label="Intensité bâtiment YTD"
           value={fmt(summary?.buildingEnergyIntensityYtd, 2)}
           unit="kWh/m²"
         />
@@ -112,7 +112,7 @@ export default function KpiSummaryPanel({ summary }: KpiSummaryPanelProps) {
       {/* Rows 3-4: Green metrics — always shown, -- when not ELEC */}
       <Grid item xs={6}>
         <KpiCard
-          label="Green Electricity Consumption"
+          label="Consommation élec. verte"
           value={fmtGwh(summary?.greenElectricityConsumptionKwh)}
           unit="GWh"
           color="green"
@@ -120,7 +120,7 @@ export default function KpiSummaryPanel({ summary }: KpiSummaryPanelProps) {
       </Grid>
       <Grid item xs={6}>
         <KpiCard
-          label="% Green Electricity Consumption"
+          label="% Élec. verte consommée"
           value={fmt(summary?.greenElectricityConsumptionPercent, 0)}
           unit="%"
           color="green"
@@ -128,7 +128,7 @@ export default function KpiSummaryPanel({ summary }: KpiSummaryPanelProps) {
       </Grid>
       <Grid item xs={6}>
         <KpiCard
-          label="Green Electricity Production"
+          label="Production élec. verte"
           value={fmtGwh(summary?.greenElectricityProductionKwh)}
           unit="GWh"
           color="green"
@@ -136,7 +136,7 @@ export default function KpiSummaryPanel({ summary }: KpiSummaryPanelProps) {
       </Grid>
       <Grid item xs={6}>
         <KpiCard
-          label="% Green Electricity Production"
+          label="% Élec. verte produite"
           value={fmt(summary?.greenElectricityProductionPercent, 0)}
           unit="%"
           color="green"
