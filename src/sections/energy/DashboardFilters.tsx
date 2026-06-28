@@ -92,23 +92,21 @@ export default function DashboardFilters({ filters, onChange }: DashboardFilters
   function handleResourceToggle(_: React.MouseEvent, values: ResourceCategory[]) {
     if (values.length === 0) return; // at least one must remain
     const primary = values[0];
+    const newSubOptions = [...new Set(values.flatMap((cat) => SUB_CATEGORIES[cat]))];
+    const keepSubCategory = filters.resourceSubCategory && newSubOptions.includes(filters.resourceSubCategory)
+      ? filters.resourceSubCategory
+      : undefined;
     onChange({
       ...filters,
       resourceCategory: primary,
       resourceCategories: values.length > 1 ? values : undefined,
-      // reset sub-category when resource changes
-      resourceSubCategory: undefined
+      resourceSubCategory: keepSubCategory,
     });
   }
 
-  // ── Sub-category (only shown when single resource is selected) ────────────
+  // ── Sub-category (union of all selected resources) ───────────────────────
 
-  const singleResource: ResourceCategory | null =
-    !filters.resourceCategories || filters.resourceCategories.length <= 1
-      ? filters.resourceCategory
-      : null;
-
-  const subCategoryOptions = singleResource ? SUB_CATEGORIES[singleResource] : [];
+  const subCategoryOptions = [...new Set(activeCategories.flatMap((cat) => SUB_CATEGORIES[cat]))];
 
   function handleSubCategoryChange(event: SelectChangeEvent) {
     const value = event.target.value;
@@ -205,13 +203,13 @@ export default function DashboardFilters({ filters, onChange }: DashboardFilters
           </ToggleButtonGroup>
         </Stack>
 
-        {/* Sous-catégorie — toujours visible, désactivée si multi-ressources */}
+        {/* Sous-catégorie — union des ressources sélectionnées */}
         <>
           <Divider orientation="vertical" flexItem sx={{ my: 0.5 }} />
-          <FormControl size="small" sx={{ minWidth: 220 }} disabled={!singleResource}>
+          <FormControl size="small" sx={{ minWidth: 220 }}>
             <InputLabel>{t('energy-sub-category')}</InputLabel>
             <Select
-              value={singleResource ? (filters.resourceSubCategory ?? '') : ''}
+              value={filters.resourceSubCategory ?? ''}
               label={t('energy-sub-category')}
               onChange={handleSubCategoryChange}
             >
