@@ -20,7 +20,7 @@ import {
 interface ExtraFilters {
   countryCodes?: string[];
   resourceCategories?: ResourceCategory[];
-  resourceSubCategory?: string;
+  resourceSubCategories?: string[];
   comparable?: ComparableFilter;
   dataSource?: DataSourceFilter;
   siteTypes?: string[];
@@ -56,8 +56,8 @@ function buildParams(
     }
   }
 
-  if (extra.resourceSubCategory) {
-    params.append('resourceSubCategory', extra.resourceSubCategory);
+  if (extra.resourceSubCategories && extra.resourceSubCategories.length > 0) {
+    for (const sub of extra.resourceSubCategories) params.append('resourceSubCategories[]', sub);
   }
 
   if (extra.comparable && extra.comparable !== 'all') {

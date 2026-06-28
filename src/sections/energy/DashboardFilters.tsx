@@ -93,14 +93,12 @@ export default function DashboardFilters({ filters, onChange }: DashboardFilters
     if (values.length === 0) return; // at least one must remain
     const primary = values[0];
     const newSubOptions = [...new Set(values.flatMap((cat) => SUB_CATEGORIES[cat]))];
-    const keepSubCategory = filters.resourceSubCategory && newSubOptions.includes(filters.resourceSubCategory)
-      ? filters.resourceSubCategory
-      : undefined;
+    const keepSubCategories = (filters.resourceSubCategories ?? []).filter((s) => newSubOptions.includes(s));
     onChange({
       ...filters,
       resourceCategory: primary,
       resourceCategories: values.length > 1 ? values : undefined,
-      resourceSubCategory: keepSubCategory,
+      resourceSubCategories: keepSubCategories.length > 0 ? keepSubCategories : undefined,
     });
   }
 
@@ -108,9 +106,12 @@ export default function DashboardFilters({ filters, onChange }: DashboardFilters
 
   const subCategoryOptions = [...new Set(activeCategories.flatMap((cat) => SUB_CATEGORIES[cat]))];
 
-  function handleSubCategoryChange(event: SelectChangeEvent) {
-    const value = event.target.value;
-    onChange({ ...filters, resourceSubCategory: value === '' ? undefined : value });
+  function handleSubCategoryChange(event: SelectChangeEvent<string[]>) {
+    const values = typeof event.target.value === 'string'
+      ? event.target.value.split(',')
+      : event.target.value;
+    const filtered = values.filter((v) => v !== '');
+    onChange({ ...filters, resourceSubCategories: filtered.length > 0 ? filtered : undefined });
   }
 
   // ── Month ─────────────────────────────────────────────────────────────────
@@ -208,14 +209,19 @@ export default function DashboardFilters({ filters, onChange }: DashboardFilters
           <Divider orientation="vertical" flexItem sx={{ my: 0.5 }} />
           <FormControl size="small" sx={{ minWidth: 220 }}>
             <InputLabel>{t('energy-sub-category')}</InputLabel>
-            <Select
-              value={filters.resourceSubCategory ?? ''}
+            <Select<string[]>
+              multiple
+              value={filters.resourceSubCategories ?? []}
               label={t('energy-sub-category')}
               onChange={handleSubCategoryChange}
+              renderValue={(selected) =>
+                selected.length === 0
+                  ? <em>{t('energy-all-sub-categories')}</em>
+                  : selected.length === 1
+                    ? selected[0]
+                    : `${selected.length} sélectionnées`
+              }
             >
-              <MenuItem value="">
-                <em>{t('energy-all-sub-categories')}</em>
-              </MenuItem>
               {subCategoryOptions.map((sub) => (
                 <MenuItem key={sub} value={sub}>
                   {sub}

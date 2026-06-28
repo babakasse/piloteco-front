@@ -42,6 +42,7 @@ export function useEnergyEfficiencyKpis(filters: EnergyFiltersType): UseEnergyEf
     countryCodes: filters.countryCodes,
     comparable: filters.comparable,
     dataSource: filters.dataSource,
+    resourceSubCategories: filters.resourceSubCategories,
     siteTypes: filters.siteTypes,
     siteFormats: filters.siteFormats
   };

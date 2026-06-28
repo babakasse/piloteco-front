@@ -55,7 +55,7 @@ export function useEnergyKpis(filters: EnergyFiltersType): UseEnergyKpisState & 
         resourceCategories: filters.resourceCategories && filters.resourceCategories.length > 0
           ? filters.resourceCategories
           : undefined,
-        resourceSubCategory: filters.resourceSubCategory,
+        resourceSubCategories: filters.resourceSubCategories,
         comparable: filters.comparable,
         dataSource: filters.dataSource
       };
@@ -99,7 +99,7 @@ export function useEnergyKpis(filters: EnergyFiltersType): UseEnergyKpisState & 
     filters.year,
     JSON.stringify(filters.countryCodes),
     JSON.stringify(filters.resourceCategories),
-    filters.resourceSubCategory,
+    JSON.stringify(filters.resourceSubCategories),
     filters.comparable,
     filters.dataSource
   ]);

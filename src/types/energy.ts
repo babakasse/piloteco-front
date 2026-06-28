@@ -84,7 +84,7 @@ export interface EnergyFiltersType {
   resourceCategory: ResourceCategory;
   /** Multi-resource override — when set, overrides resourceCategory */
   resourceCategories?: ResourceCategory[];
-  resourceSubCategory?: string;
+  resourceSubCategories?: string[];
   comparable?: ComparableFilter;
   dataSource?: DataSourceFilter;
   month: string;
