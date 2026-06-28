@@ -17,14 +17,11 @@ import CountryChips from 'sections/energy/CountryChips';
 import KpiSummaryPanel from 'sections/energy/KpiSummaryPanel';
 import EnergyIntensityYtdChart from 'sections/energy/EnergyIntensityYtdChart';
 import HorizontalRankingChart from 'sections/energy/HorizontalRankingChart';
-import CountryIntensityChart from 'sections/energy/CountryIntensityChart';
-import CountryIntensityMonthlyChart from 'sections/energy/CountryIntensityMonthlyChart';
 import RefrigerantByQuarterChart from 'sections/energy/RefrigerantByQuarterChart';
 import RefrigerantBreakdownChart from 'sections/energy/RefrigerantBreakdownChart';
 
 // ==============================|| PAGE — ENERGY DASHBOARD ||============================== //
 
-// Default to the latest month with available data
 const DEFAULT_YEAR = 2025;
 const DEFAULT_MONTH = '2025-12';
 
@@ -49,8 +46,6 @@ export default function EnergyDashboard() {
     monthlyEvolution,
     topSites,
     flopSites,
-    countryIntensity,
-    countryIntensityMonthly,
     refrigerantByQuarter,
     refrigerantBreakdown,
     loading,
@@ -82,16 +77,16 @@ export default function EnergyDashboard() {
       )}
 
       {!loading && !error && (
-        <Grid container spacing={2}>
+        <Grid container spacing={2} alignItems="stretch">
           {/* ── Row 1 : KPI panel (left) + Energy intensity YTD chart (right) ── */}
-          <Grid item xs={12} md={5}>
-            <MainCard sx={{ height: '100%' }}>
+          <Grid item xs={12} md={6} sx={{ display: 'flex' }}>
+            <MainCard sx={{ height: '100%', width: '100%' }}>
               <KpiSummaryPanel summary={summary} />
             </MainCard>
           </Grid>
 
-          <Grid item xs={12} md={7}>
-            <MainCard sx={{ height: '100%' }}>
+          <Grid item xs={12} md={6} sx={{ display: 'flex' }}>
+            <MainCard sx={{ height: '100%', width: '100%' }}>
               <Typography variant="subtitle1" fontWeight={700} gutterBottom>
                 {t('energy-intensity-surface-ytd')} — {filters.year}
               </Typography>
@@ -99,28 +94,9 @@ export default function EnergyDashboard() {
             </MainCard>
           </Grid>
 
-          {/* ── Row 2 : Intensity MTD by country (left) + Intensity YTD per sales surface (right) ── */}
-          <Grid item xs={12} md={6}>
-            <MainCard>
-              <CountryIntensityChart
-                data={countryIntensity}
-                title={`${t('energy-intensity-by-country')} — MTD`}
-              />
-            </MainCard>
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <MainCard>
-              <CountryIntensityMonthlyChart
-                data={countryIntensityMonthly}
-                title={`${t('energy-intensity-surface-ytd')} — ${filters.year}`}
-              />
-            </MainCard>
-          </Grid>
-
-          {/* ── Row 3 : Refrigerant reloaded by quarter (left) + Refrigerant breakdown pie (right) ── */}
-          <Grid item xs={12} md={6}>
-            <MainCard>
+          {/* ── Row 2 : Refrigerant by quarter (left) + Refrigerant breakdown (right) ── */}
+          <Grid item xs={12} md={6} sx={{ display: 'flex' }}>
+            <MainCard sx={{ height: '100%', width: '100%' }}>
               <RefrigerantByQuarterChart
                 data={refrigerantByQuarter}
                 title={`${t('energy-refrigerant-by-country')} (${filters.year} T1 – T4)`}
@@ -128,8 +104,8 @@ export default function EnergyDashboard() {
             </MainCard>
           </Grid>
 
-          <Grid item xs={12} md={6}>
-            <MainCard>
+          <Grid item xs={12} md={6} sx={{ display: 'flex' }}>
+            <MainCard sx={{ height: '100%', width: '100%' }}>
               <RefrigerantBreakdownChart
                 data={refrigerantBreakdown}
                 title={`${t('energy-refrigerant-breakdown')} (${filters.year} T1 – T4)`}
@@ -137,15 +113,15 @@ export default function EnergyDashboard() {
             </MainCard>
           </Grid>
 
-          {/* ── Row 4 : Top 10 (left) + Flop 10 (right) ── */}
-          <Grid item xs={12} md={6}>
-            <MainCard>
+          {/* ── Row 3 : Top 10 (left) + Flop 10 (right) ── */}
+          <Grid item xs={12} md={6} sx={{ display: 'flex' }}>
+            <MainCard sx={{ height: '100%', width: '100%' }}>
               <HorizontalRankingChart sites={topSites} title={t('energy-top-sites')} color="success" />
             </MainCard>
           </Grid>
 
-          <Grid item xs={12} md={6}>
-            <MainCard>
+          <Grid item xs={12} md={6} sx={{ display: 'flex' }}>
+            <MainCard sx={{ height: '100%', width: '100%' }}>
               <HorizontalRankingChart sites={flopSites} title={t('energy-flop-sites')} color="error" />
             </MainCard>
           </Grid>

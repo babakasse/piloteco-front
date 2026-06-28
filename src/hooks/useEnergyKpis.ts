@@ -4,8 +4,6 @@ import {
   fetchKpiSummary,
   fetchMonthlyEvolution,
   fetchSiteRanking,
-  fetchCountryIntensity,
-  fetchCountryIntensityMonthly,
   fetchRefrigerantByCountry,
   fetchRefrigerantByQuarter,
   fetchRefrigerantBreakdown
@@ -14,8 +12,6 @@ import {
   KpiSummaryType,
   MonthlyEvolutionItemType,
   SiteRankingItemType,
-  CountryIntensityItemType,
-  CountryIntensityMonthlyItemType,
   RefrigerantByCountryItemType,
   RefrigerantByQuarterItemType,
   RefrigerantBreakdownItemType,
@@ -29,8 +25,6 @@ interface UseEnergyKpisState {
   monthlyEvolution: MonthlyEvolutionItemType[];
   topSites: SiteRankingItemType[];
   flopSites: SiteRankingItemType[];
-  countryIntensity: CountryIntensityItemType[];
-  countryIntensityMonthly: CountryIntensityMonthlyItemType[];
   refrigerantByCountry: RefrigerantByCountryItemType[];
   refrigerantByQuarter: RefrigerantByQuarterItemType[];
   refrigerantBreakdown: RefrigerantBreakdownItemType[];
@@ -45,8 +39,6 @@ export function useEnergyKpis(filters: EnergyFiltersType): UseEnergyKpisState & 
     monthlyEvolution: [],
     topSites: [],
     flopSites: [],
-    countryIntensity: [],
-    countryIntensityMonthly: [],
     refrigerantByCountry: [],
     refrigerantByQuarter: [],
     refrigerantBreakdown: [],
@@ -63,7 +55,7 @@ export function useEnergyKpis(filters: EnergyFiltersType): UseEnergyKpisState & 
         resourceCategories: filters.resourceCategories && filters.resourceCategories.length > 0
           ? filters.resourceCategories
           : undefined,
-        resourceSubCategory: filters.resourceSubCategory,
+        resourceSubCategories: filters.resourceSubCategories,
         comparable: filters.comparable,
         dataSource: filters.dataSource
       };
@@ -73,18 +65,14 @@ export function useEnergyKpis(filters: EnergyFiltersType): UseEnergyKpisState & 
         evolution,
         top,
         flop,
-        countryIntensityData,
-        countryIntensityMonthlyData,
         refrigerantData,
         refrigerantByQuarterData,
         refrigerantBreakdownData
       ] = await Promise.all([
         fetchKpiSummary(filters.resourceCategory, filters.month, extra),
-        fetchMonthlyEvolution(filters.resourceCategory, filters.year, extra),
+        fetchMonthlyEvolution(filters.resourceCategory, filters.year, filters.month, extra),
         fetchSiteRanking(filters.resourceCategory, filters.month, 10, 'ASC', extra),
         fetchSiteRanking(filters.resourceCategory, filters.month, 10, 'DESC', extra),
-        fetchCountryIntensity(filters.resourceCategory, filters.month, extra),
-        fetchCountryIntensityMonthly(filters.resourceCategory, filters.year, extra),
         fetchRefrigerantByCountry(filters.month, extra),
         fetchRefrigerantByQuarter(filters.month, extra),
         fetchRefrigerantBreakdown(filters.month, extra)
@@ -95,8 +83,6 @@ export function useEnergyKpis(filters: EnergyFiltersType): UseEnergyKpisState & 
         monthlyEvolution: evolution,
         topSites: top,
         flopSites: flop,
-        countryIntensity: countryIntensityData,
-        countryIntensityMonthly: countryIntensityMonthlyData,
         refrigerantByCountry: refrigerantData,
         refrigerantByQuarter: refrigerantByQuarterData,
         refrigerantBreakdown: refrigerantBreakdownData,
@@ -113,7 +99,7 @@ export function useEnergyKpis(filters: EnergyFiltersType): UseEnergyKpisState & 
     filters.year,
     JSON.stringify(filters.countryCodes),
     JSON.stringify(filters.resourceCategories),
-    filters.resourceSubCategory,
+    JSON.stringify(filters.resourceSubCategories),
     filters.comparable,
     filters.dataSource
   ]);

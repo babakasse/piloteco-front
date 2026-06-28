@@ -31,7 +31,7 @@ export default function CountryIntensityChart({ data, title }: CountryIntensityC
   }
 
   const chartData = data
-    .filter((d) => d.intensity !== null)
+    .filter((d) => d.intensity != null)
     .map((d) => ({
       country: d.countryCode,
       value: +(d.intensity as number).toFixed(2)

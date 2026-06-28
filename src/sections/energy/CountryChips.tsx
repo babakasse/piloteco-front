@@ -23,9 +23,7 @@ const COUNTRIES = [
   { code: 'RU', label: 'Russia' },
   { code: 'SN', label: 'Senegal' },
   { code: 'ES', label: 'Spain' },
-  { code: 'UA', label: 'Ukraine' },
-  { code: 'PDG', label: 'Congo' },
-  { code: 'CH', label: 'Switzerland' }
+  { code: 'UA', label: 'Ukraine' }
 ];
 
 const ALL_CODES = COUNTRIES.map((c) => c.code);
@@ -40,7 +38,9 @@ export default function CountryChips({ selected, onChange }: CountryChipsProps) 
   const allSelected = selected.length === ALL_CODES.length || selected.length === 0;
 
   function toggleAll() {
-    onChange(allSelected ? [] : ALL_CODES);
+    // If all are explicitly selected → deselect all (back to implicit all)
+    // Otherwise (empty or partial) → explicitly select all
+    onChange(selected.length === ALL_CODES.length ? [] : ALL_CODES);
   }
 
   function toggleCountry(code: string) {

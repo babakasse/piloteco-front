@@ -33,8 +33,8 @@ export default function EnergyIntensityYtdChart({ data, year }: EnergyIntensityY
     () =>
       data.map((item) => ({
         month: MONTH_LABELS[parseInt(item.month.split('-')[1] ?? '1', 10) - 1] ?? item.month,
-        current: item.current !== undefined ? +(item.current / 1000).toFixed(1) : undefined,
-        previous: item.previous !== undefined ? +(item.previous / 1000).toFixed(1) : undefined,
+        current: item.current !== undefined ? +item.current.toFixed(2) : undefined,
+        previous: item.previous !== undefined ? +item.previous.toFixed(2) : undefined,
         evolution: item.evolutionPercent !== undefined ? +item.evolutionPercent.toFixed(1) : undefined
       })),
     [data]
@@ -59,7 +59,7 @@ export default function EnergyIntensityYtdChart({ data, year }: EnergyIntensityY
           yAxisId="left"
           tickFormatter={(v) => `${v}`}
           tick={{ fontSize: 11 }}
-          label={{ value: 'MWh', angle: -90, position: 'insideLeft', style: { fontSize: 11 } }}
+          label={{ value: 'kWh/m²', angle: -90, position: 'insideLeft', style: { fontSize: 11 } }}
         />
         <YAxis
           yAxisId="right"
@@ -71,7 +71,7 @@ export default function EnergyIntensityYtdChart({ data, year }: EnergyIntensityY
         <Tooltip
           formatter={(value: number, name: string) => {
             if (name === 'Gap % vs N-1') return [`${value}%`, name];
-            return [`${value} MWh`, name];
+            return [`${value} kWh/m²`, name];
           }}
         />
         <Legend />

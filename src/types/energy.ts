@@ -84,11 +84,35 @@ export interface EnergyFiltersType {
   resourceCategory: ResourceCategory;
   /** Multi-resource override — when set, overrides resourceCategory */
   resourceCategories?: ResourceCategory[];
-  resourceSubCategory?: string;
+  resourceSubCategories?: string[];
   comparable?: ComparableFilter;
   dataSource?: DataSourceFilter;
   month: string;
   year: number;
   /** Multi-country filter — empty array or undefined = all countries */
   countryCodes?: string[];
+  siteTypes?: string[];
+  siteFormats?: string[];
+  siteNames?: string[];
+}
+
+// ── Efficiency page ───────────────────────────────────────────────────────────
+
+export interface EfficiencyConsumptionBucketType {
+  elecKwh: number | null;
+  gasNgKwh: number | null;
+  gasHnKwh: number | null;
+  waterConsumedM3: number | null;
+  waterStoredM3: number | null;
+}
+
+export interface EfficiencySummaryType {
+  all: EfficiencyConsumptionBucketType;
+  mag: EfficiencyConsumptionBucketType;
+}
+
+export interface SiteFilterOptionsType {
+  siteTypes: string[];
+  siteFormats: string[];
+  siteNames: string[];
 }
