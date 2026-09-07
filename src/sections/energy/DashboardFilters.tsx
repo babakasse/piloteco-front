@@ -13,6 +13,7 @@ import Typography from '@mui/material/Typography';
 
 import { EnergyFiltersType, ResourceCategory, ComparableFilter, DataSourceFilter } from 'types/energy';
 import { useLanguage } from 'contexts/LanguageContext';
+import type { TranslationKeys } from 'locales';
 
 // ==============================|| ENERGY — DASHBOARD FILTERS ||============================== //
 
@@ -23,7 +24,7 @@ interface DashboardFiltersProps {
 
 const RESOURCE_CATEGORIES: ResourceCategory[] = ['ELEC', 'GAS', 'WATER'];
 
-const RESOURCE_TRANSLATION_KEYS: Record<ResourceCategory, string> = {
+const RESOURCE_TRANSLATION_KEYS: Record<ResourceCategory, TranslationKeys> = {
   ELEC: 'resource-elec',
   GAS: 'resource-gas',
   WATER: 'resource-water',
@@ -91,27 +92,26 @@ export default function DashboardFilters({ filters, onChange }: DashboardFilters
   function handleResourceToggle(_: React.MouseEvent, values: ResourceCategory[]) {
     if (values.length === 0) return; // at least one must remain
     const primary = values[0];
+    const newSubOptions = [...new Set(values.flatMap((cat) => SUB_CATEGORIES[cat]))];
+    const keepSubCategories = (filters.resourceSubCategories ?? []).filter((s) => newSubOptions.includes(s));
     onChange({
       ...filters,
       resourceCategory: primary,
       resourceCategories: values.length > 1 ? values : undefined,
-      // reset sub-category when resource changes
-      resourceSubCategory: undefined
+      resourceSubCategories: keepSubCategories.length > 0 ? keepSubCategories : undefined,
     });
   }
 
-  // ── Sub-category (only shown when single resource is selected) ────────────
+  // ── Sub-category (union of all selected resources) ───────────────────────
 
-  const singleResource: ResourceCategory | null =
-    !filters.resourceCategories || filters.resourceCategories.length <= 1
-      ? filters.resourceCategory
-      : null;
+  const subCategoryOptions = [...new Set(activeCategories.flatMap((cat) => SUB_CATEGORIES[cat]))];
 
-  const subCategoryOptions = singleResource ? SUB_CATEGORIES[singleResource] : [];
-
-  function handleSubCategoryChange(event: SelectChangeEvent) {
-    const value = event.target.value;
-    onChange({ ...filters, resourceSubCategory: value === '' ? undefined : value });
+  function handleSubCategoryChange(event: SelectChangeEvent<string[]>) {
+    const values = typeof event.target.value === 'string'
+      ? event.target.value.split(',')
+      : event.target.value;
+    const filtered = values.filter((v) => v !== '');
+    onChange({ ...filters, resourceSubCategories: filtered.length > 0 ? filtered : undefined });
   }
 
   // ── Month ─────────────────────────────────────────────────────────────────
@@ -204,29 +204,32 @@ export default function DashboardFilters({ filters, onChange }: DashboardFilters
           </ToggleButtonGroup>
         </Stack>
 
-        {/* Sous-catégorie (affiché uniquement si 1 ressource sélectionnée) */}
-        {singleResource && subCategoryOptions.length > 0 && (
-          <>
-            <Divider orientation="vertical" flexItem sx={{ my: 0.5 }} />
-            <FormControl size="small" sx={{ minWidth: 220 }}>
-              <InputLabel>{t('energy-sub-category')}</InputLabel>
-              <Select
-                value={filters.resourceSubCategory ?? ''}
-                label={t('energy-sub-category')}
-                onChange={handleSubCategoryChange}
-              >
-                <MenuItem value="">
-                  <em>{t('energy-all-sub-categories')}</em>
+        {/* Sous-catégorie — union des ressources sélectionnées */}
+        <>
+          <Divider orientation="vertical" flexItem sx={{ my: 0.5 }} />
+          <FormControl size="small" sx={{ minWidth: 220 }}>
+            <InputLabel>{t('energy-sub-category')}</InputLabel>
+            <Select<string[]>
+              multiple
+              value={filters.resourceSubCategories ?? []}
+              label={t('energy-sub-category')}
+              onChange={handleSubCategoryChange}
+              renderValue={(selected) =>
+                selected.length === 0
+                  ? <em>{t('energy-all-sub-categories')}</em>
+                  : selected.length === 1
+                    ? selected[0]
+                    : `${selected.length} sélectionnées`
+              }
+            >
+              {subCategoryOptions.map((sub) => (
+                <MenuItem key={sub} value={sub}>
+                  {sub}
                 </MenuItem>
-                {subCategoryOptions.map((sub) => (
-                  <MenuItem key={sub} value={sub}>
-                    {sub}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </>
-        )}
+              ))}
+            </Select>
+          </FormControl>
+        </>
       </Stack>
 
       {/* Row 2: comparable + data source */}
