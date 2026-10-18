@@ -91,3 +91,21 @@ Mark `not-ready` if any of these apply:
 - Unresolved high-severity correctness/security issue.
 - Critical missing tests for modified behavior.
 - PR scope is unclear due to unrelated noisy changes.
+
+### Review Consistency Protocol (Anti Churn)
+
+- First review on a PR is the baseline pass: inspect all changed files, CI status, and unresolved threads before posting findings.
+- Subsequent reviews must be delta-first: focus on new commits, changed files since last review, newly failing checks, and still-open findings.
+- Do not create a new comment for the same issue if it was already reported, unless severity increases or new evidence appears.
+- Re-open a previously closed/resolved issue only with concrete proof (repro steps, failing test, or clear code path).
+- Tag each finding with confidence (`high`/`medium`/`low`) and impact; only `high` confidence issues should block merge by default.
+- For unchanged files, report only if the issue is critical or security-sensitive and explain why it was missed earlier.
+- End each re-review with a short delta summary: new findings, resolved findings, unchanged risks, and current merge verdict.
+
+### Fix Verification Protocol (Resolved Issues)
+
+- On re-review, check previously reported findings first and verify whether the exact code path changed.
+- If a finding is fixed, mark it explicitly as resolved and avoid re-posting it in active findings.
+- Before keeping a finding open, provide fresh evidence from current diff/CI/tests (not only prior comments).
+- If confidence drops after changes, downgrade severity/confidence and explain what is still uncertain.
+- Include a `resolved findings` section in re-review outputs with short proof (changed file, test, or behavior).
