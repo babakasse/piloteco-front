@@ -31,18 +31,18 @@ const RESOURCE_TRANSLATION_KEYS: Record<ResourceCategory, TranslationKeys> = {
 };
 
 const MONTHS = [
-  { value: '01', label: 'Janvier' },
-  { value: '02', label: 'Février' },
-  { value: '03', label: 'Mars' },
-  { value: '04', label: 'Avril' },
-  { value: '05', label: 'Mai' },
-  { value: '06', label: 'Juin' },
-  { value: '07', label: 'Juillet' },
-  { value: '08', label: 'Août' },
-  { value: '09', label: 'Septembre' },
-  { value: '10', label: 'Octobre' },
-  { value: '11', label: 'Novembre' },
-  { value: '12', label: 'Décembre' }
+  { value: '01' },
+  { value: '02' },
+  { value: '03' },
+  { value: '04' },
+  { value: '05' },
+  { value: '06' },
+  { value: '07' },
+  { value: '08' },
+  { value: '09' },
+  { value: '10' },
+  { value: '11' },
+  { value: '12' }
 ];
 
 const SUB_CATEGORIES: Record<ResourceCategory, string[]> = {
@@ -68,7 +68,8 @@ const CURRENT_YEAR = new Date().getFullYear();
 const YEAR_OPTIONS = Array.from({ length: 8 }, (_, i) => String(CURRENT_YEAR - i));
 
 export default function DashboardFilters({ filters, onChange }: DashboardFiltersProps) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const monthFormatter = new Intl.DateTimeFormat(language === 'fr' ? 'fr-FR' : 'en-US', { month: 'long' });
 
   const currentMonthNum = filters.month.split('-')[1] ?? '01';
   const [yearDraft, setYearDraft] = useState(String(filters.year));
@@ -175,9 +176,9 @@ export default function DashboardFilters({ filters, onChange }: DashboardFilters
         <FormControl size="small" sx={{ minWidth: 140 }}>
           <InputLabel>{t('energy-month')}</InputLabel>
           <Select value={currentMonthNum} label={t('energy-month')} onChange={handleMonthChange}>
-            {MONTHS.map(({ value, label }) => (
+            {MONTHS.map(({ value }) => (
               <MenuItem key={value} value={value}>
-                {label}
+                {monthFormatter.format(new Date(2020, Number(value) - 1, 1))}
               </MenuItem>
             ))}
           </Select>
@@ -219,7 +220,7 @@ export default function DashboardFilters({ filters, onChange }: DashboardFilters
                   ? <em>{t('energy-all-sub-categories')}</em>
                   : selected.length === 1
                     ? selected[0]
-                    : `${selected.length} sélectionnées`
+                    : t('energy-selected-count', { count: selected.length })
               }
             >
               {subCategoryOptions.map((sub) => (

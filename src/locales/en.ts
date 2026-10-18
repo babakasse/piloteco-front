@@ -698,7 +698,29 @@ export const en = {
   'energy-filter-data-source': 'Source',
   'energy-filter-total': 'Total',
   'energy-filter-real': 'Real',
-  'energy-refrigerant-breakdown': 'Refrigerant Fluid Breakdown (YTD)'
+  'energy-refrigerant-breakdown': 'Refrigerant Fluid Breakdown (YTD)',
+  'energy-selected-count': '{count} selected',
+  'energy-site-type': 'Site type',
+  'energy-site-format': 'Format',
+  'energy-consumption-section-title': 'Consumption',
+  'energy-all-site-types': 'All site types',
+  'energy-mag-sites': 'Stores (MAG)',
+  'energy-kpi-section-title': 'Key indicators',
+  'energy-intensity-sales-ytd-title': 'Intensity / sales surface - YTD (kWh/m²)',
+  'energy-intensity-sales-mtd-title': 'Intensity / sales surface - MTD (kWh/m²)',
+  'energy-intensity-building-ytd-title': 'Intensity / building surface - YTD (kWh/m²)',
+  'energy-intensity-building-mtd-title': 'Intensity / building surface - MTD (kWh/m²)',
+  'energy-sales-surface-mag': 'Sales surface (MAG)',
+  'energy-commercial-intensity-ytd': 'Commercial intensity YTD',
+  'energy-total-building-surface': 'Total building surface',
+  'energy-building-intensity-ytd': 'Building intensity YTD',
+  'energy-green-electricity-consumption': 'Green electricity consumption',
+  'energy-green-electricity-consumption-percent': '% Green electricity consumed',
+  'energy-green-electricity-production': 'Green electricity production',
+  'energy-green-electricity-production-percent': '% Green electricity produced',
+  'energy-natural-gas-ng': 'Natural Gas (NG)',
+  'energy-heat-network-hn': 'Heat network (HN)',
+  'energy-water-consumed': 'Water (consumed)'
 };
 
 export default en;

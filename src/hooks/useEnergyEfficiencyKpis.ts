@@ -12,6 +12,7 @@ import {
   SiteFilterOptionsType
 } from 'types/energy';
 import { EfficiencySummaryResponseType } from 'api/energyApi';
+import { TranslationKeys } from 'locales';
 
 // ==============================|| HOOK — ENERGY EFFICIENCY KPIs ||============================== //
 
@@ -24,7 +25,7 @@ interface UseEnergyEfficiencyKpisResult {
   totalMtd: MonthlyEvolutionItemType[];
   filterOptions: SiteFilterOptionsType;
   loading: boolean;
-  error: string | null;
+  error: TranslationKeys | null;
 }
 
 export function useEnergyEfficiencyKpis(filters: EnergyFiltersType): UseEnergyEfficiencyKpisResult {
@@ -36,10 +37,11 @@ export function useEnergyEfficiencyKpis(filters: EnergyFiltersType): UseEnergyEf
   const [totalMtd, setTotalMtd] = useState<MonthlyEvolutionItemType[]>([]);
   const [filterOptions, setFilterOptions] = useState<SiteFilterOptionsType>({ siteTypes: [], siteFormats: [], siteNames: [] });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<TranslationKeys | null>(null);
 
   const extra = {
     countryCodes: filters.countryCodes,
+    resourceCategories: filters.resourceCategories ?? [filters.resourceCategory],
     comparable: filters.comparable,
     dataSource: filters.dataSource,
     resourceSubCategories: filters.resourceSubCategories,
@@ -48,7 +50,12 @@ export function useEnergyEfficiencyKpis(filters: EnergyFiltersType): UseEnergyEf
   };
 
   // Stringify the entire filter set for stable dependency comparison
-  const filterKey = JSON.stringify({ month: filters.month, year: filters.year, ...extra });
+  const filterKey = JSON.stringify({
+    month: filters.month,
+    year: filters.year,
+    resourceCategory: filters.resourceCategory,
+    ...extra
+  });
 
   useEffect(() => {
     let cancelled = false;
@@ -58,12 +65,12 @@ export function useEnergyEfficiencyKpis(filters: EnergyFiltersType): UseEnergyEf
       setError(null);
       try {
         const [summary, kpiArr, sy, sm, ty, tm, opts] = await Promise.all([
-          fetchEfficiencySummary(filters.month, extra),
-          fetchKpiSummary('ELEC', filters.month, extra),
-          fetchMonthlyIntensity(filters.month, 'sales', 'ytd', extra),
-          fetchMonthlyIntensity(filters.month, 'sales', 'mtd', extra),
-          fetchMonthlyIntensity(filters.month, 'total', 'ytd', extra),
-          fetchMonthlyIntensity(filters.month, 'total', 'mtd', extra),
+          fetchEfficiencySummary(filters.resourceCategory, filters.month, extra),
+          fetchKpiSummary(filters.resourceCategory, filters.month, extra),
+          fetchMonthlyIntensity(filters.resourceCategory, filters.month, 'sales', 'ytd', extra),
+          fetchMonthlyIntensity(filters.resourceCategory, filters.month, 'sales', 'mtd', extra),
+          fetchMonthlyIntensity(filters.resourceCategory, filters.month, 'total', 'ytd', extra),
+          fetchMonthlyIntensity(filters.resourceCategory, filters.month, 'total', 'mtd', extra),
           fetchSiteFilterOptions()
         ]);
 
@@ -78,7 +85,8 @@ export function useEnergyEfficiencyKpis(filters: EnergyFiltersType): UseEnergyEf
         setFilterOptions({ siteTypes: opts.siteTypes ?? [], siteFormats: opts.siteFormats ?? [], siteNames: [] });
       } catch (err) {
         if (!cancelled) {
-          setError(err instanceof Error ? err.message : 'Erreur lors du chargement des données');
+          console.error('Failed to load energy efficiency KPIs', err);
+          setError('energy-kpi-load-error');
         }
       } finally {
         if (!cancelled) setLoading(false);

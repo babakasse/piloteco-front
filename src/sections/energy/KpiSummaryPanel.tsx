@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 
 import { KpiSummaryType } from 'types/energy';
+import { useLanguage } from 'contexts/LanguageContext';
 
 // ==============================|| ENERGY — KPI SUMMARY PANEL ||============================== //
 
@@ -64,31 +65,34 @@ function KpiCard({ label, value, unit, color = 'default' }: KpiCardProps) {
   );
 }
 
-function fmt(value?: number, decimals = 0): string {
+function fmt(value: number | undefined, locale: string, decimals = 0): string {
   if (value === undefined || value === null) return '--';
-  return value.toLocaleString('fr-FR', { maximumFractionDigits: decimals });
+  return value.toLocaleString(locale, { maximumFractionDigits: decimals });
 }
 
-function fmtGwh(kwh?: number): string {
+function fmtGwh(kwh: number | undefined, locale: string): string {
   if (kwh === undefined || kwh === null) return '--';
-  return (kwh / 1_000_000).toLocaleString('fr-FR', { maximumFractionDigits: 2 });
+  return (kwh / 1_000_000).toLocaleString(locale, { maximumFractionDigits: 2 });
 }
 
 export default function KpiSummaryPanel({ summary }: KpiSummaryPanelProps) {
+  const { t, language } = useLanguage();
+  const locale = language === 'fr' ? 'fr-FR' : 'en-US';
+
   return (
     <Grid container spacing={1.5}>
       {/* Row 1: Sales Surface (MAG only) + Commercial Energy Intensity */}
       <Grid item xs={6}>
         <KpiCard
-          label="Surface commerciale (MAG)"
-          value={fmt(summary?.salesSurfaceM2)}
+          label={t('energy-sales-surface-mag')}
+          value={fmt(summary?.salesSurfaceM2, locale)}
           unit="m²"
         />
       </Grid>
       <Grid item xs={6}>
         <KpiCard
-          label="Intensité commerciale YTD"
-          value={fmt(summary?.commercialEnergyIntensityYtd, 2)}
+          label={t('energy-commercial-intensity-ytd')}
+          value={fmt(summary?.commercialEnergyIntensityYtd, locale, 2)}
           unit="kWh/m²"
         />
       </Grid>
@@ -96,15 +100,15 @@ export default function KpiSummaryPanel({ summary }: KpiSummaryPanelProps) {
       {/* Row 2: Total Surface (all types) + Building Energy Intensity */}
       <Grid item xs={6}>
         <KpiCard
-          label="Surface totale bâtiment"
-          value={fmt(summary?.totalSurfaceM2)}
+          label={t('energy-total-building-surface')}
+          value={fmt(summary?.totalSurfaceM2, locale)}
           unit="m²"
         />
       </Grid>
       <Grid item xs={6}>
         <KpiCard
-          label="Intensité bâtiment YTD"
-          value={fmt(summary?.buildingEnergyIntensityYtd, 2)}
+          label={t('energy-building-intensity-ytd')}
+          value={fmt(summary?.buildingEnergyIntensityYtd, locale, 2)}
           unit="kWh/m²"
         />
       </Grid>
@@ -112,32 +116,32 @@ export default function KpiSummaryPanel({ summary }: KpiSummaryPanelProps) {
       {/* Rows 3-4: Green metrics — always shown, -- when not ELEC */}
       <Grid item xs={6}>
         <KpiCard
-          label="Consommation élec. verte"
-          value={fmtGwh(summary?.greenElectricityConsumptionKwh)}
+          label={t('energy-green-electricity-consumption')}
+          value={fmtGwh(summary?.greenElectricityConsumptionKwh, locale)}
           unit="GWh"
           color="green"
         />
       </Grid>
       <Grid item xs={6}>
         <KpiCard
-          label="% Élec. verte consommée"
-          value={fmt(summary?.greenElectricityConsumptionPercent, 0)}
+          label={t('energy-green-electricity-consumption-percent')}
+          value={fmt(summary?.greenElectricityConsumptionPercent, locale, 0)}
           unit="%"
           color="green"
         />
       </Grid>
       <Grid item xs={6}>
         <KpiCard
-          label="Production élec. verte"
-          value={fmtGwh(summary?.greenElectricityProductionKwh)}
+          label={t('energy-green-electricity-production')}
+          value={fmtGwh(summary?.greenElectricityProductionKwh, locale)}
           unit="GWh"
           color="green"
         />
       </Grid>
       <Grid item xs={6}>
         <KpiCard
-          label="% Élec. verte produite"
-          value={fmt(summary?.greenElectricityProductionPercent, 0)}
+          label={t('energy-green-electricity-production-percent')}
+          value={fmt(summary?.greenElectricityProductionPercent, locale, 0)}
           unit="%"
           color="green"
         />

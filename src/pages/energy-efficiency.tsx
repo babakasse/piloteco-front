@@ -13,6 +13,7 @@ import InputLabel from '@mui/material/InputLabel';
 
 import MainCard from 'components/MainCard';
 import { useEnergyEfficiencyKpis } from 'hooks/useEnergyEfficiencyKpis';
+import { useLanguage } from 'contexts/LanguageContext';
 import { EnergyFiltersType } from 'types/energy';
 
 import DashboardFilters from 'sections/energy/DashboardFilters';
@@ -27,6 +28,8 @@ const DEFAULT_YEAR = 2025;
 const DEFAULT_MONTH = '2025-12';
 
 export default function EnergyEfficiency() {
+  const { t } = useLanguage();
+
   const [filters, setFilters] = useState<EnergyFiltersType>({
     resourceCategory: 'ELEC',
     month: DEFAULT_MONTH,
@@ -74,9 +77,9 @@ export default function EnergyEfficiency() {
           <Divider />
           <Stack direction="row" spacing={2} flexWrap="wrap" useFlexGap alignItems="center">
             <FormControl size="small" sx={{ minWidth: 160 }}>
-              <InputLabel>Type de site</InputLabel>
-              <Select value={selectedSiteType} label="Type de site" onChange={handleSiteTypeChange}>
-                <MenuItem value=""><em>Tous</em></MenuItem>
+              <InputLabel>{t('energy-site-type')}</InputLabel>
+              <Select value={selectedSiteType} label={t('energy-site-type')} onChange={handleSiteTypeChange}>
+                <MenuItem value=""><em>{t('energy-filter-all')}</em></MenuItem>
                 {(filterOptions.siteTypes ?? []).map((t) => (
                   <MenuItem key={t} value={t}>{t}</MenuItem>
                 ))}
@@ -85,9 +88,9 @@ export default function EnergyEfficiency() {
 
             {(filterOptions.siteFormats ?? []).length > 0 && (
               <FormControl size="small" sx={{ minWidth: 160 }}>
-                <InputLabel>Format</InputLabel>
-                <Select value={selectedSiteFormat} label="Format" onChange={handleSiteFormatChange}>
-                  <MenuItem value=""><em>Tous</em></MenuItem>
+                <InputLabel>{t('energy-site-format')}</InputLabel>
+                <Select value={selectedSiteFormat} label={t('energy-site-format')} onChange={handleSiteFormatChange}>
+                  <MenuItem value=""><em>{t('energy-filter-all')}</em></MenuItem>
                   {filterOptions.siteFormats.map((f) => (
                     <MenuItem key={f} value={f}>{f}</MenuItem>
                   ))}
@@ -106,7 +109,7 @@ export default function EnergyEfficiency() {
 
       {error && !loading && (
         <Alert severity="error" sx={{ mb: 3 }}>
-          {error}
+          {t(error)}
         </Alert>
       )}
 
@@ -115,17 +118,17 @@ export default function EnergyEfficiency() {
           {/* ── Consommations ── */}
           <MainCard>
             <Typography variant="subtitle1" fontWeight={700} gutterBottom>
-              Consommations — {filters.year}
+              {t('energy-consumption-section-title')} - {filters.year}
             </Typography>
             <Stack spacing={2}>
               <ConsumptionSummaryRow
-                label="Tous types de sites"
+                label={t('energy-all-site-types')}
                 data={efficiencySummary?.ytd.all ?? null}
                 variant="default"
               />
               <Divider />
               <ConsumptionSummaryRow
-                label="Magasins (MAG)"
+                label={t('energy-mag-sites')}
                 data={efficiencySummary?.ytd.mag ?? null}
                 variant="mag"
               />
@@ -135,7 +138,7 @@ export default function EnergyEfficiency() {
           {/* ── KPIs ── */}
           <MainCard>
             <Typography variant="subtitle1" fontWeight={700} gutterBottom>
-              Indicateurs clés — {filters.year}
+              {t('energy-kpi-section-title')} - {filters.year}
             </Typography>
             <KpiSummaryPanel summary={kpiSummary} />
           </MainCard>
@@ -145,7 +148,7 @@ export default function EnergyEfficiency() {
             <Grid item xs={12} md={6} sx={{ display: 'flex' }}>
               <MainCard sx={{ height: '100%', width: '100%' }}>
                 <Typography variant="subtitle1" fontWeight={700} gutterBottom>
-                  Intensité / surface commerciale — YTD (kWh/m²)
+                  {t('energy-intensity-sales-ytd-title')}
                 </Typography>
                 <EnergyIntensityYtdChart data={salesYtd} year={filters.year} />
               </MainCard>
@@ -154,7 +157,7 @@ export default function EnergyEfficiency() {
             <Grid item xs={12} md={6} sx={{ display: 'flex' }}>
               <MainCard sx={{ height: '100%', width: '100%' }}>
                 <Typography variant="subtitle1" fontWeight={700} gutterBottom>
-                  Intensité / surface commerciale — MTD (kWh/m²)
+                  {t('energy-intensity-sales-mtd-title')}
                 </Typography>
                 <EnergyIntensityYtdChart data={salesMtd} year={filters.year} />
               </MainCard>
@@ -163,7 +166,7 @@ export default function EnergyEfficiency() {
             <Grid item xs={12} md={6} sx={{ display: 'flex' }}>
               <MainCard sx={{ height: '100%', width: '100%' }}>
                 <Typography variant="subtitle1" fontWeight={700} gutterBottom>
-                  Intensité / surface bâtiment — YTD (kWh/m²)
+                  {t('energy-intensity-building-ytd-title')}
                 </Typography>
                 <EnergyIntensityYtdChart data={totalYtd} year={filters.year} />
               </MainCard>
@@ -172,7 +175,7 @@ export default function EnergyEfficiency() {
             <Grid item xs={12} md={6} sx={{ display: 'flex' }}>
               <MainCard sx={{ height: '100%', width: '100%' }}>
                 <Typography variant="subtitle1" fontWeight={700} gutterBottom>
-                  Intensité / surface bâtiment — MTD (kWh/m²)
+                  {t('energy-intensity-building-mtd-title')}
                 </Typography>
                 <EnergyIntensityYtdChart data={totalMtd} year={filters.year} />
               </MainCard>

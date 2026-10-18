@@ -232,10 +232,11 @@ export interface EfficiencySummaryResponseType {
 }
 
 export async function fetchEfficiencySummary(
+  resourceCategory: ResourceCategory,
   month: string,
   extra: ExtraFilters = {}
 ): Promise<EfficiencySummaryResponseType> {
-  const params = buildParams({ month }, extra);
+  const params = buildParams({ resourceCategory, month }, extra);
   const response = await axiosServices.get<RawEfficiencySummary[]>('/kpi/efficiency-summary', {
     params,
     headers: { Accept: 'application/json' }
@@ -278,12 +279,13 @@ export async function fetchEfficiencySummary(
 }
 
 export async function fetchMonthlyIntensity(
+  resourceCategory: ResourceCategory,
   month: string,
   surfaceType: 'sales' | 'total',
   mode: 'ytd' | 'mtd',
   extra: ExtraFilters = {}
 ): Promise<MonthlyEvolutionItemType[]> {
-  const params = buildParams({ month, surfaceType, mode }, extra);
+  const params = buildParams({ resourceCategory, month, surfaceType, mode }, extra);
   const response = await axiosServices.get<MonthlyEvolutionItemType[]>('/kpi/monthly-intensity', {
     params,
     headers: { Accept: 'application/json' }

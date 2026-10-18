@@ -5,6 +5,7 @@ import Chip from '@mui/material/Chip';
 import { useTheme } from '@mui/material/styles';
 
 import { EfficiencyConsumptionBucketType } from 'types/energy';
+import { useLanguage } from 'contexts/LanguageContext';
 
 // ==============================|| ENERGY — CONSUMPTION SUMMARY ROW ||============================== //
 
@@ -14,14 +15,14 @@ interface ConsumptionSummaryRowProps {
   variant?: 'default' | 'mag';
 }
 
-function fmtGwh(kwh: number | null): string {
+function fmtGwh(kwh: number | null, locale: string): string {
   if (kwh === null || kwh === undefined) return '--';
-  return (kwh / 1_000_000).toLocaleString('fr-FR', { maximumFractionDigits: 2 }) + ' GWh';
+  return (kwh / 1_000_000).toLocaleString(locale, { maximumFractionDigits: 2 }) + ' GWh';
 }
 
-function fmtM3(val: number | null): string {
+function fmtM3(val: number | null, locale: string): string {
   if (val === null || val === undefined) return '--';
-  return val.toLocaleString('fr-FR', { maximumFractionDigits: 0 }) + ' m³';
+  return val.toLocaleString(locale, { maximumFractionDigits: 0 }) + ' m³';
 }
 
 interface MetricCellProps {
@@ -55,6 +56,8 @@ function MetricCell({ label, value, color, bg }: MetricCellProps) {
 
 export default function ConsumptionSummaryRow({ label, data, variant = 'default' }: ConsumptionSummaryRowProps) {
   const theme = useTheme();
+  const { t, language } = useLanguage();
+  const locale = language === 'fr' ? 'fr-FR' : 'en-US';
 
   const isMag = variant === 'mag';
   const headerColor = isMag ? theme.palette.warning.dark : theme.palette.primary.dark;
@@ -76,26 +79,26 @@ export default function ConsumptionSummaryRow({ label, data, variant = 'default'
       </Stack>
       <Stack direction="row" spacing={1.5} flexWrap="wrap" useFlexGap>
         <MetricCell
-          label="Électricité"
-          value={fmtGwh(data?.elecKwh ?? null)}
+          label={t('resource-elec')}
+          value={fmtGwh(data?.elecKwh ?? null, locale)}
           color={theme.palette.primary.main}
           bg={`${theme.palette.primary.main}08`}
         />
         <MetricCell
-          label="Gaz Naturel (NG)"
-          value={fmtGwh(data?.gasNgKwh ?? null)}
+          label={t('energy-natural-gas-ng')}
+          value={fmtGwh(data?.gasNgKwh ?? null, locale)}
           color={theme.palette.warning.dark}
           bg={`${theme.palette.warning.main}08`}
         />
         <MetricCell
-          label="Réseau de chaleur (HN)"
-          value={fmtGwh(data?.gasHnKwh ?? null)}
+          label={t('energy-heat-network-hn')}
+          value={fmtGwh(data?.gasHnKwh ?? null, locale)}
           color={theme.palette.error.dark}
           bg={`${theme.palette.error.main}08`}
         />
         <MetricCell
-          label="Eau (consommée)"
-          value={fmtM3(data?.waterConsumedM3 ?? null)}
+          label={t('energy-water-consumed')}
+          value={fmtM3(data?.waterConsumedM3 ?? null, locale)}
           color={theme.palette.info.dark}
           bg={`${theme.palette.info.main}08`}
         />
