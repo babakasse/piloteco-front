@@ -13,6 +13,7 @@ import Typography from '@mui/material/Typography';
 
 import { EnergyFiltersType, ResourceCategory, ComparableFilter, DataSourceFilter } from 'types/energy';
 import { useLanguage } from 'contexts/LanguageContext';
+import type { TranslationKeys } from 'locales';
 
 // ==============================|| ENERGY — DASHBOARD FILTERS ||============================== //
 
@@ -23,25 +24,25 @@ interface DashboardFiltersProps {
 
 const RESOURCE_CATEGORIES: ResourceCategory[] = ['ELEC', 'GAS', 'WATER'];
 
-const RESOURCE_TRANSLATION_KEYS: Record<ResourceCategory, string> = {
+const RESOURCE_TRANSLATION_KEYS: Record<ResourceCategory, TranslationKeys> = {
   ELEC: 'resource-elec',
   GAS: 'resource-gas',
   WATER: 'resource-water',
 };
 
 const MONTHS = [
-  { value: '01', label: 'Janvier' },
-  { value: '02', label: 'Février' },
-  { value: '03', label: 'Mars' },
-  { value: '04', label: 'Avril' },
-  { value: '05', label: 'Mai' },
-  { value: '06', label: 'Juin' },
-  { value: '07', label: 'Juillet' },
-  { value: '08', label: 'Août' },
-  { value: '09', label: 'Septembre' },
-  { value: '10', label: 'Octobre' },
-  { value: '11', label: 'Novembre' },
-  { value: '12', label: 'Décembre' }
+  { value: '01' },
+  { value: '02' },
+  { value: '03' },
+  { value: '04' },
+  { value: '05' },
+  { value: '06' },
+  { value: '07' },
+  { value: '08' },
+  { value: '09' },
+  { value: '10' },
+  { value: '11' },
+  { value: '12' }
 ];
 
 const SUB_CATEGORIES: Record<ResourceCategory, string[]> = {
@@ -67,7 +68,8 @@ const CURRENT_YEAR = new Date().getFullYear();
 const YEAR_OPTIONS = Array.from({ length: 8 }, (_, i) => String(CURRENT_YEAR - i));
 
 export default function DashboardFilters({ filters, onChange }: DashboardFiltersProps) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const monthFormatter = new Intl.DateTimeFormat(language === 'fr' ? 'fr-FR' : 'en-US', { month: 'long' });
 
   const currentMonthNum = filters.month.split('-')[1] ?? '01';
   const [yearDraft, setYearDraft] = useState(String(filters.year));
@@ -91,27 +93,26 @@ export default function DashboardFilters({ filters, onChange }: DashboardFilters
   function handleResourceToggle(_: React.MouseEvent, values: ResourceCategory[]) {
     if (values.length === 0) return; // at least one must remain
     const primary = values[0];
+    const newSubOptions = [...new Set(values.flatMap((cat) => SUB_CATEGORIES[cat]))];
+    const keepSubCategories = (filters.resourceSubCategories ?? []).filter((s) => newSubOptions.includes(s));
     onChange({
       ...filters,
       resourceCategory: primary,
       resourceCategories: values.length > 1 ? values : undefined,
-      // reset sub-category when resource changes
-      resourceSubCategory: undefined
+      resourceSubCategories: keepSubCategories.length > 0 ? keepSubCategories : undefined,
     });
   }
 
-  // ── Sub-category (only shown when single resource is selected) ────────────
+  // ── Sub-category (union of all selected resources) ───────────────────────
 
-  const singleResource: ResourceCategory | null =
-    !filters.resourceCategories || filters.resourceCategories.length <= 1
-      ? filters.resourceCategory
-      : null;
+  const subCategoryOptions = [...new Set(activeCategories.flatMap((cat) => SUB_CATEGORIES[cat]))];
 
-  const subCategoryOptions = singleResource ? SUB_CATEGORIES[singleResource] : [];
-
-  function handleSubCategoryChange(event: SelectChangeEvent) {
-    const value = event.target.value;
-    onChange({ ...filters, resourceSubCategory: value === '' ? undefined : value });
+  function handleSubCategoryChange(event: SelectChangeEvent<string[]>) {
+    const values = typeof event.target.value === 'string'
+      ? event.target.value.split(',')
+      : event.target.value;
+    const filtered = values.filter((v) => v !== '');
+    onChange({ ...filters, resourceSubCategories: filtered.length > 0 ? filtered : undefined });
   }
 
   // ── Month ─────────────────────────────────────────────────────────────────
@@ -175,9 +176,9 @@ export default function DashboardFilters({ filters, onChange }: DashboardFilters
         <FormControl size="small" sx={{ minWidth: 140 }}>
           <InputLabel>{t('energy-month')}</InputLabel>
           <Select value={currentMonthNum} label={t('energy-month')} onChange={handleMonthChange}>
-            {MONTHS.map(({ value, label }) => (
+            {MONTHS.map(({ value }) => (
               <MenuItem key={value} value={value}>
-                {label}
+                {monthFormatter.format(new Date(2020, Number(value) - 1, 1))}
               </MenuItem>
             ))}
           </Select>
@@ -204,29 +205,32 @@ export default function DashboardFilters({ filters, onChange }: DashboardFilters
           </ToggleButtonGroup>
         </Stack>
 
-        {/* Sous-catégorie (affiché uniquement si 1 ressource sélectionnée) */}
-        {singleResource && subCategoryOptions.length > 0 && (
-          <>
-            <Divider orientation="vertical" flexItem sx={{ my: 0.5 }} />
-            <FormControl size="small" sx={{ minWidth: 220 }}>
-              <InputLabel>{t('energy-sub-category')}</InputLabel>
-              <Select
-                value={filters.resourceSubCategory ?? ''}
-                label={t('energy-sub-category')}
-                onChange={handleSubCategoryChange}
-              >
-                <MenuItem value="">
-                  <em>{t('energy-all-sub-categories')}</em>
+        {/* Sous-catégorie — union des ressources sélectionnées */}
+        <>
+          <Divider orientation="vertical" flexItem sx={{ my: 0.5 }} />
+          <FormControl size="small" sx={{ minWidth: 220 }}>
+            <InputLabel>{t('energy-sub-category')}</InputLabel>
+            <Select<string[]>
+              multiple
+              value={filters.resourceSubCategories ?? []}
+              label={t('energy-sub-category')}
+              onChange={handleSubCategoryChange}
+              renderValue={(selected) =>
+                selected.length === 0
+                  ? <em>{t('energy-all-sub-categories')}</em>
+                  : selected.length === 1
+                    ? selected[0]
+                    : t('energy-selected-count', { count: selected.length })
+              }
+            >
+              {subCategoryOptions.map((sub) => (
+                <MenuItem key={sub} value={sub}>
+                  {sub}
                 </MenuItem>
-                {subCategoryOptions.map((sub) => (
-                  <MenuItem key={sub} value={sub}>
-                    {sub}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </>
-        )}
+              ))}
+            </Select>
+          </FormControl>
+        </>
       </Stack>
 
       {/* Row 2: comparable + data source */}

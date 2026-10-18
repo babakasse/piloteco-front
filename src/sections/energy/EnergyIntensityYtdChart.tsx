@@ -16,35 +16,37 @@ import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 
 import { MonthlyEvolutionItemType } from 'types/energy';
+import { useLanguage } from 'contexts/LanguageContext';
 
 // ==============================|| ENERGY — INTENSITY YTD CHART ||============================== //
 
 interface EnergyIntensityYtdChartProps {
   data: MonthlyEvolutionItemType[];
   year: number;
+  unit: string;
 }
 
-const MONTH_LABELS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-export default function EnergyIntensityYtdChart({ data, year }: EnergyIntensityYtdChartProps) {
+export default function EnergyIntensityYtdChart({ data, year, unit }: EnergyIntensityYtdChartProps) {
   const theme = useTheme();
+  const { t, language } = useLanguage();
+  const monthFormatter = new Intl.DateTimeFormat(language === 'fr' ? 'fr-FR' : 'en-US', { month: 'short' });
 
   const chartData = useMemo(
     () =>
       data.map((item) => ({
-        month: MONTH_LABELS[parseInt(item.month.split('-')[1] ?? '1', 10) - 1] ?? item.month,
-        current: item.current !== undefined ? +(item.current / 1000).toFixed(1) : undefined,
-        previous: item.previous !== undefined ? +(item.previous / 1000).toFixed(1) : undefined,
+        month: monthFormatter.format(new Date(item.month)),
+        current: item.current !== undefined ? +item.current.toFixed(2) : undefined,
+        previous: item.previous !== undefined ? +item.previous.toFixed(2) : undefined,
         evolution: item.evolutionPercent !== undefined ? +item.evolutionPercent.toFixed(1) : undefined
       })),
-    [data]
+    [data, monthFormatter]
   );
 
   if (data.length === 0) {
     return (
       <Box display="flex" alignItems="center" justifyContent="center" height={280}>
         <Typography color="text.secondary" variant="body2">
-          No data available
+          {t('energy-no-data')}
         </Typography>
       </Box>
     );
@@ -59,7 +61,7 @@ export default function EnergyIntensityYtdChart({ data, year }: EnergyIntensityY
           yAxisId="left"
           tickFormatter={(v) => `${v}`}
           tick={{ fontSize: 11 }}
-          label={{ value: 'MWh', angle: -90, position: 'insideLeft', style: { fontSize: 11 } }}
+          label={{ value: unit, angle: -90, position: 'insideLeft', style: { fontSize: 11 } }}
         />
         <YAxis
           yAxisId="right"
@@ -70,8 +72,8 @@ export default function EnergyIntensityYtdChart({ data, year }: EnergyIntensityY
         />
         <Tooltip
           formatter={(value: number, name: string) => {
-            if (name === 'Gap % vs N-1') return [`${value}%`, name];
-            return [`${value} MWh`, name];
+            if (name === t('energy-gap-vs-n-1')) return [`${value}%`, name];
+            return [`${value} ${unit}`, name];
           }}
         />
         <Legend />
@@ -90,7 +92,7 @@ export default function EnergyIntensityYtdChart({ data, year }: EnergyIntensityY
           yAxisId="right"
           type="monotone"
           dataKey="evolution"
-          name="Gap % vs N-1"
+          name={t('energy-gap-vs-n-1')}
           stroke={theme.palette.warning.main}
           strokeWidth={2}
           dot={{ r: 3 }}

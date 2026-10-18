@@ -1,130 +1,111 @@
-# PilotEco Frontend - AI Coding Agent Instructions
+# PilotEco Frontend - Project-Specific Instructions
 
-## Project Overview
+Keep this file limited to context and rules specific to this repository.
 
-This is a **carbon footprint assessment application** built with React + TypeScript + Vite, based on the Able Pro Material UI template. The app helps companies track and analyze their carbon emissions across Scope 1, 2, and 3 categories.
+## Product Context
 
-## Core Architecture Patterns
+- Carbon footprint assessment app (React + TypeScript + Vite).
+- Business domain is emissions tracking across Scope 1, Scope 2, and Scope 3.
+- Core unit for emission values is `tCO₂e`.
 
-### Context-Based State Management
+## Non-Negotiable Project Rules
 
-- **Language/i18n**: Use `LanguageContext` with `useLanguage()` hook for all text. All user-facing strings must use `t('translation-key')` pattern
-- **Authentication**: `JWTContext` handles auth state with bearer token storage in localStorage
-- **Theme**: Material-UI theme system with custom configurations in `src/themes/`
+### i18n
 
-### API Integration Pattern
+- All user-facing text must go through `useLanguage()` and `t('translation-key')`.
+- Any new translation key must be added in both `src/locales/en.ts` and `src/locales/fr.ts`.
+- Translation keys use kebab-case and domain prefixes (example: `assessment-details`, `scope-1-direct`).
 
-```typescript
-// Follow this pattern in src/api/
-import axios from '../utils/axios'; // Pre-configured with auth interceptors
-export const getResource = async () => {
-  const response = await axios.get('/endpoint');
-  return response.data || [];
-};
-```
+### Emissions Domain
 
-### Component Structure
+- Display emissions in `tCO₂e`.
+- Scopes mapping is fixed: Scope 1=direct, Scope 2=electricity, Scope 3=indirect.
+- Scope color mapping is fixed: Scope 1=success, Scope 2=info, Scope 3=warning.
 
-- **MainCard**: Wrap all page content in `<MainCard title={t('page-title')}>` for consistent layout
-- **Charts**: Use recharts with custom tooltips that display emissions in `tCO₂e` units
-- **Forms**: Follow `EmissionForm.tsx` pattern with Material-UI components and validation
+### Auth and API Integration
 
-## Carbon Emissions Domain Logic
+- Frontend JWT token key in localStorage is `serviceToken`.
+- Axios auth flow and interceptors are centralized in `src/utils/axios`.
+- API service modules under `src/api/` must use the shared axios instance from `src/utils/axios`.
+- Unauthorized flow currently routes to `/maintenance/500` on 401.
+- API base URL comes from `VITE_APP_API_URL` (default `http://localhost:3010/`).
 
-### Unit Standards
+### Routing and Assessment Flow
 
-- **Always use `tCO₂e`** (tonnes CO₂ equivalent) for all emission displays
-- Scopes: Scope 1 (direct), Scope 2 (electricity), Scope 3 (indirect)
-- Color coding: Scope 1=success, Scope 2=info, Scope 3=warning
+- Protected routes are configured in `src/routes/MainRoutes.tsx`; public routes in `src/routes/LoginRoutes.tsx`.
+- Default post-login route is `/dashboard`.
+- Assessment flow: create assessment, add emissions, then review aggregated dashboards and history.
 
-### Assessment Flow
+## Project Reference Points
 
-1. Companies create assessments (`/assessment-create`)
-2. Add emissions to assessments (`EmissionForm` component)
-3. View aggregated data on dashboard with charts
-4. Historical comparison across multiple assessment years
+- `src/App.tsx`: provider hierarchy and app structure.
+- `src/components/EmissionForm.tsx`: emissions form behavior.
+- `src/api/carbonAssessment.ts`: carbon assessment API conventions.
+- `src/contexts/LanguageContext.tsx`: translation usage.
+- `docs/TRANSLATION_SYSTEM.md`: translation system details.
 
-## Development Workflows
+## Pull Request Handling
 
-### Local Development
+Apply this section when the user asks for PR summary, PR review, merge readiness, CI debugging, or change understanding.
 
-```bash
-npm run dev     # Starts Vite dev server on port 3000
-npm run build   # Production build
-npm run preview # Preview production build
-```
+### Request Type
 
-### File Organization Conventions
+- PR summary: what changed, why, impacted areas, risks.
+- PR review: findings by severity first (Critical/High/Medium/Low), with file references.
+- Merge readiness: verdict (`ready` / `ready-with-follow-ups` / `not-ready`) and blocking items.
+- CI debugging: failing check, likely cause, reproduction, minimal fix.
+- Change understanding: explain specific files/flows and side effects.
 
-- **Pages**: `src/pages/` - Route components, always wrapped in MainCard
-- **API**: `src/api/` - Service functions with axios, one file per domain
-- **Components**: Reusable UI in `src/components/`, domain-specific in subdirs
-- **Types**: TypeScript interfaces in `src/types/` by domain
-- **Utils**: Pure functions in `src/utils/`
+### PR Inspection Order
 
-### Translation System
+1. PR title and description.
+2. Commits and branch scope.
+3. Changed files grouped by area (auth, API, routing, UI, config, tests).
+4. CI/check statuses and failures.
+5. Existing comments and unresolved threads.
 
-- Add new keys to both `src/locales/fr.ts` and `src/locales/en.ts`
-- Use parameter interpolation: `t('welcome-user', { firstName: user.firstName })`
-- Key naming: kebab-case with domain prefixes (e.g., `assessment-details`, `scope-1-direct`)
+### Review Priorities
 
-## Critical Integration Points
+1. Correctness/regressions.
+2. Security and permissions.
+3. API/data contract compatibility.
+4. Test coverage for changed behavior.
+5. Maintainability.
 
-### Authentication Flow
+High-risk files to inspect first:
 
-- JWT stored as `serviceToken` in localStorage
-- Axios interceptor auto-adds Bearer token to requests
-- 401 responses redirect to `/maintenance/500`
-- Login state managed via `JWTContext`
+- `src/contexts/JWTContext.tsx`, `src/hooks/useAuth.ts`, `src/utils/axios*`
+- `src/routes/MainRoutes.tsx`, `src/routes/LoginRoutes.tsx`
+- `src/api/*.ts`, `src/config.ts`, `public/config.js`
 
-### API Base Configuration
+### Scope Noise and Security Checks
 
-- Base URL: `VITE_APP_API_URL` env var (default: `http://localhost:3010/`)
-- API expects JSON:API format in some endpoints
-- Assessment relationships: `/assessment/{id}` includes emissions array
+- Flag unrelated formatting-only changes, temporary/debug artifacts, and unrelated generated churn as scope noise.
+- For security-sensitive PRs, explicitly check token handling, CORS/trust boundaries, secrets exposure, route protection, and external endpoint/base URL changes.
 
-### Routing Structure
+### Merge Readiness Rules
 
-- Auth-protected routes in `MainRoutes.tsx`
-- Public routes in `LoginRoutes.tsx`
-- Default redirect: `/dashboard`
-- Route parameters: Assessment ID as string, convert for API calls
+Mark `not-ready` if any of these apply:
 
-## Component Patterns to Follow
+- Required CI is failing.
+- Unresolved high-severity correctness/security issue.
+- Critical missing tests for modified behavior.
+- PR scope is unclear due to unrelated noisy changes.
 
-### Data Fetching Pattern
+### Review Consistency Protocol (Anti Churn)
 
-```typescript
-const [data, setData] = useState<any>(null);
-const [loading, setLoading] = useState(true);
+- First review on a PR is the baseline pass: inspect all changed files, CI status, and unresolved threads before posting findings.
+- Subsequent reviews must be delta-first: focus on new commits, changed files since last review, newly failing checks, and still-open findings.
+- Do not create a new comment for the same issue if it was already reported, unless severity increases or new evidence appears.
+- Re-open a previously closed/resolved issue only with concrete proof (repro steps, failing test, or clear code path).
+- Tag each finding with confidence (`high`/`medium`/`low`) and impact; only `high` confidence issues should block merge by default.
+- For unchanged files, report only if the issue is critical or security-sensitive and explain why it was missed earlier.
+- End each re-review with a short delta summary: new findings, resolved findings, unchanged risks, and current merge verdict.
 
-useEffect(() => {
-  fetchData()
-    .then(setData)
-    .finally(() => setLoading(false));
-}, []);
+### Fix Verification Protocol (Resolved Issues)
 
-if (loading) return <CircularProgress />;
-```
-
-### Chart Components
-
-- All charts use recharts library with custom tooltips
-- Emissions data formatted with `tCO₂e` units
-- Color scheme matches Material-UI theme colors
-- Responsive design with Grid layout
-
-### Form Validation
-
-- Material-UI components with controlled inputs
-- Error states handled at component level
-- Success callbacks trigger page reloads or navigation
-
-## Key Files for Reference
-
-- `src/App.tsx` - Provider hierarchy and app structure
-- `src/pages/dashboard.tsx` - Main data visualization patterns
-- `src/components/EmissionForm.tsx` - Complex form handling
-- `src/api/carbonAssessment.ts` - API service patterns
-- `src/contexts/LanguageContext.tsx` - i18n implementation
-- `docs/TRANSLATION_SYSTEM.md` - Detailed translation guide
+- On re-review, check previously reported findings first and verify whether the exact code path changed.
+- If a finding is fixed, mark it explicitly as resolved and avoid re-posting it in active findings.
+- Before keeping a finding open, provide fresh evidence from current diff/CI/tests (not only prior comments).
+- If confidence drops after changes, downgrade severity/confidence and explain what is still uncertain.
+- Include a `resolved findings` section in re-review outputs with short proof (changed file, test, or behavior).
