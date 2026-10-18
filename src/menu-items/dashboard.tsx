@@ -4,7 +4,7 @@
 import { FormattedMessage } from 'react-intl';
 
 // assets
-import { Home, BookSquare, Buildings, Flash } from 'iconsax-react';
+import { Home, BookSquare, Buildings, Flash, Chart } from 'iconsax-react';
 
 // type
 import { NavItemType } from 'types/menu';
@@ -14,7 +14,8 @@ const icons = {
   dashboard: Home,
   assessment: BookSquare,
   companies: Buildings,
-  energy: Flash
+  energy: Flash,
+  efficiency: Chart
 };
 
 // ==============================|| MENU ITEMS - DASHBOARD ||============================== //
@@ -52,6 +53,13 @@ const dashboard: NavItemType = {
       type: 'item',
       url: '/energy',
       icon: icons.energy
+    },
+    {
+      id: 'energy-efficiency',
+      title: <FormattedMessage id="energy-efficiency" />,
+      type: 'item',
+      url: '/energy-efficiency',
+      icon: icons.efficiency
     }
   ]
 };

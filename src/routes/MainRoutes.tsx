@@ -23,6 +23,7 @@ const AssessmentDetailsPage = Loadable(lazy(() => import('pages/assessment-detai
 const Dashboard = Loadable(lazy(() => import('pages/dashboard')));
 const CompaniesPage = Loadable(lazy(() => import('pages/companies')));
 const EnergyDashboardPage = Loadable(lazy(() => import('pages/energy-dashboard')));
+const EnergyEfficiencyPage = Loadable(lazy(() => import('pages/energy-efficiency')));
 
 // ==============================|| MAIN ROUTES ||============================== //
 
@@ -68,6 +69,10 @@ const MainRoutes = {
         {
           path: 'energy',
           element: <EnergyDashboardPage />
+        },
+        {
+          path: 'energy-efficiency',
+          element: <EnergyEfficiencyPage />
         },
         {
           path: 'contact-us',

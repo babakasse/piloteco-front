@@ -656,6 +656,7 @@ export const en = {
 
   // ── Energy ─────────────────────────────────────────────────────────────────
   'energy-dashboard': 'Energy & KPIs',
+  'energy-efficiency': 'Energy Efficiency',
   'energy-resource': 'Resource',
   'energy-month': 'Month',
   'energy-country': 'Country',

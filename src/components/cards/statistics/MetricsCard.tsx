@@ -11,6 +11,7 @@ interface MetricsCardProps {
   icon?: ReactNode;
 }
 
+
 const COLOR_MAP: Record<string, { bg: string; text: string }> = {
   primary:   { bg: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)', text: '#6366f1' },
   secondary: { bg: 'linear-gradient(135deg, #64748b 0%, #94a3b8 100%)', text: '#64748b' },
