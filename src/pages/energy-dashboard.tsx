@@ -15,7 +15,7 @@ import { EnergyFiltersType } from 'types/energy';
 import DashboardFilters from 'sections/energy/DashboardFilters';
 import CountryChips from 'sections/energy/CountryChips';
 import KpiSummaryPanel from 'sections/energy/KpiSummaryPanel';
-import EnergyIntensityYtdChart from 'sections/energy/EnergyIntensityYtdChart';
+import MonthlyEvolutionChart from 'sections/energy/MonthlyEvolutionChart';
 import HorizontalRankingChart from 'sections/energy/HorizontalRankingChart';
 import RefrigerantByQuarterChart from 'sections/energy/RefrigerantByQuarterChart';
 import RefrigerantBreakdownChart from 'sections/energy/RefrigerantBreakdownChart';
@@ -88,9 +88,9 @@ export default function EnergyDashboard() {
           <Grid item xs={12} md={6} sx={{ display: 'flex' }}>
             <MainCard sx={{ height: '100%', width: '100%' }}>
               <Typography variant="subtitle1" fontWeight={700} gutterBottom>
-                {t('energy-intensity-surface-ytd')} — {filters.year}
+                {t('energy-monthly-evolution')} - {filters.year}
               </Typography>
-              <EnergyIntensityYtdChart data={monthlyEvolution} year={filters.year} />
+              <MonthlyEvolutionChart data={monthlyEvolution} />
             </MainCard>
           </Grid>
 

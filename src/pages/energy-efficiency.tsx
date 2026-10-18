@@ -65,6 +65,11 @@ export default function EnergyEfficiency() {
   const selectedCountries = filters.countryCodes ?? [];
   const selectedSiteType = filters.siteTypes?.[0] ?? '';
   const selectedSiteFormat = filters.siteFormats?.[0] ?? '';
+  const activeResources = filters.resourceCategories ?? [filters.resourceCategory];
+  const hasWater = activeResources.includes('WATER');
+  const hasEnergy = activeResources.some((resource) => resource !== 'WATER');
+  const showMixedResourceWarning = hasWater && hasEnergy;
+  const intensityUnit = hasWater && !hasEnergy ? 'm³/m²' : 'kWh/m²';
 
   return (
     <Box>
@@ -77,8 +82,15 @@ export default function EnergyEfficiency() {
           <Divider />
           <Stack direction="row" spacing={2} flexWrap="wrap" useFlexGap alignItems="center">
             <FormControl size="small" sx={{ minWidth: 160 }}>
-              <InputLabel>{t('energy-site-type')}</InputLabel>
-              <Select value={selectedSiteType} label={t('energy-site-type')} onChange={handleSiteTypeChange}>
+              <InputLabel id="energy-efficiency-site-type-label">{t('energy-site-type')}</InputLabel>
+              <Select
+                labelId="energy-efficiency-site-type-label"
+                id="energy-efficiency-site-type"
+                value={selectedSiteType}
+                label={t('energy-site-type')}
+                onChange={handleSiteTypeChange}
+                inputProps={{ 'aria-label': t('energy-site-type') }}
+              >
                 <MenuItem value=""><em>{t('energy-filter-all')}</em></MenuItem>
                 {(filterOptions.siteTypes ?? []).map((t) => (
                   <MenuItem key={t} value={t}>{t}</MenuItem>
@@ -88,8 +100,15 @@ export default function EnergyEfficiency() {
 
             {(filterOptions.siteFormats ?? []).length > 0 && (
               <FormControl size="small" sx={{ minWidth: 160 }}>
-                <InputLabel>{t('energy-site-format')}</InputLabel>
-                <Select value={selectedSiteFormat} label={t('energy-site-format')} onChange={handleSiteFormatChange}>
+                <InputLabel id="energy-efficiency-site-format-label">{t('energy-site-format')}</InputLabel>
+                <Select
+                  labelId="energy-efficiency-site-format-label"
+                  id="energy-efficiency-site-format"
+                  value={selectedSiteFormat}
+                  label={t('energy-site-format')}
+                  onChange={handleSiteFormatChange}
+                  inputProps={{ 'aria-label': t('energy-site-format') }}
+                >
                   <MenuItem value=""><em>{t('energy-filter-all')}</em></MenuItem>
                   {filterOptions.siteFormats.map((f) => (
                     <MenuItem key={f} value={f}>{f}</MenuItem>
@@ -115,6 +134,12 @@ export default function EnergyEfficiency() {
 
       {!loading && !error && (
         <Stack spacing={2}>
+          {showMixedResourceWarning && (
+            <Alert severity="warning">
+              {t('energy-intensity-mixed-resource-warning')}
+            </Alert>
+          )}
+
           {/* ── Consommations ── */}
           <MainCard>
             <Typography variant="subtitle1" fontWeight={700} gutterBottom>
@@ -143,44 +168,45 @@ export default function EnergyEfficiency() {
             <KpiSummaryPanel summary={kpiSummary} />
           </MainCard>
 
-          {/* ── 4 intensity charts ── */}
-          <Grid container spacing={2} alignItems="stretch">
-            <Grid item xs={12} md={6} sx={{ display: 'flex' }}>
-              <MainCard sx={{ height: '100%', width: '100%' }}>
-                <Typography variant="subtitle1" fontWeight={700} gutterBottom>
-                  {t('energy-intensity-sales-ytd-title')}
-                </Typography>
-                <EnergyIntensityYtdChart data={salesYtd} year={filters.year} />
-              </MainCard>
-            </Grid>
+          {!showMixedResourceWarning && (
+            <Grid container spacing={2} alignItems="stretch">
+              <Grid item xs={12} md={6} sx={{ display: 'flex' }}>
+                <MainCard sx={{ height: '100%', width: '100%' }}>
+                  <Typography variant="subtitle1" fontWeight={700} gutterBottom>
+                    {t('energy-intensity-sales-ytd-label')} ({intensityUnit})
+                  </Typography>
+                  <EnergyIntensityYtdChart data={salesYtd} year={filters.year} unit={intensityUnit} />
+                </MainCard>
+              </Grid>
 
-            <Grid item xs={12} md={6} sx={{ display: 'flex' }}>
-              <MainCard sx={{ height: '100%', width: '100%' }}>
-                <Typography variant="subtitle1" fontWeight={700} gutterBottom>
-                  {t('energy-intensity-sales-mtd-title')}
-                </Typography>
-                <EnergyIntensityYtdChart data={salesMtd} year={filters.year} />
-              </MainCard>
-            </Grid>
+              <Grid item xs={12} md={6} sx={{ display: 'flex' }}>
+                <MainCard sx={{ height: '100%', width: '100%' }}>
+                  <Typography variant="subtitle1" fontWeight={700} gutterBottom>
+                    {t('energy-intensity-sales-mtd-label')} ({intensityUnit})
+                  </Typography>
+                  <EnergyIntensityYtdChart data={salesMtd} year={filters.year} unit={intensityUnit} />
+                </MainCard>
+              </Grid>
 
-            <Grid item xs={12} md={6} sx={{ display: 'flex' }}>
-              <MainCard sx={{ height: '100%', width: '100%' }}>
-                <Typography variant="subtitle1" fontWeight={700} gutterBottom>
-                  {t('energy-intensity-building-ytd-title')}
-                </Typography>
-                <EnergyIntensityYtdChart data={totalYtd} year={filters.year} />
-              </MainCard>
-            </Grid>
+              <Grid item xs={12} md={6} sx={{ display: 'flex' }}>
+                <MainCard sx={{ height: '100%', width: '100%' }}>
+                  <Typography variant="subtitle1" fontWeight={700} gutterBottom>
+                    {t('energy-intensity-building-ytd-label')} ({intensityUnit})
+                  </Typography>
+                  <EnergyIntensityYtdChart data={totalYtd} year={filters.year} unit={intensityUnit} />
+                </MainCard>
+              </Grid>
 
-            <Grid item xs={12} md={6} sx={{ display: 'flex' }}>
-              <MainCard sx={{ height: '100%', width: '100%' }}>
-                <Typography variant="subtitle1" fontWeight={700} gutterBottom>
-                  {t('energy-intensity-building-mtd-title')}
-                </Typography>
-                <EnergyIntensityYtdChart data={totalMtd} year={filters.year} />
-              </MainCard>
+              <Grid item xs={12} md={6} sx={{ display: 'flex' }}>
+                <MainCard sx={{ height: '100%', width: '100%' }}>
+                  <Typography variant="subtitle1" fontWeight={700} gutterBottom>
+                    {t('energy-intensity-building-mtd-label')} ({intensityUnit})
+                  </Typography>
+                  <EnergyIntensityYtdChart data={totalMtd} year={filters.year} unit={intensityUnit} />
+                </MainCard>
+              </Grid>
             </Grid>
-          </Grid>
+          )}
         </Stack>
       )}
     </Box>
